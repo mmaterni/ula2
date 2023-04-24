@@ -1,0 +1,51 @@
+﻿- scaricare il file zip
+
+- scompattare il file in una directory di propia scelta
+
+- posizionarsi nella directory scompattata (dir-base) e
+  aprire un terminale, nel quale si eseguiranno i comandi 
+
+- digitare ulainit.py (linux/mac ./ulainit.py)
+  crea le dir:
+  ula_data
+    data
+    data_back
+    data_corpus
+    data_corpus_back
+    data_export
+    text
+    text_back
+    text_src
+
+-  inserire files di testo in ula_data/text
+
+-  eseguire il comando
+  textadd.py 
+
+Lancio del Server
+=============================
+
+- posizionarsi nella dir-base
+
+- digitare 
+ulaserver.py
+  Apre di default la porta 8080.
+  Si possono usare porte diverse.
+  Attenzione la porta 80 può entrare in conflitto con quella del
+  server di sistema.
+
+
+Lancio del Browser
+=============================
+- digitare l'url:
+
+http://127.0.0.1:8080
+oppure
+http://localhost:8080
+
+Si possono usare porte diverse.
+Nel caso sia possibile utilizzare la porta 80
+si può usare l'url:
+
+http://127.0.0.1   
+      

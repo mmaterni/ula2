@@ -1,0 +1,33 @@
+
+
+dir_florimont  (..)
+   dir_grenoble  (..)
+        dir_tesit_sorgenti
+            testo1  (..)
+            testo2
+            ....
+        dir_testi tokenizzati
+            testo1
+            testo2
+            ....
+        dir_dati_lemmat.
+            testo1
+            testo2
+            .....
+   dir_ padova
+        dir_tesit_sorgenti
+            testo1
+            testo2
+            ....
+        dir_testi tokenizzati
+            testo1
+            testo2
+            ....
+        dir_dati_lemmat.
+            testo1
+            testo2
+            .....
+
+    dir_corpus  ??
+         corpus
+

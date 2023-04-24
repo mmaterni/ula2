@@ -1,0 +1,16 @@
+ula_data/florimont/text/eps00a.txt -1 
+ula_data/florimont/text/eps12a.txt -1
+ula_data/florimont/text/eps13a.txt -1
+ula_data/florimont/text/eps14a.txt -1
+ula_data/florimont/text/eps16a.txt -1
+ula_data/florimont/text/eps17a.txt -1
+ula_data/florimont/text/eps18a.txt -1
+ula_data/florimont/text/eps19a.txt -1
+ula_data/florimont/text/eps20a.txt -1
+ula_data/florimont/text/eps21a.txt -1
+ula_data/florimont/text/eps22a.txt -1
+ula_data/florimont/text/eps23a.txt -1
+ula_data/florimont/text/eps24a.txt -1
+ula_data/florimont/text/eps25a.txt -1
+ula_data/florimont/text/eps26a.txt -1
+ula_data/florimont/text/eps27a.txt -1
