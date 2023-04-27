@@ -250,7 +250,7 @@ var FormLpmx = {
     return true;
   },
   form_lst2html: function () {
-    //form,formkey,lemma,etimo, phon, pos, msd ..
+    //form,formkey,lemma,etimo, lang, pos, msd ..
     const lfe = DbFormLpmx.form_lst.length;
     if (lfe == 0)
       return;
@@ -496,14 +496,14 @@ var FormLpmx = {
     this.save_store();
     // const pr = document.getElementById("lpmx_rows_id");
   },
-  set_phon: function (phon) {
+  set_phon: function (lang) {
     if (!this.tr_selected) {
       Notify.center().wait(5000).show("Row Not Selected.");
       return;
     }
-    phon = phon == '-' ? '' : phon;
+    lang = lang == '-' ? '' : lang;
     const ph = $("#lpmx_rows_id tr.select").find("td.ph");
-    ph.html(phon);
+    ph.html(lang);
     // let e = ph.get(0);
     this.save_store();
     // const pr = document.getElementById("lpmx_rows_id");
@@ -573,12 +573,12 @@ var FormLpmx = {
       let formkey = tds[2].innerHTML;
       let lemma = tds[3].firstChild.value;
       let etimo = tds[4].firstChild.value;
-      let phon = tds[5].innerHTML;
+      let lang = tds[5].innerHTML;
       let pos = tds[6].innerHTML;
       let funct = tds[7].innerHTML;
       let msd = tds[8].innerHTML;
       //forma, lemma, etimo, lang, POS, funct, MSD
-      DbFormLpmx.form_lst.push([form, formkey, lemma, etimo, phon, pos, funct, msd]);
+      DbFormLpmx.form_lst.push([form, formkey, lemma, etimo, lang, pos, funct, msd]);
     }
   },
   open_context: function (form_idx, form, formkey) {

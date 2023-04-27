@@ -71,7 +71,7 @@ var sleep = function (ms) {
 var relocate = () => {
   PosMsd.resetXY();
   Msd.resetXY();
-  Phon.resetXY();
+  Lang.resetXY();
   Funct.resetXY();
   FormContext.resetXY();
   FormOmogr.resetXY();
@@ -108,7 +108,7 @@ var Ula = {
     TEXT_ID.style.display = 'none';
     await FormLpmx.open();
     await PosMsd.open();
-    await Phon.open();
+    await Lang.open();
     await Funct.open();
     await FormText.open();
     cmd_wait_stop();

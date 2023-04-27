@@ -1,5 +1,3 @@
-// jshint esversion: 8
-// release 19-04-2022
 
 var UaLog = {
     active: false,

@@ -85,7 +85,7 @@ const form_lemma_filter = `
   <div class="input_row">
     <div class="input_col">LANG:</div>
     <div class="input_col">
-      <input type="text" value="" size="4" name="phon" >
+      <input type="text" value="" size="4" name="lang" >
     </div>
   </div>
 

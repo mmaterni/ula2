@@ -27,7 +27,7 @@ var DbFormLpmx = {
   omogr_json: {},
   len_row: 80,
   rows_js: [],
-  get_text_name: () {
+  get_text_name: function () {
     const store_text_name = localStorage.getItem(KEY_TEXT_NAME);
     const text_name = store_text_name || "";
     return text_name;
@@ -374,7 +374,7 @@ var DbFormLpmx = {
     let lemma = js.lemma.trim();
     let etimo = js.etimo.trim().toLowerCase();
     let pos = js.pos.trim().toLowerCase();
-    let phon = js.phon.trim().toLowerCase(); ///lang
+    let lang = js.lang.trim().toLowerCase(); ///lang
 
     let rows = this.rows_js;
 
@@ -404,7 +404,7 @@ var DbFormLpmx = {
     1:formakey
     2:lemma
     3:etimo
-    4:lang (phon) 
+    4:lang (lang) 
     5:pos
     6:funct 
     7:msd (multiplo)
@@ -429,9 +429,9 @@ var DbFormLpmx = {
         rs = rs.filter((x) => {
           return x[ipos].toLowerCase() == pos;
         });
-      if (phon != "")//lang
+      if (lang != "")//lang
         rs = rs.filter((x) => {
-          return x[iphon] == phon;
+          return x[iphon] == lang;
         });
       // set dei token corrispondenti al lemma
       let tks = [];

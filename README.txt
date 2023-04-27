@@ -74,7 +74,7 @@ Tabelle di  Configurazione
 - Spostarsi nella dir BASEDIR/ula2/static/cfg
 - Settare pos.csv 
           msd.csv 
-          phon.txt 
+          lang.txt 
 - Spostarsi nella dir BASEDIR/ula
 - lanciare 
 posmsd2json.py

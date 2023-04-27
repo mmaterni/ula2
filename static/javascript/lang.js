@@ -1,7 +1,7 @@
 
-var Phon = {
+var Lang = {
     id: 'lpmx_phon_id',
-    url: "cfg/phon.csv",
+    url: "cfg/lang.csv",
     left: 0,
     top: 0,
     wind: null,
@@ -65,8 +65,8 @@ ${rs.join("")}
     bind_phon: function () {
         $("#lpmx_phon_id").off("click");
         $("#lpmx_phon_id").on("click ", "table tr.d td", {}, function (e) {
-            let phon = $(this).html();
-            FormLpmx.set_phon(phon);
+            let lang = $(this).html();
+            FormLpmx.set_phon(lang);
         });
     }
 };
