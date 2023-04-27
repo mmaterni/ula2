@@ -1,4 +1,3 @@
-/* jshint esversion: 8 */
 
 var Phon = {
     id: 'lpmx_phon_id',

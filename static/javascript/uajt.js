@@ -1,5 +1,3 @@
-// jshint esversion: 8
-// release 21-04-22
 
 var UaJt = function () {
     const jt = {

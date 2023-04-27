@@ -1,9 +1,14 @@
-/* jshint esversion: 8 */
+
+// const foo = null ?? 'default string';
+// console.log(foo);
+
 
 let T0 = {};
+
 var start_performance = function (k) {
   T0.k = performance.now();
 };
+
 var log_performance = function (k, msg = '') {
   const t1 = performance.now();
   const d = t1 - T0.k;
