@@ -27,7 +27,7 @@ var DbFormLpmx = {
   omogr_json: {},
   len_row: 80,
   rows_js: [],
-  get_text_name: function () {
+  get_text_name: () {
     const store_text_name = localStorage.getItem(KEY_TEXT_NAME);
     const text_name = store_text_name || "";
     return text_name;
@@ -145,7 +145,6 @@ var DbFormLpmx = {
   save_csv: function (rows, file_name) {
     const rs = rows.map((x) => x.join("|"));
     const data = rs.join("\n");
-    // AAA const url = `/write/data/${file_name}`;
     const url = `/write${DATA_DIR}/${file_name}`;
     fetch(url, {
       method: "POST",
@@ -238,6 +237,7 @@ var DbFormLpmx = {
     if (!csv_data || csv_data.trim().length == 0) {
       const msg = `${file_name} Not Found.`;
       alert(msg);
+      //AAA
       csv_data = "|||||||";
     }
     const rows = csv_data.trim().split("\n");
@@ -272,20 +272,17 @@ var DbFormLpmx = {
       method: "GET",
       headers: { 'Content-Type': 'application/json' },
       cace: 'no-store'
-    })
-      .then((resp) => {
-        if (!resp.ok) {
-          alert("ERROR compare text corpus ");
-          return {};
-        }
-        return resp.json();
-      })
-      .then((js) => {
-        call(js);
-      })
-      .catch((error) => {
-        alert(`load_diff_text_corpus() \n${url}\n${error}`);
-      });
+    }).then((resp) => {
+      if (!resp.ok) {
+        alert("ERROR compare text corpus ");
+        return {};
+      }
+      return resp.json();
+    }).then((js) => {
+      call(js);
+    }).catch((error) => {
+      alert(`load_diff_text_corpus() \n${url}\n${error}`);
+    });
   },
   get_formakey_context: function (formakey, cnt_size) {
     let build_context = (i) => {
@@ -335,7 +332,6 @@ var DbFormLpmx = {
   },
   fill_rows_text: function () {
     // popola this.rows_js chiamatto da Form_text
-    // TODO
     let t_tk_lst = DbFormLpmx.token_lst || [];
     this.rows_js = [];
     let len_row_text = 0;
@@ -373,7 +369,6 @@ var DbFormLpmx = {
   filter_rows_js: function (js) {
     // setta this.rows_js
     // i nomi dei campi derivano dall'input di filtraggio
-    //TODO controllare find
     let formkey = js.formkey.trim();
     let form = js.form.trim();
     let lemma = js.lemma.trim();
