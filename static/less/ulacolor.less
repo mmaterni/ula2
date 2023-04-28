@@ -15,11 +15,8 @@
 @color_2x: darken(@color1, 20%);
 //
 @color3: #ffffff;
-@color_3x: darken(@color3, 10%);
 //
 @color5: green;
-@color_5x: darken(@color5, 0%);
-@color_5y: darken(@color5, 10%);
 
 ////////////////////////////////
 @html_back: @color_0b;
@@ -57,14 +54,14 @@
 @row_text_hover_back: @color_0b;
 @row_text_color: @color_2x;
 @row_border_color: @color_0z;
-@row_num_select_back: @color_5x;
+@row_num_select_back: darken(@color5,0%);
 
 //box cmd
 @cmd_back: @color1;
-@cmd_back2: @color_5y;
+@cmd_back2: darken(@color5,10%);
 @cmd_hover_back: @color_1b;
 @cmd_color: @color_0c;
-@cmd_border_color_l: @color_3x;
+@cmd_border_color_l: darken(@color3,10%);
 
 //head
 @head_first_back: @color_1a;
@@ -110,7 +107,7 @@
 //tokens selected
 @token_back: @color3;
 @token_color: @color_2x;
-@token_color2: @color_5x;
+@token_color2: darken(@color5,0%);
 @token_select_back: @color_1b;
 @token_select_color: @color3;
 
