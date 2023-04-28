@@ -1,35 +1,28 @@
 @color_wait:#3a55f1;
 
 @color0: #c2c188;
-@color_0a: lighten(@color0, 10%);
-@color_0b: lighten(@color0, 20%);
-// @color_0c: lighten(@color0, 30%);
-// @color_0d: lighten(@color0, 40%);
-// @color_0x: darken(@color0, 10%);
-// @color_0z: darken(@color0, 40%);
 //
 @color1: #08166a; 
-@color_1a: lighten(@color1, 10%);
-@color_1b: lighten(@color1, 20%);
+// @color_1a: lighten(@color1, 10%);
+// @color_1b: lighten(@color1, 20%);
 @color_1x: darken(@color1, 10%);
 @color_2x: darken(@color1, 20%);
 //
 @color3: #ffffff;
-//
 @color5: green;
 
 ////////////////////////////////
-@html_back: @color_0b;
+@html_back: lighten(@color0,20%);
 
 //msg
-@msg_back: @color_1b;
+@msg_back: lighten(@color1,20%);
 @msg_color: @color3;
-@msg_border_color: @color_1b;
+@msg_border_color: lighten(@color1,20%);
 
 //help
-@help_head_back: @color_1a;
+@help_head_back: lighten(@color1,10%);
 @help_head_color: @color3;
-@help_back: @color_1a;
+@help_back: lighten(@color1,10%);
 @help_color: @color3;
 
 //menu  orizontale
@@ -37,21 +30,21 @@
 @menu_hover_bck: darken(@menu_bck, 20%);
 @menu_border_bck: darken(@menu_bck, 40%);
 @menu_color: #ffffff;
-@mh_hover_back: @color_1a;
+@mh_hover_back: lighten(@color1,10%);
 @mh_hover_color: lighten(@color0,30%);
 @mh_active_back: lighten(@mh_hover_back, 10%);
 @mh_used_back: lighten(@mh_hover_back, 15%);
 @mn_title_back: darken(@color5,0%);
 
 //menu verticale
-@mv_back: @color_1b;
+@mv_back: lighten(@color1,20%);
 @mv_color: lighten(@color0,30%);
-@mv_hover_back: @color_1a;
+@mv_hover_back: lighten(@color1,10%);
 @mv_hover_color: lighten(@color0,30%);
 
 //righe text
 @row_text_back: lighten(@color0,40%);
-@row_text_hover_back: @color_0b;
+@row_text_hover_back: lighten(@color0,20%);
 @row_text_color: @color_2x;
 @row_border_color: darken(@color0,40%);
 @row_num_select_back: darken(@color5,0%);
@@ -59,55 +52,55 @@
 //box cmd
 @cmd_back: @color1;
 @cmd_back2: darken(@color5,10%);
-@cmd_hover_back: @color_1b;
+@cmd_hover_back: lighten(@color1,20%);
 @cmd_color: lighten(@color0,30%);
 @cmd_border_color_l: darken(@color3,10%);
 
 //head
-@head_first_back: @color_1a;
+@head_first_back: lighten(@color1,10%);
 @head_back: darken(@color0,10%);
 @head_color: @color_2x;
 @head_border_color: darken(@color0,40%);
 
 //rows
 @cell_border_color: darken(@color0,40%);
-@cell_back: @color_0b;
+@cell_back: lighten(@color0,20%);
 @cell_color: @color_2x;
-@cell_hover_back: @color_1b;
-@cell_jshover_back: @color_1a;
+@cell_hover_back: lighten(@color1,20%);
+@cell_jshover_back: lighten(@color1,10%);
 @cell_hover_color: lighten(@color0,30%);
 @cell_jshover_color: @color3;
 @form_empty: @color_1x;
 
 // input
-@inp_back: @color_0a;
+@inp_back: lighten(@color0,10%);
 @inp_color: @color_2x;
 @inp_hover_back: @color3;
-@inp_hover_border_color: @color_1b;
+@inp_hover_border_color: lighten(@color1,20%);
 @inp_hover_color: @inp_color;
-@inp_active_back: @color_1a;
+@inp_active_back: lighten(@color1,10%);
 @inp_err_back: @color_2x;
 
 //option
-@opt_back: @color_0a;
+@opt_back: lighten(@color0,10%);
 @opt_color: @color_2x;
-@opt_hover_back: @color_1a;
+@opt_hover_back: lighten(@color1,10%);
 @opt_hover_color: lighten(@color0,30%);
 @opt_border_color:@color_2x;
 
 //select
-@select_back: @color_0a;
+@select_back: lighten(@color0,10%);
 @select_color: @color_2x;
 
 //context
-@cnt_row_back: @color_0b;
+@cnt_row_back: lighten(@color0,20%);
 @cnt_border_color: @color_2x;
 
 //tokens selected
 @token_back: @color3;
 @token_color: @color_2x;
 @token_color2: darken(@color5,0%);
-@token_select_back: @color_1b;
+@token_select_back: lighten(@color1,20%);
 @token_select_color: @color3;
 
 //scroll bar
