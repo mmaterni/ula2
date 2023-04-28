@@ -4,7 +4,7 @@
 @color1: #08166a; 
 @color3: #ffffff;
 @color4: #fc6621;
-@color5: green;
+@color5: #0d9e0d;
 
 ////////////////////////////////
 @html_back: lighten(@color0,20%);
@@ -22,20 +22,21 @@
 
 //menu  orizontale
 @menu_bck: @color1;
-@menu_hover_bck: darken(@menu_bck, 20%);
+@menu_hover_bck: darken(@menu_bck, -30%);
 @menu_border_bck: darken(@menu_bck, 40%);
-@menu_color: #ffffff;
-@mh_hover_back: lighten(@color1,10%);
-@mh_hover_color: lighten(@color0,30%);
-@mh_active_back: lighten(@mh_hover_back, 10%);
-@mh_used_back: lighten(@mh_hover_back, 15%);
-@mn_title_back: darken(@color3,0%);
+@menu_color: @color3;
+
+// @mh_hover_back: lighten(@color1,10%);
+// @mh_hover_color: lighten(@color0,30%);
+// @mh_active_back: lighten(@mh_hover_back, 10%);
+// @mh_used_back: lighten(@mh_hover_back, 15%);
+// @mn_title_back: darken(@color3,0%);
 
 //menu verticale
-@mv_back: lighten(@color1,20%);
-@mv_color: lighten(@color0,30%);
-@mv_hover_back: lighten(@color1,10%);
-@mv_hover_color: lighten(@color0,30%);
+// @mv_back: lighten(@color1,20%);
+// @mv_color: lighten(@color0,30%);
+// @mv_hover_back: lighten(@color1,10%);
+// @mv_hover_color: lighten(@color0,30%);
 
 //righe text
 @row_text_back: lighten(@color0,40%);
@@ -100,4 +101,4 @@
 
 //scroll bar
 @scroll_bar1:darken(@color1,0%);
-@scroll_bar2:darken(@head_back, 10%);
+@scroll_bar2:darken(@head_back, 0%);
