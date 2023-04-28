@@ -270,6 +270,7 @@ div.help {
 
     hr {
       width: 300px;
+      //AAA
       color: red;
     }
   }
@@ -351,17 +352,6 @@ div.ula_input {
   }
 }
 
-// @color0:  #406882;
-// @color0: #300919;
-// @color0: #b1215c;
-// AAA @colorm0: #8d053e;
-// @colorm0: #058d5d;
-// @menu_bck: @colorm0;
-// @menu_hover_bck: darken(@menu_bck, 20%);
-// // @menu_border_bck: darken(@menu_bck, 20%);
-// // AAA @menu_border_bck: #700202;
-// @menu_border_bck: #700202;
-// @menu_color: #ffffff;
 @font_menu: 17px;
 @menu_height: 25px;
 @menu_sub_top: 26px;
@@ -492,9 +482,15 @@ div.menu_bar {
   }
 
   .title {
-    background: #088208;
-    color: #ffffff;
+    background:darken(@color4,30%);
+    color: darken(@color3,0);
   }
+
+  .title:hover {
+    background:darken(@color4,20%);
+    color: darken(@color3,0);
+  }
+
 }
 
 /////////////////
