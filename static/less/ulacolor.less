@@ -3,10 +3,10 @@
 @color0: #c2c188;
 @color_0a: lighten(@color0, 10%);
 @color_0b: lighten(@color0, 20%);
-@color_0c: lighten(@color0, 30%);
-@color_0d: lighten(@color0, 40%);
-@color_0x: darken(@color0, 10%);
-@color_0z: darken(@color0, 40%);
+// @color_0c: lighten(@color0, 30%);
+// @color_0d: lighten(@color0, 40%);
+// @color_0x: darken(@color0, 10%);
+// @color_0z: darken(@color0, 40%);
 //
 @color1: #08166a; 
 @color_1a: lighten(@color1, 10%);
@@ -38,45 +38,44 @@
 @menu_border_bck: darken(@menu_bck, 40%);
 @menu_color: #ffffff;
 @mh_hover_back: @color_1a;
-@mh_hover_color: @color_0c;
+@mh_hover_color: lighten(@color0,30%);
 @mh_active_back: lighten(@mh_hover_back, 10%);
 @mh_used_back: lighten(@mh_hover_back, 15%);
 @mn_title_back: darken(@color5,0%);
 
 //menu verticale
 @mv_back: @color_1b;
-@mv_color: @color_0c;
+@mv_color: lighten(@color0,30%);
 @mv_hover_back: @color_1a;
-@mv_hover_color: @color_0c;
+@mv_hover_color: lighten(@color0,30%);
 
 //righe text
-@row_text_back: @color_0d;
+@row_text_back: lighten(@color0,40%);
 @row_text_hover_back: @color_0b;
 @row_text_color: @color_2x;
-@row_border_color: @color_0z;
+@row_border_color: darken(@color0,40%);
 @row_num_select_back: darken(@color5,0%);
 
 //box cmd
 @cmd_back: @color1;
 @cmd_back2: darken(@color5,10%);
 @cmd_hover_back: @color_1b;
-@cmd_color: @color_0c;
+@cmd_color: lighten(@color0,30%);
 @cmd_border_color_l: darken(@color3,10%);
 
 //head
 @head_first_back: @color_1a;
-@head_back: @color_0x;
+@head_back: darken(@color0,10%);
 @head_color: @color_2x;
-@head_border_color: @color_0z;
+@head_border_color: darken(@color0,40%);
 
 //rows
-@cell_border_color: @color_0z;
+@cell_border_color: darken(@color0,40%);
 @cell_back: @color_0b;
 @cell_color: @color_2x;
-// @cell_first_back: @color_0x;
 @cell_hover_back: @color_1b;
 @cell_jshover_back: @color_1a;
-@cell_hover_color: @color_0c;
+@cell_hover_color: lighten(@color0,30%);
 @cell_jshover_color: @color3;
 @form_empty: @color_1x;
 
@@ -93,7 +92,7 @@
 @opt_back: @color_0a;
 @opt_color: @color_2x;
 @opt_hover_back: @color_1a;
-@opt_hover_color: @color_0c;
+@opt_hover_color: lighten(@color0,30%);
 @opt_border_color:@color_2x;
 
 //select
