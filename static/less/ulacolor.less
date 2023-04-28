@@ -3,11 +3,7 @@
 @color0: #c2c188;
 //
 @color1: #08166a; 
-// @color_1a: lighten(@color1, 10%);
-// @color_1b: lighten(@color1, 20%);
 @color_1x: darken(@color1, 10%);
-@color_2x: darken(@color1, 20%);
-//
 @color3: #ffffff;
 @color5: green;
 
@@ -45,7 +41,7 @@
 //righe text
 @row_text_back: lighten(@color0,40%);
 @row_text_hover_back: lighten(@color0,20%);
-@row_text_color: @color_2x;
+@row_text_color: darken(@color1,20%);
 @row_border_color: darken(@color0,40%);
 @row_num_select_back: darken(@color5,0%);
 
@@ -59,46 +55,46 @@
 //head
 @head_first_back: lighten(@color1,10%);
 @head_back: darken(@color0,10%);
-@head_color: @color_2x;
+@head_color: darken(@color1,20%);
 @head_border_color: darken(@color0,40%);
 
 //rows
 @cell_border_color: darken(@color0,40%);
 @cell_back: lighten(@color0,20%);
-@cell_color: @color_2x;
+@cell_color: darken(@color1,20%);
 @cell_hover_back: lighten(@color1,20%);
 @cell_jshover_back: lighten(@color1,10%);
 @cell_hover_color: lighten(@color0,30%);
 @cell_jshover_color: @color3;
-@form_empty: @color_1x;
+@form_empty: darken(@color1,10%);
 
 // input
 @inp_back: lighten(@color0,10%);
-@inp_color: @color_2x;
+@inp_color: darken(@color1,20%);
 @inp_hover_back: @color3;
 @inp_hover_border_color: lighten(@color1,20%);
 @inp_hover_color: @inp_color;
 @inp_active_back: lighten(@color1,10%);
-@inp_err_back: @color_2x;
+@inp_err_back: darken(@color1,20%);
 
 //option
 @opt_back: lighten(@color0,10%);
-@opt_color: @color_2x;
+@opt_color: darken(@color1,20%);
 @opt_hover_back: lighten(@color1,10%);
 @opt_hover_color: lighten(@color0,30%);
-@opt_border_color:@color_2x;
+@opt_border_color:darken(@color1,20%);
 
 //select
 @select_back: lighten(@color0,10%);
-@select_color: @color_2x;
+@select_color: darken(@color1,20%);
 
 //context
 @cnt_row_back: lighten(@color0,20%);
-@cnt_border_color: @color_2x;
+@cnt_border_color: darken(@color1,20%);
 
 //tokens selected
 @token_back: @color3;
-@token_color: @color_2x;
+@token_color: darken(@color1,20%);
 @token_color2: darken(@color5,0%);
 @token_select_back: lighten(@color1,20%);
 @token_select_color: @color3;
