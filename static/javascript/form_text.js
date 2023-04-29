@@ -1,4 +1,3 @@
-/* jshint esversion: 8 */
 
 const h_menu_text = `
 <div id="text_menu_id" class="menu_bar" >
@@ -142,6 +141,7 @@ var FormText = {
     this.rows_text2html();
   },
   data2html:function(){
+    // console.log("FormText.data2html");
     DbFormLpmx.fill_rows_text();
     this.rows_text2html();
   },
@@ -161,6 +161,7 @@ var FormText = {
     RowsInput.show();
   },
   show_text: function () {
+    // console.log("FormText.show_text");
     if (this.text_all) {
       Notify.center().wait(5000).show("Full Text.");
     }

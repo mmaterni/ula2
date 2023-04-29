@@ -321,7 +321,6 @@ var DbFormLpmx = {
   },
   fill_rows_text: function () {
     // popola this.rows_js chiamatto da Form_text
-    // XXX let t_tk_lst = DbFormLpmx.token_lst || [];
     let t_tk_lst = this.token_lst || [];
     this.rows_js = [];
     let len_row_text = 0;
@@ -330,17 +329,21 @@ var DbFormLpmx = {
     let row_tk = [];
     const le = t_tk_lst.length;
     const last = le - 1;
-    for (let i = 0; i < le; i++) {
+    for (let i = 0; i <= last; i++) {
       const t_tk = t_tk_lst[i];
       const t = t_tk[0];
       const tk = t_tk[1];
       len_row_text += t.length;
       row_t.push(t);
       row_tk.push(tk);
+      // fine riga
       if (len_row_text > this.len_row || i == last) {
-        //token successivo
-        if (i == last || !UAPUNCTS.includes(t_tk_lst[i + 1][1])) {
-          const row_js = {
+        console.log(t_tk_lst.length, i);
+        let tk_next = i < last ? t_tk_lst[i + 1][1] : '.';
+        console.log(tk_next);
+        //AAA if (i == last || !UAPUNCTS.includes(t_tk_lst[i + 1][1])) {
+          if (!UAPUNCTS.includes(tk_next)) {
+            const row_js = {
             row_n: row_num,
             row_text: row_t.join(" "),
             t: row_t,
@@ -354,7 +357,6 @@ var DbFormLpmx = {
         }
       }
     }
-    // console.log(this.rows_js[1])
   },
   filter_rows_js: function (js) {
     // setta this.rows_js
