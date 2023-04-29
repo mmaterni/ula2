@@ -29,6 +29,7 @@ var DbFormLpmx = {
   form_lst: [],
   omogr_json: {},
   len_row: 80,
+  row_eof: '##',
   rows_js: [],
   get_text_name: function () {
     const store_text_name = localStorage.getItem(KEY_TEXT_NAME);
@@ -329,32 +330,29 @@ var DbFormLpmx = {
     let row_tk = [];
     const le = t_tk_lst.length;
     const last = le - 1;
+
     for (let i = 0; i <= last; i++) {
       const t_tk = t_tk_lst[i];
       const t = t_tk[0];
       const tk = t_tk[1];
-      len_row_text += t.length;
-      row_t.push(t);
-      row_tk.push(tk);
+      if (t != this.row_eof) {
+        row_t.push(t);
+        row_tk.push(tk);
+        len_row_text += t.length;
+      }
       // fine riga
-      if (len_row_text > this.len_row || i == last) {
-        console.log(t_tk_lst.length, i);
-        let tk_next = i < last ? t_tk_lst[i + 1][1] : '.';
-        console.log(tk_next);
-        //AAA if (i == last || !UAPUNCTS.includes(t_tk_lst[i + 1][1])) {
-          if (!UAPUNCTS.includes(tk_next)) {
-            const row_js = {
-            row_n: row_num,
-            row_text: row_t.join(" "),
-            t: row_t,
-            tk: row_tk
-          };
-          this.rows_js.push(row_js);
-          row_num += 1;
-          row_t = [];
-          row_tk = [];
-          len_row_text = 0;
-        }
+      if (len_row_text > this.len_row || t == this.row_eof || i == last) {
+        const row_js = {
+          row_n: row_num,
+          row_text: row_t.join(" "),
+          t: row_t,
+          tk: row_tk
+        };
+        this.rows_js.push(row_js);
+        row_num += 1;
+        row_t = [];
+        row_tk = [];
+        len_row_text = 0;
       }
     }
   },
