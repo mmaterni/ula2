@@ -36,8 +36,8 @@ class Text2Data(object):
     def text2token_list(self, text):
         # AAA mantenimento verso
         # text = text.replace(os.linesep, ' ')
-        tknew_line=" ## "
-        text = text.replace(os.linesep,tknew_line)
+        row_eof=" ## "
+        text = text.replace(os.linesep,row_eof)
         lst = re.split(" ", text)
         token_lst = []
         for token in lst:
