@@ -34,11 +34,15 @@ class Text2Data(object):
         self.logerr = Log("w").open(path_err, 1).log
 
     def text2token_list(self, text):
-        text = text.replace(os.linesep, ' ')
+        # AAA mantenimento verso
+        # text = text.replace(os.linesep, ' ')
+        tknew_line=" ## "
+        text = text.replace(os.linesep,tknew_line)
         lst = re.split(" ", text)
         token_lst = []
         for token in lst:
-            if token.strip() == '':
+            token = token.strip()
+            if token == '':
                 continue
             token = token.lower()
             s = f"{token}|{token}"
@@ -61,9 +65,9 @@ class Text2Data(object):
         form_lst = sorted(form_lst, key=lambda x: (x.split('|')[0]))
         return form_lst
 
+    # scrive data/text_name.form.csv
+    #        data/txt_name.token.csv
     def write_tokens_forms(self, f_inp):
-        # scrive ./data/text_name.form.csv
-        #        ./data/txt_name.token.csv
         try:
             fr = open(f_inp, 'r', encoding=ENCODING)
             text = fr.read()
@@ -124,6 +128,7 @@ class Text2Data(object):
         self.write_tokens_forms(text_path)
         # self.write_text_list()
 
+
 def do_main(text_path):
     Text2Data().text2data(text_path)
 
@@ -133,11 +138,10 @@ if __name__ == "__main__":
     if le < 2:
         print(f"\nauthor: {__author__}")
         print(f"release: {__version__} { __date__}")
-        h=""" 
+        h = """ 
 texttodata.py <text_path>
         """
         print(h)
         sys.exit()
     text_path = sys.argv[1]
     do_main(text_path)
-
