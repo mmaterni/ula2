@@ -1,9 +1,15 @@
+@colorx:red;
+@colory:rgb(16, 242, 253);
+
 @color_wait:#3a55f1;
 
 @color0: #c2c188;
-@color1: #08166a; 
+// @color1: #08166a; 
+@color1: #800000; //maroon1
+// @color2: #300919; //purple
 @color3: #ffffff;
-@color4: #fc6621;
+// @color4: #fc6621;
+@color4: #ff0000;
 @color5: #0d9e0d;
 
 ////////////////////////////////
@@ -22,33 +28,23 @@
 
 //menu  orizontale
 @menu_bck: @color1;
-@menu_hover_bck: darken(@menu_bck, -30%);
+// @menu_hover_bck: darken(@menu_bck, -30%);
+@menu_hover_bck: darken(@color5, 10%);
 @menu_border_bck: darken(@menu_bck, 40%);
 @menu_color: @color3;
-
-// @mh_hover_back: lighten(@color1,10%);
-// @mh_hover_color: lighten(@color0,30%);
-// @mh_active_back: lighten(@mh_hover_back, 10%);
-// @mh_used_back: lighten(@mh_hover_back, 15%);
-// @mn_title_back: darken(@color3,0%);
-
-//menu verticale
-// @mv_back: lighten(@color1,20%);
-// @mv_color: lighten(@color0,30%);
-// @mv_hover_back: lighten(@color1,10%);
-// @mv_hover_color: lighten(@color0,30%);
 
 //righe text
 @row_text_back: lighten(@color0,40%);
 @row_text_hover_back: lighten(@color0,20%);
 @row_text_color: darken(@color1,20%);
 @row_border_color: darken(@color0,40%);
-@row_num_select_back: darken(@color4,20%);
+// @row_num_select_back: darken(@color4,20%);
+@row_num_select_back: darken(@color5,10%);
 
 //box cmd
 @cmd_back: @color1;
-@cmd_back2: darken(@color4,20%);
-@cmd_hover_back: lighten(@color1,20%);
+@cmd_back2: darken(@color5,10%);
+@cmd_hover_back: lighten(@color1,10%);
 @cmd_color: lighten(@color0,30%);
 @cmd_border_color_l: darken(@color3,10%);
 

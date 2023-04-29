@@ -112,6 +112,19 @@ const h_menu_form_lpmx = `
 </div>
 `;
 //forma, lemma, etimo, lang, POS, funct, MSD
+const tr_tmpl = `
+<tr n="{i}">
+  <td class="n" name="n">{i}</td>
+  <td class="fr" name="fr" >{fr}</td>
+  <td class="{disp}" name="fk">{fk}</td>
+  <td class="l" name="l"><input type="text" value="{l}" size="4" ></td>
+  <td class="e" name="e"><input type="text" value="{e}" size="4" ></td>
+  <td class="ph">{ph}</td>
+  <td class="p">{p}</td>
+  <td class="fn">{fn}</td>
+  <td class="m">{m}</td>
+</tr> 
+`;
 
 var FormLpmx = {
   id: "lpmx_id",
@@ -257,19 +270,6 @@ var FormLpmx = {
       return;
     let jt = UaJt();
     jt.append("<table>");
-    const tr_tmpl = `
-    <tr n="{i}">
-      <td class="n" name="n">{i}</td>
-      <td class="fr" name="fr" >{fr}</td>
-      <td class="{disp}" name="fk">{fk}</td>
-      <td class="l" name="l"><input type="text" value="{l}" size="4" ></td>
-      <td class="e" name="e"><input type="text" value="{e}" size="4" ></td>
-      <td class="ph">{ph}</td>
-      <td class="p">{p}</td>
-      <td class="fn">{fn}</td>
-      <td class="m">{m}</td>
-    </tr> 
-   `;
     for (let i = 0; i < lfe; i++) {
       const r = DbFormLpmx.form_lst[i];
       const disp = r[0] == r[1] ? "f" : "k";
