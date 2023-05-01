@@ -485,15 +485,12 @@ div.menu_bar {
       }
     }
   }
-
   .title {
-    background:darken(@color5,9%) !important;
-    color: darken(@color3, 0);
+    background:@menu_title_bck !important;
   }
 
   .title:hover {
-    background: darken(@color5, 20%) !important;
-    color: darken(@color3, 0);
+    background: darken(@menu_title_bck, 5%) !important;
   }
 }
 
@@ -1195,7 +1192,6 @@ div.ula_option {
 
 #lpmx_context_id {
   min-width: @context_width;
-  //max-width: @context_width;
 
   div.cmd {
     cursor: move;
@@ -1263,13 +1259,8 @@ div.ula_option {
         padding: 0;
         margin: 0;
         min-width: 40px;
-        // font-size: @font_select;
-        // font-family: @fsans;
-        // font-weight: bold;
         background: darken(@select_back, 10%);
         color: darken(@select_back, 10%);
-        // color: @select_color;
-        // text-align: center;
       }
 
       select:hover {

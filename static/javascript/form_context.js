@@ -1,4 +1,3 @@
-/* jshint esversion: 8 */
 
 var FormContext = {
     //id: "lpmx_context_id",
