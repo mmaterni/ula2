@@ -1,5 +1,3 @@
-/* jshint esversion: 8 */
-// release 25-04-22
 
 var PosMsdJson = {
   pmjs: {},
