@@ -1,3 +1,37 @@
+const cmd_html = `
+<div class="cmd" >              
+<div class="title">{fk}</div>
+<div> 
+    <a cmd="unselect_tokens" class="tipb" href="#">Unselect 
+    <span class="tiptextb">Unselecb Selected Tokens</span> 
+</a> 
+</div>
+    <div class="add">
+    <span class="tipb">Add
+        <span class="tiptextb">Add new Forma</span>
+    </span>
+    <select name="add_formakey" cmd="add_formakey">{option_list}</select>
+</div> 
+<div class="del"> 
+<a cmd="del_formakey" class="tipb" href="#">Delete 
+<span class="tiptextb">Delete Current Forma</span> 
+</a> 
+</div>
+ <div class="size">
+    <span class="tipb">Size
+        <span class="tiptextb">Set Size Context</span>
+    </span>
+    <select name="set_size" cmd="set_size">{size_list}</select>
+</div>
+<div class="fk"> 
+    <a cmd="set_context_fk" class="tipb" href="#">f/k
+    <span class="tiptextb">Context Forma / Formak </span> 
+    </a> 
+</div>
+<div> 
+    <a cmd="close" class="last" href="#">Close</a> </div>
+</div>
+`;
 
 var FormContext = {
     //id: "lpmx_context_id",
@@ -59,40 +93,6 @@ var FormContext = {
         FormOmogr.open(this.form);
     },
     show_html: function () {
-        const cmd_html = `
-        <div class="cmd" >              
-        <div class="title">{fk}</div>
-        <div> 
-            <a cmd="unselect_tokens" class="tipb" href="#">Unselect 
-            <span class="tiptextb">Unselecb Selected Tokens</span> 
-        </a> 
-        </div>
-            <div class="add">
-            <span class="tipb">Add
-                <span class="tiptextb">Add new Forma</span>
-            </span>
-            <select name="add_formakey" cmd="add_formakey">{option_list}</select>
-        </div> 
-        <div class="del"> 
-        <a cmd="del_formakey" class="tipb" href="#">Delete 
-        <span class="tiptextb">Delete Current Forma</span> 
-        </a> 
-        </div>
-         <div class="size">
-            <span class="tipb">Size
-                <span class="tiptextb">Set Size Context</span>
-            </span>
-            <select name="set_size" cmd="set_size">{size_list}</select>
-        </div>
-        <div class="fk"> 
-            <a cmd="set_context_fk" class="tipb" href="#">f/k
-            <span class="tiptextb">Context Forma / Formak </span> 
-            </a> 
-        </div>
-        <div> 
-            <a cmd="close" class="last" href="#">Close</a> </div>
-        </div>
-        `;
         // selezione dimensioni contesto
         const size = this.context_size;
         const sizes = [3, 5, 7, 9];
