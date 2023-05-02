@@ -62,7 +62,6 @@ class ExportData(object):
             fw = open(exp_path, "w", encoding=ENCODING)
             lst.sort()
             for item in lst:
-                #AAA
                 item0=[]
                 r=item.split('|')
                 for i,x in enumerate(r):
@@ -156,7 +155,6 @@ class ExportData(object):
             fw.write(os.linesep)
             for item in token_fom_lst:
                 
-                #AAA
                 item0 = []
                 for i, x in enumerate(item):
                     if i == 1:

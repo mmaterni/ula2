@@ -13,13 +13,11 @@ var UaJt = function () {
             this.sepR = sR;
             return this;
         },
-        //inserisce all'inzio il testo
         insert: function (templ, data) {
             let t = (!data) ? templ : this.render(templ, data);
             this.lines.unshift(t);
             return this;
         },
-        //accoda il testo
         append: function (templ, data) {
             let t = (!data) ? templ : this.render(templ, data);
             this.lines.push(t);

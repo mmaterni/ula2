@@ -120,6 +120,7 @@ var FormContext = {
         jt.append("<div>");
         let opt_lst = get_fk_list();
         let size_lst = get_size_list();
+        
         jt.append(cmd_html, {
             "idx": this.form_idx,
             "fr": this.form,
@@ -127,6 +128,7 @@ var FormContext = {
             "option_list": opt_lst,
             "size_list": size_lst
         });
+
         jt.append('<div class="rows">');
 
         if (this.is_context_active) {

@@ -20,6 +20,8 @@ const KEY_DATA = "ula_data";
 const KEY_DATA_FORM = "ula_form";
 const KEY_DATA_TOKEN = "ula_token";
 
+// sigla testo
+var TEXT_SIGLA = '';
 
 var DbFormLpmx = {
   text_name: null,
@@ -28,6 +30,7 @@ var DbFormLpmx = {
   token_lst: null,
   form_lst: [],
   omogr_json: {},
+  // lunghezza righe di testo e terminatore di riga
   len_row: 80,
   row_eof: '##',
   rows_js: [],
@@ -36,10 +39,16 @@ var DbFormLpmx = {
     const text_name = store_text_name || "";
     return text_name;
   },
-  set_text_name: function (text_name_) {
-    this.text_name = text_name_;
-    this.token_file = `${text_name_}.token.csv`;
-    this.form_file = `${text_name_}.form.csv`;
+  set_text_name: function (text_name) {
+    const s = text_name.split('.');
+    if (s.length > 2)
+      TEXT_SIGLA = s[s.length - 2];
+    else
+      TEXT_SIGLA="??";
+    console.log(TEXT_SIGLA);
+    this.text_name = text_name;
+    this.token_file = `${text_name}.token.csv`;
+    this.form_file = `${text_name}.form.csv`;
   },
   load_text_list: async function () {
     const url = URL_TEXT_LIST;
