@@ -1,6 +1,6 @@
 
 var UaJt = function () {
-    const jt = {
+    return {
         lines: [],
         sepL: '{',
         sepR: '}',
@@ -55,5 +55,31 @@ var UaJt = function () {
             return s.replace(/\s+|\[rn]/g, ' ');
         }
     };
-    return jt;
+};
+
+
+var UaJth = function () {
+    return {
+        lines: [],
+        reset: () => {
+            this.lines = [];
+            return this;
+        },
+        insert: (h) => {
+            this.lines.unshift(h);
+            return this;
+        },
+        append: (h) => {
+            this.lines.push(h);
+            return this;
+        },
+        text: (linesep) => {
+            const sep = linesep || "";
+            return this.lines.join(sep);
+        },
+        html: (linesep) => {
+            const s = this.text(linesep);
+            return s.replace(/\s+|\[rn]/g, ' ');
+        }
+    };
 };

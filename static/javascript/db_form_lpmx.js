@@ -30,6 +30,10 @@ var DbFormLpmx = {
   token_lst: null,
   form_lst: [],
   omogr_json: {},
+  sigla: {
+    text: 'x',
+    forma: 'x'
+  },
   // lunghezza righe di testo e terminatore di riga
   len_row: 80,
   row_eof: '##',
@@ -41,14 +45,27 @@ var DbFormLpmx = {
   },
   set_text_name: function (text_name) {
     const s = text_name.split('.');
-    if (s.length > 2)
-      TEXT_SIGLA = s[s.length - 2];
+    if (s.length > 1) {
+      const sg = s[s.length - 1];
+      this.sigka = {
+        text: sg,
+        forma: sg.toLowerCase()
+      }
+    }
     else
-      TEXT_SIGLA="??";
-    console.log(TEXT_SIGLA);
+      this.sigka = {
+        text: 'x',
+        forma: 'x'
+      }
     this.text_name = text_name;
     this.token_file = `${text_name}.token.csv`;
     this.form_file = `${text_name}.form.csv`;
+  },
+  get_sigla_text: () => {
+    return this.sigla.text;
+  },
+  get_sigla_forma: () => {
+    return this.sigla.forma;
   },
   load_text_list: async function () {
     const url = URL_TEXT_LIST;
