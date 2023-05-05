@@ -28,8 +28,8 @@
 .tipl .tiptextl,
 .tipr .tiptextr {
   visibility: hidden;
-  background: @tip_back;
-  color: @tip_color;
+  background: @tip_back !important;
+  color: @tip_color !important;
   font-size: @tip_fsize;
   font-family: @tip_fam;
   font-weight: normal;
@@ -52,7 +52,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent @tip_back transparent;
+  border-color: transparent transparent @tip_back transparent !important;
 }
 //bottom
 .tipb .tiptextb {

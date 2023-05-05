@@ -1,10 +1,12 @@
 const cmd_html = `
 <div class="cmd" >              
 <div class="title">{fk}</div>
+
 <div> 
     <a cmd="unselect_tokens" class="tipb" href="#">Unselect 
     <span class="tiptextb">Unselecb Selected Tokens</span> 
 </a> 
+
 </div>
     <div class="add">
     <span class="tipb">Add
@@ -12,6 +14,7 @@ const cmd_html = `
     </span>
     <select name="add_formakey" cmd="add_formakey">{option_list}</select>
 </div> 
+
 <div class="del"> 
 <a cmd="del_formakey" class="tipb" href="#">Delete 
 <span class="tiptextb">Delete Current Forma</span> 
