@@ -1,5 +1,3 @@
-/* jshint esversion: 8 */
-
 
 const h_menu_form_lpmx = `
 <div id="lpmx_menu_id" class="menu_bar" >
@@ -110,7 +108,12 @@ const h_menu_form_lpmx = `
 </tr> 
 </table>
 </div>
+
+<div id='lpmx_rows_id'></div>;
 `;
+
+
+
 //forma, lemma, etimo, lang, POS, funct, MSD
 const tr_tmpl = `
 <tr n="{i}">
@@ -218,10 +221,12 @@ var FormLpmx = {
     }
   },
   open: async function () {
-    let jt = UaJt();
-    jt.append(h_menu_form_lpmx + "<div id='lpmx_rows_id'></div>");
-    const html = jt.html();
-    $("#" + this.id).html(html);
+    //AAA
+    // let jt = UaJt();
+    // jt.append(h_menu_form_lpmx + "<div id='lpmx_rows_id'></div>");
+    // const html = jt.html();
+    // $("#" + this.id).html(html);
+    document.getElementById(this.id).innerHTML = h_menu_form_lpmx;
     this.bind_menu();
     this.form_lst2html();
     const e = document.querySelector("#lpmx_menu_id ul li a.title");
