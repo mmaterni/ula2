@@ -142,7 +142,7 @@ var FormContext = {
                 for (let t of row) {
                     let fk = t[1];
                     let n = t[2]; //  token_idx
-                    // AAA
+                    // AAA elimina il fine riga dalla visualizzazione
                     if (fk == DbFormLpmx.row_eof) {
                         continue;
                     }
