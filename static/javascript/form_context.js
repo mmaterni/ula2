@@ -98,7 +98,8 @@ var FormContext = {
     show_html: function () {
         // selezione dimensioni contesto
         const size = this.context_size;
-        const sizes = [3, 5, 7, 9];
+        //AAA aggiunto 0 per gestione versi
+        const sizes = [3, 5, 7, 9, 0];
         const get_size_list = () => {
             let s = "<option value=''></option>";
             for (let sz of sizes)
@@ -123,7 +124,7 @@ var FormContext = {
         jt.append("<div>");
         let opt_lst = get_fk_list();
         let size_lst = get_size_list();
-        
+
         jt.append(cmd_html, {
             "idx": this.form_idx,
             "fr": this.form,
@@ -141,7 +142,11 @@ var FormContext = {
                 for (let t of row) {
                     let fk = t[1];
                     let n = t[2]; //  token_idx
-                    if (fk == this.formkey) {
+                    // AAA
+                    if (fk == DbFormLpmx.row_eof) {
+                        continue;
+                    }
+                    else if (fk == this.formkey) {
                         const d = { "n": n, "fk": fk };
                         jtsp.append('<span n="{n}" class="form nodrag" >{fk}</span>', d);
                     }
@@ -156,7 +161,7 @@ var FormContext = {
             }
         }
         else {
-            // seleziona contesto com forma  (esteso)  e qoperazioni disattivate
+            // seleziona contesto com forma (esteso)  e qoperazioni disattivate
             const rows = DbFormLpmx.get_forma_context(this.form, this.context_size);
             for (let row of rows) {
                 for (let t of row) {

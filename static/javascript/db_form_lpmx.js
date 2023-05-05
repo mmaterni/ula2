@@ -298,46 +298,107 @@ var DbFormLpmx = {
       alert(`load_diff_text_corpus() \n${url}\n${error}`);
     });
   },
-  get_formakey_context: function (formakey, cnt_size) {
 
-    let build_context = (i) => {
-      let lft = Math.max(i - cnt_size, 0);
-      let rgt = Math.min(i + cnt_size + 1, le);
-      let array = DbFormLpmx.token_lst.slice(lft, rgt);
-      let row = JSON.parse(JSON.stringify(array));
-      for (let i = 0; i < row.length; i++)
-        row[i].push(lft + i);
-      return row;
-    };
+  //contesto con limite di token a destra e sinistra
+  build_context: (cnt_size, i) => {
+    let lft = Math.max(i - cnt_size, 0);
+    let rgt = Math.min(i + cnt_size + 1, le);
+    // AAA let array = DbFormLpmx.token_lst.slice(lft, rgt);
+    // let row = JSON.parse(JSON.stringify(array));
+    let row = DbFormLpmx.token_lst.slice(lft, rgt);
+    for (let i = 0; i < row.length; i++)
+      row[i].push(lft + i);
+    return row;
+  },
+
+  build_context_line: (i) => {
+    let j = i;
+    while (j > -1 && this.token_lst[j][0] !== '##')
+      j--;
+    const lft = Math.max(++j, 0);
+    let le = this.token_lst.length;
+    j = i;
+    while (j < le && this.token_lst[j][0] !== '##')
+      j++;
+    const rgt = Math.min(j, le);
+    let row = this.token_lst.slice(lft, rgt);
+    for (let i = 0; i < row.length; i++)
+      row[i].push(lft + i);
+    return row;
+  },
+
+
+  get_formakey_context: function (formakey, cnt_size) {
 
     // filtra utilizzando formakey
     let rows = [];
     let le = this.token_lst.length;
-    for (let i = 0; i < le; i++)
-      if (this.token_lst[i][1] == formakey)
-        rows.push(build_context(i));
-    return rows;
+    if (cnt_size > 0) {
+      for (let i = 0; i < le; i++)
+        if (this.token_lst[i][1] == formakey)
+          rows.push(this.build_context(i, cnt_size));
+      return rows;
+    }
+    else {
+      for (let i = 0; i < le; i++)
+        if (this.token_lst[i][1] == formakey)
+          rows.push(this.build_context_line(i));
+      return rows;
+    }
   },
-  get_forma_context: function (forma, cnt_size) {
 
-    let build_context = function (i) {
+  get_context: function (fr_fk, f_idx, cnt_size) {
+
+    //contesto con limite di token a destra e sinistra
+    build_context = (i) => {
       let lft = Math.max(i - cnt_size, 0);
       let rgt = Math.min(i + cnt_size + 1, le);
-      let array = DbFormLpmx.token_lst.slice(lft, rgt);
-      let row = JSON.parse(JSON.stringify(array));
+      // AAA let array = DbFormLpmx.token_lst.slice(lft, rgt);
+      // let row = JSON.parse(JSON.stringify(array));
+      let row = this.token_lst.slice(lft, rgt);
       for (let i = 0; i < row.length; i++)
         row[i].push(lft + i);
       return row;
     };
 
-    // filtra utilizzando forma
+    // prende  i token da  ## a sinistra a ## a destra
+    const build_context_line = (i) => {
+      let j = i;
+      while (j > -1 && this.token_lst[j][0] !== this.row_eof)
+        j--;
+      const lft = Math.max(++j, 0);
+      let le = this.token_lst.length;
+      j = i;
+      while (j < le && this.token_lst[j][0] !== this.row_eof)
+        j++;
+      const rgt = Math.min(j, le);
+      let row = this.token_lst.slice(lft, rgt);
+      for (let i = 0; i < row.length; i++)
+        row[i].push(lft + i);
+      return row;
+    };
+
+    // f_idx = 1 => formakey
+    // f_idx = 0 => forma
     let rows = [];
     let le = this.token_lst.length;
     for (let i = 0; i < le; i++)
-      if (this.token_lst[i][0] == forma)
-        rows.push(build_context(i));
+      if (this.token_lst[i][f_idx] == fr_fk)
+        if (cnt_size > 0)
+          rows.push(build_context(i, cnt_size));
+        else
+          rows.push(build_context_line(i));
     return rows;
   },
+  get_formakey_context: function (formakey, cnt_size) {
+    // filtra utilizzando formakey
+    return this.get_context(formakey, 1, cnt_size);
+  },
+  get_forma_context: function (forma, cnt_size) {
+    // filtra utilizzando forma
+    return this.get_context(forma, 0, cnt_size);
+  },
+
   sort_form_lst: function () {
     let sortFn = function (a, b) {
       if (a[1] == b[1]) return 0;
@@ -543,3 +604,4 @@ var DbFormLpmx = {
     return row_token_form;
   }
 };
+

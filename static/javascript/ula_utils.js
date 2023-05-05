@@ -1,5 +1,4 @@
-/* jshint esversion: 8 */
-// release 19-04-22
+
 
 var Notify = {
   element: null,
