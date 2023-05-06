@@ -19,6 +19,7 @@ const cmd_html = `
 <a cmd="del_formakey" class="tipb" href="#">Delete 
 <span class="tiptextb">Delete Current Forma</span> 
 </a> 
+
 </div>
  <div class="size">
     <span class="tipb">Size
@@ -26,6 +27,7 @@ const cmd_html = `
     </span>
     <select name="set_size" cmd="set_size">{size_list}</select>
 </div>
+
 <div class="fk"> 
     <a cmd="set_context_fk" class="tipb" href="#">f/k
     <span class="tiptextb">Context Forma / Formak </span> 

@@ -486,7 +486,7 @@ div.menu_bar {
     }
   }
   .title {
-    background:@menu_title_bck !important;
+    background: @menu_title_bck !important;
   }
 
   .title:hover {
@@ -1259,12 +1259,12 @@ div.ula_option {
         padding: 0;
         margin: 0;
         min-width: 40px;
-        background: darken(@select_back, 10%);
-        color: darken(@select_back, 10%);
+        background: darken(@select_back, 0%)!important;
+        color: darken(@select_color, 0%);
       }
 
       select:hover {
-        background: darken(@cmd_back, -10%);
+        background: darken(@select_back, 30%) !important;
         // background: darken(@head_back, 10%);
         // color: darken(@head_back, 10%);
       }
@@ -1278,6 +1278,13 @@ div.ula_option {
       margin-left: auto;
       margin-right: 10px;
     }
+    // select {
+    //   background: @cnt_select_bck !important;
+    //   color: @cnt_select_color !important;
+    // }
+    // select:hover{
+    //   background: darken(@cnt_select_bck,10%) !important;
+    // }
   }
 
   div.rows {
