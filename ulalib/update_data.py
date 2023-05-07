@@ -417,7 +417,6 @@ class UpdateData(object):
         setta:
         self.text_lst
         """
-        #XXX self.text_name_lst = []
         if not ptu.exists(TEXT_LIST_PATH):
             self.logerr("text_list.txt Not Found.").prn()
             return

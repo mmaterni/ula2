@@ -34,8 +34,7 @@ class Text2Data(object):
         self.logerr = Log("w").open(path_err, 1).log
 
     def text2token_list(self, text):
-        # AAA mantenimento verso
-        # text = text.replace(os.linesep, ' ')
+        # XXX mantenimento verso
         row_eof=" ## "
         text = text.replace(os.linesep,row_eof)
         lst = re.split(" ", text)

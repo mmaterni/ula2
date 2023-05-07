@@ -194,7 +194,7 @@ var DbFormLpmx = {
     }).then((json) => {
       const t = get_time();
       cmd_log("Update Corpus Data   " + t);
-      //UA invoca la funzione per aggiornare  form_lpmx.js
+      //XXX invoca la funzione per aggiornare  form_lpmx.js
       callback(json);
     }).catch((error) => {
       alert(`ERROR post()\n${url}\n${error}`);
@@ -250,7 +250,7 @@ var DbFormLpmx = {
     if (!csv_data || csv_data.trim().length == 0) {
       const msg = `${file_name} Not Found.`;
       alert(msg);
-      //UA riga vuota per gestione csv
+      //riga vuota per gestione csv
       //AAA da 7 a 8
       csv_data = "|||||||";
     }
@@ -303,8 +303,6 @@ var DbFormLpmx = {
   build_context: (cnt_size, i) => {
     let lft = Math.max(i - cnt_size, 0);
     let rgt = Math.min(i + cnt_size + 1, le);
-    // AAA let array = DbFormLpmx.token_lst.slice(lft, rgt);
-    // let row = JSON.parse(JSON.stringify(array));
     let row = DbFormLpmx.token_lst.slice(lft, rgt);
     for (let i = 0; i < row.length; i++)
       row[i].push(lft + i);
@@ -353,8 +351,6 @@ var DbFormLpmx = {
     build_context = (i) => {
       let lft = Math.max(i - cnt_size, 0);
       let rgt = Math.min(i + cnt_size + 1, le);
-      // AAA let array = DbFormLpmx.token_lst.slice(lft, rgt);
-      // let row = JSON.parse(JSON.stringify(array));
       let row = this.token_lst.slice(lft, rgt);
       for (let i = 0; i < row.length; i++)
         row[i].push(lft + i);

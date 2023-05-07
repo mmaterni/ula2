@@ -86,8 +86,6 @@ var Ula = {
     LPMX_ID = document.getElementById("lpmx_id");
     TEXT_ID = document.getElementById("text_id");
     UaLog.setXY(-300, 0).setZ(11).new();
-
-    //AAA
     const lst = await DbFormLpmx.load_text_list();
     if (lst.length > 0) {
       let text_name = DbFormLpmx.get_text_name();

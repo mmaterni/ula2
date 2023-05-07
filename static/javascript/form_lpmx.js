@@ -242,7 +242,6 @@ var FormLpmx = {
       }
       document.querySelector("#lpmx_menu_id ul li a.title").innerHTML = tname;
     };
-    //AAA
     let text_lst = await DbFormLpmx.load_text_list();
     SelectText.open("lpmx_id", "select_text_id", text_lst, call).at(400, 100).show();
   },
