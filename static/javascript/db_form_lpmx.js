@@ -467,7 +467,7 @@ var DbFormLpmx = {
         });
     };
     filter_token();
-    //UA struttura dati
+    //XXX struttura dati
     /*
     0: "adonc"
     1: "adonc"
