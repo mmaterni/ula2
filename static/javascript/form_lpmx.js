@@ -508,16 +508,23 @@ var FormLpmx = {
       return;
     }
     const pt = document.querySelector("#lpmx_rows_id tr.select td.ph");
-    if (!!l) {
+    const xy = pt.innerHTML.split(',');
+    const n = xy.length;
+
+    if (l != '') {
       l = l == '-' ? '' : l;
-      pt.innerHTML = `${l}`;
-    } else {
+      if (l == '')
+        pt.innerHTML = "";
+      else {
+        if (n == 2)
+          pt.innerHTML = `${l},${xy[1]}`;
+        else
+          pt.innerHTML = l + ",";
+      }
+    }
+    else if (d != '') {
       d = d == '-' ? '' : d;
-      const xy = pt.innerHTML.split(',');
-      const n = xy.length;
-      if (n == 1)
-        pt.innerHTML = `${xy},${d}`;
-      else if (n == 2)
+      if (n == 2)
         pt.innerHTML = `${xy[0]},${d}`;
     }
     this.save_store();

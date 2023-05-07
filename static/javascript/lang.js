@@ -50,13 +50,6 @@ var Lang = {
             if (i < ds.length)
                 lds[i][1] = ds[i];
         }
-
-        // for (let i = 0; i < lmax; i++)
-        //     lds.push(['', '']);
-        // for (let i = 0; i < ls.length; i++)
-        //     lds[i][0] = ls[i];
-        // for (let i = 0; i < ds.length; i++)
-        //     lds[i][1] = ds[i];
         return lds;
     },
     open: async function () {
@@ -85,12 +78,12 @@ var Lang = {
     set_lang: function () {
         $("#lpmx_lang_id").off("click");
         $("#lpmx_lang_id").on("click ", "table tr.d td.l", {}, function (e) {
-            let ld = $(this).html();
-            FormLpmx.set_lang(ld, null);
+            let L = $(this).html();
+            FormLpmx.set_lang(L, "");
         });
         $("#lpmx_lang_id").on("click ", "table tr.d td.d", {}, function (e) {
-            let ld = $(this).html();
-            FormLpmx.set_lang(null, ld);
+            let D = $(this).html();
+            FormLpmx.set_lang("", D);
         });
     }
 };
