@@ -55,7 +55,7 @@ var Lang = {
         let rows = await this.read();
         let rs = [];
         for (let row of rows) {
-            let r = `<tr class="d"> <td>${row[0]}</td><td>${row[1]}</td> </tr> `;
+            let r = `<tr class="d"><td class="l">${row[0]}</td><td class="d">${row[1]}</td> </tr> `;
             rs.push(r);
         }
         const r = rs.join("");
@@ -76,9 +76,13 @@ var Lang = {
     },
     set_lang: function () {
         $("#lpmx_lang_id").off("click");
-        $("#lpmx_lang_id").on("click ", "table tr.d td", {}, function (e) {
-            let lang = $(this).html();
-            FormLpmx.set_lang(lang);
+        $("#lpmx_lang_id").on("click ", "table tr.d td.l", {}, function (e) {
+            let ld = $(this).html();
+            FormLpmx.set_lang(ld, null);
+        });
+        $("#lpmx_lang_id").on("click ", "table tr.d td.d", {}, function (e) {
+            let ld = $(this).html();
+            FormLpmx.set_lang(null, ld);
         });
     }
 };

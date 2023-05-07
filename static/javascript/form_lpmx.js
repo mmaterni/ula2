@@ -502,18 +502,28 @@ var FormLpmx = {
     this.save_store();
     // const pr = document.getElementById("lpmx_rows_id");
   },
-  set_lang: function (lang) {
+  set_lang: function (l, d) {
     if (!this.tr_selected) {
       Notify.center().wait(5000).show("Row Not Selected.");
       return;
     }
-    lang = lang == '-' ? '' : lang;
-    const ph = $("#lpmx_rows_id tr.select").find("td.ph");
-    ph.html(lang);
-    // let e = ph.get(0);
+
+    const pt = document.querySelector("#lpmx_rows_id tr.select td.ph");
+    if (!!l) {
+      l = l == '-' ? '' : l;
+      pt.innerHTML = `${l}`;
+    } else {
+      d = d == '-' ? '' : d;
+      const xy = pt.innerHTML.split(',');
+      const n = xy.length;
+      if (n == 1)
+        pt.innerHTML = `${xy},${d}`;
+      else if (n == 2)
+        pt.innerHTML = `${xy[0]},${d}`;
+    }
     this.save_store();
-    // const pr = document.getElementById("lpmx_rows_id");
   },
+
   set_funct: function (funct) {
     if (!this.tr_selected) {
       Notify.center().wait(5000).show("Row Not Selected.");
@@ -522,10 +532,9 @@ var FormLpmx = {
     funct = funct == '-' ? '' : funct;
     const fn = $("#lpmx_rows_id tr.select").find("td.fn");
     fn.html(funct);
-    // let e = fn.get(0);
     this.save_store();
-    // const pr = document.getElementById("lpmx_rows_id");
   },
+
   save_store: function () {
     this.html2form_lst();
     DbFormLpmx.set_store();
