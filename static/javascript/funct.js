@@ -53,7 +53,7 @@ ${rs.join("")}
      `.replace(/\s+|\[rn]/g, ' ');
         if (!this.wind) {
             this.wind = UaWindowAdm.create(this.id, "lpmx_id");
-            this.wind.linkToId("lpmx_phon_id", 10, 0, -1);
+            this.wind.linkToId("lpmx_lang_id", 10, 0, -1);
             this.wind.drag();
         }
         this.wind.setHtml(html);

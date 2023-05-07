@@ -1,6 +1,6 @@
 
 var Lang = {
-    id: 'lpmx_phon_id',
+    id: 'lpmx_lang_id',
     url0: "cfg/lang.csv",
     url1: "cfg/ldata.csv",
     left: 0,
@@ -76,8 +76,8 @@ var Lang = {
         this.top = p.top;
     },
     build_lang: function () {
-        $("#lpmx_phon_id").off("click");
-        $("#lpmx_phon_id").on("click ", "table tr.d td", {}, function (e) {
+        $("#lpmx_lang_id").off("click");
+        $("#lpmx_lang_id").on("click ", "table tr.d td", {}, function (e) {
             let lang = $(this).html();
             FormLpmx.build_lang(lang);
         });
