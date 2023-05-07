@@ -69,17 +69,17 @@ var Lang = {
             this.wind.drag();
         }
         this.wind.setHtml(html);
-        this.bind_phon();
+        this.build_lang();
         this.show();
         const p = $("#" + this.id).offset();
         this.left = p.left;
         this.top = p.top;
     },
-    bind_phon: function () {
+    build_lang: function () {
         $("#lpmx_phon_id").off("click");
         $("#lpmx_phon_id").on("click ", "table tr.d td", {}, function (e) {
             let lang = $(this).html();
-            FormLpmx.set_phon(lang);
+            FormLpmx.build_lang(lang);
         });
     }
 };
