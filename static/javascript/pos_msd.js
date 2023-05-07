@@ -65,7 +65,8 @@ var PosMsd = {
   setXY: function () {
     let p = $("#lpmx_rows_head_id").offset();
     let lp_wd = $("#lpmx_rows_head_id").width();
-    lp_wd = lp_wd > 500 ? lp_wd : 1060;
+    //AAA lp_wd = lp_wd > 500 ? lp_wd : 1060;
+    lp_wd = lp_wd > 500 ? lp_wd : 1099;
     const left = lp_wd + p.left + 20;
     this.wind.setXY(left, 10, -1).show();
   },

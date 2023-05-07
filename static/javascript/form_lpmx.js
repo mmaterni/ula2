@@ -221,11 +221,6 @@ var FormLpmx = {
     }
   },
   open: async function () {
-    //AAA
-    // let jt = UaJt();
-    // jt.append(h_menu_form_lpmx + "<div id='lpmx_rows_id'></div>");
-    // const html = jt.html();
-    // $("#" + this.id).html(html);
     document.getElementById(this.id).innerHTML = h_menu_form_lpmx;
     this.bind_menu();
     this.form_lst2html();
