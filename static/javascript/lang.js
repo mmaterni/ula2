@@ -43,12 +43,20 @@ var Lang = {
         const ds = await read_csv(this.url1);
         const lmax = Math.max(ls.length, ds.length);
         const lds = [];
-        for (let i = 0; i < lmax; i++)
+        for (let i = 0; i < lmax; i++) {
             lds.push(['', '']);
-        for (let i = 0; i < ls.length; i++)
-            lds[i][0] = ls[i];
-        for (let i = 0; i < ds.length; i++)
-            lds[i][1] = ds[i];
+            if (i < ls.length)
+                lds[i][0] = ls[i];
+            if (i < ds.length)
+                lds[i][1] = ds[i];
+        }
+
+        // for (let i = 0; i < lmax; i++)
+        //     lds.push(['', '']);
+        // for (let i = 0; i < ls.length; i++)
+        //     lds[i][0] = ls[i];
+        // for (let i = 0; i < ds.length; i++)
+        //     lds[i][1] = ds[i];
         return lds;
     },
     open: async function () {
