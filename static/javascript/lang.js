@@ -43,32 +43,25 @@ var Lang = {
         const ls = await read_csv(this.url0);
         const ds = await read_csv(this.url1);
         const lmax = Math.max(ls.length, ds.length);
-        const lds = new Array(lmax);
-        lds.fill("|");
-        for (let i = 0; i < ls.length; i++) {
-            const xy = lds[i].split('|');
-            lds[i] = `${ls[i]}|${xy[1]}`;
-        };
-        for (let i = 0; i < ds.length; i++) {
-            const xy = lds[i].split('|');
-            lds[i] = `${xy[0]}|${ds[i]}`;
-        };
-
-
+        const lds = [];
+        for (let i = 0; i < lmax; i++)
+            lds.push(['', '']);
+        for (let i = 0; i < ls.length; i++)
+            lds[i][0] = ls[i];
+        for (let i = 0; i < ds.length; i++)
+            lds[i][1] = ds[i];
         return lds;
     },
     open: async function () {
         let rows = await this.read();
         let rs = [];
         for (let row of rows) {
-            const ld = row.split('|');
-            let r = `<tr class="d"> <td>${ld[0]}</td><td>${ld[1]}</td> </tr> `;
+            let r = `<tr class="d"> <td>${row[0]}</td><td>${row[1]}</td> </tr> `;
             rs.push(r);
         }
-        const r=rs.join("");
+        const r = rs.join("");
         let html = `<table><tr class='h'><td>LANG</td><td>DATA</td></tr>${r}</table>
         `.replace(/\s+|\[rn]/g, ' ');
-
 
         if (!this.wind) {
             this.wind = UaWindowAdm.create(this.id, "lpmx_id");
