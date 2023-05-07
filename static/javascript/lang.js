@@ -39,7 +39,6 @@ var Lang = {
                 return [];
             }
         };
-
         const ls = await read_csv(this.url0);
         const ds = await read_csv(this.url1);
         const lmax = Math.max(ls.length, ds.length);
@@ -69,17 +68,17 @@ var Lang = {
             this.wind.drag();
         }
         this.wind.setHtml(html);
-        this.build_lang();
+        this.set_lang();
         this.show();
         const p = $("#" + this.id).offset();
         this.left = p.left;
         this.top = p.top;
     },
-    build_lang: function () {
+    set_lang: function () {
         $("#lpmx_lang_id").off("click");
         $("#lpmx_lang_id").on("click ", "table tr.d td", {}, function (e) {
             let lang = $(this).html();
-            FormLpmx.build_lang(lang);
+            FormLpmx.set_lang(lang);
         });
     }
 };

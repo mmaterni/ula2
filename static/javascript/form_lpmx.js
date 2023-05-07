@@ -502,7 +502,7 @@ var FormLpmx = {
     this.save_store();
     // const pr = document.getElementById("lpmx_rows_id");
   },
-  build_lang: function (lang) {
+  set_lang: function (lang) {
     if (!this.tr_selected) {
       Notify.center().wait(5000).show("Row Not Selected.");
       return;
