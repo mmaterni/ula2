@@ -507,7 +507,6 @@ var FormLpmx = {
       Notify.center().wait(5000).show("Row Not Selected.");
       return;
     }
-
     const pt = document.querySelector("#lpmx_rows_id tr.select td.ph");
     if (!!l) {
       l = l == '-' ? '' : l;
