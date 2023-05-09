@@ -44,6 +44,13 @@ var DbFormLpmx = {
     this.token_file = `${text_name}.token.csv`;
     this.form_file = `${text_name}.form.csv`;
   },
+  get_sigla: function (text_name) {
+    const s = text_name.split('.');
+    if (s.length != 2) {
+      return null;
+    }
+    return s[1];
+  },
   load_text_list: async function () {
     const url = URL_TEXT_LIST;
     let rows = [];

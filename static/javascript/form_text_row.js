@@ -1,5 +1,3 @@
-/* jshint esversion: 8 */
-
 const cmd_h = `
 <div class="cmd" >  
 <button type="button" class="tipt" cmd="enable">Enable

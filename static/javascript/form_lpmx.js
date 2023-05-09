@@ -218,19 +218,31 @@ var FormLpmx = {
         alert("command not found.");
     }
   },
+  text_name_sg: function (tname) {
+    const sg = DbFormLpmx.get_sigla(tname);
+    return `${tname}&nbsp;&nbsp;&nbsp;&nbsp;${sg.toUpperCase()}`;
+  },
   open: async function () {
     document.getElementById(this.id).innerHTML = h_menu_form_lpmx;
     this.bind_menu();
     this.form_lst2html();
     const e = document.querySelector("#lpmx_menu_id ul li a.title");
-    e.innerHTML = DbFormLpmx.text_name;
     //AAA set sigla
+    const tname = DbFormLpmx.text_name
+    const tname_sg = this.text_name_sg(tname);
+    e.innerHTML = tname_sg;
   },
   select_text: async function () {
 
     let call = async (text_name) => {
       const tname = text_name || null;
       if (!tname) return;
+      // AAA check sigla
+      const sg = DbFormLpmx.get_sigla(text_name);
+      if (!sg) {
+        alert(`${text_name}.txt\nText Name Format Error !\nEs.:  <name>.<sigla>.txt`)
+        return;
+      }
       if (!confirm(`Load ${tname} ?`))
         return;
       DbFormLpmx.set_text_name(tname);
@@ -239,8 +251,9 @@ var FormLpmx = {
         alert(tname + " Not Found.");
         return;
       }
-      // AAA sigls
-      document.querySelector("#lpmx_menu_id ul li a.title").innerHTML = tname;
+      // AAA sigla      
+      const tname_sg = this.text_name_sg(tname);
+      document.querySelector("#lpmx_menu_id ul li a.title").innerHTML = tname_sg;
     };
     let text_lst = await DbFormLpmx.load_text_list();
     SelectText.open("lpmx_id", "select_text_id", text_lst, call).at(400, 100).show();
