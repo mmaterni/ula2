@@ -230,7 +230,6 @@ var DbFormLpmx = {
     });
     if (resp.ok)
       csv_data = await resp.text();
-
     if (!csv_data || csv_data.trim().length == 0) {
       const msg = `${file_name} Not Found.`;
       alert(msg);

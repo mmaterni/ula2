@@ -17,7 +17,7 @@ const h_menu_form_lpmx = `
       <span class="tiptextb">Read Data from Server</span>
     </a>
   </li>
-  
+
   <li class="v">
     <a href="#">Corpus</a>
     <ul class="v">   
@@ -46,9 +46,10 @@ const h_menu_form_lpmx = `
 
   <li class="v">
     <a class="tipb title" cmd="select_text" href="#">Select Text
-      <span class="tiptextb">Load selected Text</span>
+      <span class="tiptextb">Load Selected Text</span>
     </a>
   </li>
+  
   <li class="v">
     <a href="#">Utils</a>
     <ul class="v">
@@ -229,7 +230,7 @@ var FormLpmx = {
     const e = document.querySelector("#lpmx_menu_id ul li a.title");
     const tname = DbFormLpmx.text_name
     const tname_sg = this.text_name_sg(tname);
-    e.innerHTML = tname_sg;
+    e.innerHTML=e.innerHTML.replace("Select Text",tname_sg);
   },
   select_text: async function () {
 
@@ -250,7 +251,8 @@ var FormLpmx = {
         return;
       }
       const tname_sg = this.text_name_sg(tname);
-      document.querySelector("#lpmx_menu_id ul li a.title").innerHTML = tname_sg;
+      const e=document.querySelector("#lpmx_menu_id ul li a.title");
+      e.innerHTML=e.innerHTML.replace("Select Text",tname_sg);
     };
     let text_lst = await DbFormLpmx.load_text_list();
     SelectText.open("lpmx_id", "select_text_id", text_lst, call).at(400, 100).show();
