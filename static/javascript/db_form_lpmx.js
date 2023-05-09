@@ -178,7 +178,7 @@ var DbFormLpmx = {
     }).then((json) => {
       const t = get_time();
       cmd_log("Update Corpus Data   " + t);
-      //XXX invoca la funzione per aggiornare  form_lpmx.js
+      //invoca la funzione per aggiornare  form_lpmx.js
       callback(json);
     }).catch((error) => {
       alert(`ERROR post()\n${url}\n${error}`);
@@ -447,7 +447,7 @@ var DbFormLpmx = {
         });
     };
     filter_token();
-    //XXX struttura dati
+    // struttura dati
     /*
     0: "adonc"
     1: "adonc"

@@ -54,7 +54,6 @@ def exists(path_s):
 
 
 def remove(path_s):
-    #AAA controllare tipo
     if not pth.Path(path_s).exists():
         return False
     pth.Path(path_s).unlink()
