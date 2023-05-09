@@ -44,11 +44,10 @@ const h_menu_form_lpmx = `
     </ul>
   </li>
 
-  <li class="v">
-    <a class="tipb title" cmd="select_text" href="#">Select Text
-      <span class="tiptextb">Load Selected Text</span>
-    </a>
-  </li>
+  <li class="v tipb" >
+    <a class="title" cmd="select_text" href="#">Select Text </a>
+    <span class="tiptextb">Load Selected Text</span>
+   </li>
   
   <li class="v">
     <a href="#">Utils</a>
@@ -219,18 +218,23 @@ var FormLpmx = {
         alert("command not found.");
     }
   },
-  text_name_sg: function (tname) {
+  get_text_name_sg: function (tname) {
     const sg = DbFormLpmx.get_sigla(tname);
     return `${tname}&nbsp;&nbsp;&nbsp;&nbsp;${sg.toUpperCase()}`;
+    // const tname_sg = `${tname}&nbsp;&nbsp;&nbsp;&nbsp;${sg.toUpperCase()}`;
+    // const e = document.querySelector("#lpmx_menu_id ul li a.title");
+    // const tname = DbFormLpmx.text_name
+    // const tname_sg = this.set_text_name_sg(tname);
+    // e.innerHTML = e.innerHTML.replace("Select Text", tname_sg);
   },
   open: async function () {
     document.getElementById(this.id).innerHTML = h_menu_form_lpmx;
     this.bind_menu();
     this.form_lst2html();
+
     const e = document.querySelector("#lpmx_menu_id ul li a.title");
-    const tname = DbFormLpmx.text_name
-    const tname_sg = this.text_name_sg(tname);
-    e.innerHTML=e.innerHTML.replace("Select Text",tname_sg);
+    const tname_sg = this.get_text_name_sg(DbFormLpmx.text_name);
+    e.innerHTML = tname_sg;
   },
   select_text: async function () {
 
@@ -250,9 +254,9 @@ var FormLpmx = {
         alert(tname + " Not Found.");
         return;
       }
-      const tname_sg = this.text_name_sg(tname);
-      const e=document.querySelector("#lpmx_menu_id ul li a.title");
-      e.innerHTML=e.innerHTML.replace("Select Text",tname_sg);
+      const e = document.querySelector("#lpmx_menu_id ul li a.title");
+      const tname_sg = this.get_text_name_sg(tname);
+      e.innerHTML = tname_sg;
     };
     let text_lst = await DbFormLpmx.load_text_list();
     SelectText.open("lpmx_id", "select_text_id", text_lst, call).at(400, 100).show();

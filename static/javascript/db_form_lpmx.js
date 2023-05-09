@@ -1,4 +1,3 @@
-
 const ULA_DATA_DIR = `/ula_data`;
 const DATA_DIR = `${ULA_DATA_DIR}/data`;
 const URL_TEXT_LIST = `${ULA_DATA_DIR}/data/text_list.txt`;
@@ -19,9 +18,6 @@ const KEY_TEXT_NAME = "ula_text_name";
 const KEY_DATA = "ula_data";
 const KEY_DATA_FORM = "ula_form";
 const KEY_DATA_TOKEN = "ula_token";
-
-// sigla testo
-var TEXT_SIGLA = '';
 
 var DbFormLpmx = {
   text_name: null,
@@ -308,9 +304,7 @@ var DbFormLpmx = {
     return row;
   },
 
-
   get_formakey_context: function (formakey, cnt_size) {
-
     // filtra utilizzando formakey
     let rows = [];
     let le = this.token_lst.length;
@@ -377,7 +371,6 @@ var DbFormLpmx = {
     // filtra utilizzando forma
     return this.get_context(forma, 0, cnt_size);
   },
-
   sort_form_lst: function () {
     let sortFn = function (a, b) {
       if (a[1] == b[1]) return 0;
@@ -431,9 +424,7 @@ var DbFormLpmx = {
     let etimo = js.etimo.trim().toLowerCase();
     let pos = js.pos.trim().toLowerCase();
     let lang = js.lang.trim().toLowerCase(); ///lang
-
     let rows = this.rows_js;
-
     let filter_token = () => {
       //setta rows selezionate
       if (form != "")
