@@ -2,18 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from pdb import set_trace
-import sys
+# import sys
 import os
 import json
-
-# from regex import E
 from ulalib.ualog import Log
 import ulalib.pathutils as ptu
 from ulalib.ula_setting import CORPUS_NAME, DATA_DIR, CORPUS_DIR
 from ulalib.ula_setting import ENCODING, TEXT_LIST_PATH
 
-__date__ = "09-01-2023"
-__version__ = "0.3.5"
+__date__ = "09-05-2023"
+__version__ = "0.3.6"
 __author__ = "Marta Materni"
 """
 text form
@@ -25,8 +23,8 @@ amor|amor
 amor|amor2
 
 corpus form
-amor|amor|lemma|etimo|lang|poas|func|msd
-amor|amor2|lemma|etimo|lang|poas|func|msd
+amor|amor|lemma|etimo|lang|poas|func|msd|g,p,v
+amor|amor2|lemma|etimo|lang|poas|func|msd|g,v
 
 """
 
@@ -39,7 +37,10 @@ POS = 5
 FUNCT = 6
 MSD = 7
 
-ROW_LEN = 8
+SIGLA = 8
+
+FORM_ROW_LEN = 8
+CORPUS_ROW_LEN = 9
 
 
 class UpdateData(object):
@@ -51,6 +52,8 @@ class UpdateData(object):
     def __init__(self):
         path_err = "log/UpdateData.ERR.log"
         self.logerr = Log("w").open(path_err, 1).log
+        # sigla del teso
+        self.sigla = "x"
 
         # lista di text_form.csv
         self.text_form_lst = []
@@ -93,6 +96,7 @@ class UpdateData(object):
     def set_text_name(self, text_name):
         text_form_name = text_name.replace(".txt", ".form.csv")
         self.text_form_path = ptu.join(DATA_DIR, text_form_name)
+        self.sigla = text_form_name.split('.')[1]
 
     def set_text_flled_idx_lst(self):
         """
@@ -115,7 +119,8 @@ class UpdateData(object):
             #     n += 1
             # if text_form[FUNCT] == "":
             # if text_form[MSD] == "":
-            # XXX è sufficiente il lemma
+
+            # è sufficiente il lemma
             if n > 0:
                 self.text_filled_idx_lst.append(i)
 
@@ -239,7 +244,7 @@ class UpdateData(object):
         """
         for i, row in enumerate(self.text_form_lst):
             text_form = row.split('|')
-            if len(text_form) < ROW_LEN:
+            if len(text_form) < FORM_ROW_LEN:
                 msg = "WARNING update_text_form\nrow:i}\n{row}\n{text_form}\n"
                 self.logerr(msg)
                 continue
@@ -273,7 +278,7 @@ class UpdateData(object):
 
         con i dati di data/text_name.form.csv
         AGGIORNA SOOLO LE FORM PER LE QUALI
-        XXX lemma !='' '
+        lemma !='' '
         utilizza:
         self.text_form_lst
         self.text_filled_idx_lst
@@ -281,53 +286,71 @@ class UpdateData(object):
         self.corpus_formakey_lst
         self.corpus_form_lst
 
-        ritrona una lista delle row del corpus
-        sovrascritte da form diverse
+        aggiunge le righe nuove
+        sovrascrive le righe modificate
+        aggiorna le sigle del testi
+        
+        ritrona una lista delle variazioni nella forma
+        riga__old$riga_nuova
+
         """
         self.read_text_form_csv()
         self.read_corpus_form_csv()
         self.set_text_flled_idx_lst()
         diff_lst = []
+        # set_trace()
         for idx in self.text_filled_idx_lst:
-            text_row = self.text_form_lst[idx]
-            text_cols = text_row.split('|')
-            fk = text_cols[FORMAKEY]
+            form_row = self.text_form_lst[idx]
+            form_cols = form_row.split('|')
+            fk = form_cols[FORMAKEY]
             try:
                 # verifica se in corpus esiste formakey
                 corpus_idx = self.corpus_formakey_lst.index(fk)
             except ValueError:
                 corpus_idx = -1
             if corpus_idx < 0:
-                # aggiunge form a corpus
-                self.corpus_form_lst.append(text_row)
+                # non esiste formakey
+                # aggiunge form con sigla a corpus
+                row_sg = form_row + "|" + self.sigla
+                self.corpus_form_lst.append(row_sg)
             else:
+                # esiste formakey nel corpus
                 # modifica form di corpus a lo mette in lista
-                corpus_row = self.corpus_form_lst[corpus_idx]
-                if text_row != corpus_row:
-                    row = text_row + "$" + corpus_row
+                # aggiungendo se necessario la sigla
+                corpus_row_sg = self.corpus_form_lst[corpus_idx]
+                cols = corpus_row_sg.split('|')
+                corpus_row = "|".join(cols[:-1])
+                #sigle del corpus
+                sg = cols[SIGLA]
+                sg_lst = sg.split(',')
+                if not self.sigla in sg_lst:
+                    sg_lst.append(self.sigla)
+                    sg = ",".join(sg_lst)
+                self.corpus_form_lst[corpus_idx] = form_row + "|" + sg
+                if form_row != corpus_row:
+                    row = form_row + "$" + corpus_row
                     diff_lst.append(row)
-                self.corpus_form_lst[corpus_idx] = text_row
 
         #se manca una forma base la aggiunge con lemma=?
         f_lst = []
         fk_lst = []
-        for text_row in self.corpus_form_lst:
-            row = text_row.split('|')
+        for form_row in self.corpus_form_lst:
+            row = form_row.split('|')
             f_lst.append(row[FORMA])
             fk_lst.append(row[FORMAKEY])
         for f in f_lst:
             if not f in fk_lst:
-                text_row = f"{f}|{f}|?||||||"
-                self.corpus_form_lst.append(text_row)
+                form_row = f"{f}|{f}|?||||||"
+                self.corpus_form_lst.append(form_row)
 
         # scrittura corpus.form.csv
         try:
             ptu.make_dir_of_file(self.corpus_form_path)
             fw = open(self.corpus_form_path, "w", encoding=ENCODING)
-            for text_row in self.corpus_form_lst:
-                if text_row == "":
+            for form_row in self.corpus_form_lst:
+                if form_row == "":
                     continue
-                fw.write(text_row)
+                fw.write(form_row)
                 fw.write(os.linesep)
             fw.close()
         except IOError as e:
@@ -349,6 +372,10 @@ class UpdateData(object):
         finally:
             #data = "\n".join(diff_lst)
             data = diff_lst
+            # for x in data:
+            #     ab = x.split('$')
+            #     print(ab[0])
+            #     print(ab[1] + "\n")
             return data
 
     ###################################
@@ -371,8 +398,9 @@ class UpdateData(object):
                 if row == "":
                     break
                 cols = row.split('|')
-                if len(cols) < ROW_LEN:
-                    self.logerr(f"text\n{i}\n{row}\n{cols}\n")
+                if len(cols) < FORM_ROW_LEN:
+                    msg = f"ERROR read_text_form_csv\n{self.text_form_path}\n{i}\n{row}\n{cols}\n"
+                    self.logerr(msg)
                     continue
                 self.text_form_lst.append(row)
         except Exception as e:
@@ -400,8 +428,9 @@ class UpdateData(object):
                 if row == "":
                     continue
                 cols = row.split('|')
-                if len(cols) < ROW_LEN:
-                    self.logerr(f"corpus\n{i}\n{row}\n{cols}\n")
+                if len(cols) < CORPUS_ROW_LEN:
+                    msg = f"ERROR read_corpus_form\n{i}\n{row}\n{cols}\n"
+                    self.logerr(msg)
                     continue
                 self.corpus_form_lst.append(row)
                 fk = cols[FORMAKEY]
@@ -434,7 +463,7 @@ class UpdateData(object):
         le = len(self.text_form_lst)
         for i in range(0, le):
             cols = self.text_form_lst[i].split("|")
-            for j in range(2, ROW_LEN):
+            for j in range(2, FORM_ROW_LEN):
                 cols[j] = ""
             row = ("|").join(cols)
             self.text_form_lst[i] = row
