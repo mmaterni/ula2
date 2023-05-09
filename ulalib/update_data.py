@@ -256,8 +256,10 @@ class UpdateData(object):
                 idx = -1
             if idx < 0:
                 continue
-            corpus_form = self.corpus_form_lst[idx]
-            self.text_form_lst[i] = corpus_form
+            corpus_row_sg = self.corpus_form_lst[idx]
+            cols = corpus_row_sg.split("|")
+            corpus_row = "|".join(cols[:FORM_ROW_LEN])
+            self.text_form_lst[i] = corpus_row
         try:
             fw = open(self.text_form_path, "w", encoding=ENCODING)
             for row in self.text_form_lst:
