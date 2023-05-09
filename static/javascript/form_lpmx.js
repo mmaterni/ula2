@@ -49,7 +49,6 @@ const h_menu_form_lpmx = `
       <span class="tiptextb">Load selected Text</span>
     </a>
   </li>
-  
   <li class="v">
     <a href="#">Utils</a>
     <ul class="v">
@@ -111,7 +110,6 @@ const h_menu_form_lpmx = `
 
 <div id='lpmx_rows_id'></div>;
 `;
-
 
 
 //forma, lemma, etimo, lang, POS, funct, MSD
@@ -226,6 +224,7 @@ var FormLpmx = {
     this.form_lst2html();
     const e = document.querySelector("#lpmx_menu_id ul li a.title");
     e.innerHTML = DbFormLpmx.text_name;
+    //AAA set sigla
   },
   select_text: async function () {
 
@@ -240,6 +239,7 @@ var FormLpmx = {
         alert(tname + " Not Found.");
         return;
       }
+      // AAA sigls
       document.querySelector("#lpmx_menu_id ul li a.title").innerHTML = tname;
     };
     let text_lst = await DbFormLpmx.load_text_list();
