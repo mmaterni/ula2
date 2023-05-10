@@ -81,7 +81,7 @@ class ExportData(object):
             raise Exception(msg)
         try:
             # head_csv = self.sep.join(HEAD)
-            corpus_name = CORPUS_NAME.replace('csv', '.ula.csv')
+            corpus_name = CORPUS_NAME.replace('.csv', '.ula.csv')
             exp_path = ptu.join(DATA_EXPORT_DIR, corpus_name)
             fw = open(exp_path, "w", encoding=ENCODING)
             lst.sort()
