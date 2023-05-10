@@ -84,7 +84,7 @@ class ExportData(object):
             corpus_name = CORPUS_NAME.replace('csv', '.ula.csv')
             exp_path = ptu.join(DATA_EXPORT_DIR, corpus_name)
             fw = open(exp_path, "w", encoding=ENCODING)
-            # lst.sort() AAA
+            lst.sort()
             #set di sigle di tutto il corpus
             corpus_sg = fill_corpus_sg(lst)
             #dictionari delle sigle del corpus
@@ -98,7 +98,6 @@ class ExportData(object):
                 #elimina formakey
                 del r[1]
                 row = self.sep.join(r)
-                # row = item0.replace('|', self.sep)
                 fw.write(row)
                 fw.write(os.linesep)
             fw.close()
