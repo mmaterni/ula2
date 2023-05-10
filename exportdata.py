@@ -10,8 +10,8 @@ import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
 
-__date__ = "02-01-2023"
-__version__ = "0.1.1"
+__date__ = "10-05-2023"
+__version__ = "0.1.2"
 __author__ = "Marta Materni"
 
 #form.csv
@@ -31,8 +31,10 @@ TOKEN_ROW_LEN = 2
 FORM_ROW_LEN = 2
 
 HEAD_TOKEN = [
-    "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLe"
+    "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLE"
 ]
+
+HEAD_CORPUS = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD"]
 
 path_err = "log/exportdata.ERR.log"
 logerr = Log("w").open(path_err, 1).log
@@ -40,8 +42,8 @@ logerr = Log("w").open(path_err, 1).log
 
 class ExportData(object):
 
-    def __init__(self, dir_exp, csv_sep='\t'):
-        self.dir_exp = dir_exp
+    def __init__(self, corpus_exp_name, csv_sep='\t'):
+        self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
 
     def export_corpus(self):
@@ -56,7 +58,7 @@ class ExportData(object):
             return st
 
         def set_row_sg(row, js, lst0):
-            lst=lst0.copy()
+            lst = lst0.copy()
             r = row.split('|')
             rsg = r[SIGLA].split(',')
             rsg = [x for x in rsg if x != '']
@@ -81,16 +83,26 @@ class ExportData(object):
             raise Exception(msg)
         try:
             # head_csv = self.sep.join(HEAD)
-            corpus_name = CORPUS_NAME.replace('.csv', '.ula.csv')
-            exp_path = ptu.join(DATA_EXPORT_DIR, corpus_name)
+            cexport_name = f"corpus.{self.corpus_exp_name}.csv"
+            exp_path = ptu.join(DATA_EXPORT_DIR, cexport_name)
+            print(os.linesep)
+            print(exp_path)
             fw = open(exp_path, "w", encoding=ENCODING)
-            lst.sort()
             #set di sigle di tutto il corpus
             corpus_sg = fill_corpus_sg(lst)
-            #dictionari delle sigle del corpus
+            #dictionario delle sigle del corpus
             sg_js = {x: i for i, x in enumerate(sorted(corpus_sg))}
             #list di sigle vuote
             sg_lst = ['' for i in range(len(corpus_sg))]
+
+            #intestazione comprensiva delle sigke
+            head = HEAD_CORPUS.copy()
+            head.extend(corpus_sg)
+            row = self.sep.join(head)
+            fw.write(row)
+            fw.write(os.linesep)
+
+            lst.sort()
             for item in lst:
                 item = item.strip()
                 # print(item)
@@ -108,7 +120,6 @@ class ExportData(object):
 
     def read_form_csv(self, text_name):
         form_name = text_name.replace(".txt", f".form.csv")
-        # AAAform_path = os.path.join(DATA_DIR, form_name)
         form_path = ptu.join(DATA_DIR, form_name)
 
         if pth.Path(form_path).exists() is False:
@@ -230,17 +241,16 @@ class ExportData(object):
         path = ptu.abs(DATA_EXPORT_DIR)
         ptu.make_dir(path, 0o777)
         names = self.read_text_list()
-        # for name in names:
-        #     if name.strip() == '':
-        #         continue
-        #     text_name = name + ".txt"
-        #     # print(text_name)
-        #     self.export_text_data(text_name)
+        for name in names:
+            if name.strip() == '':
+                continue
+            text_name = name + ".txt"
+            self.export_text_data(text_name)
         self.export_corpus()
 
 
-def do_main(dir_exp, csv_sep):
-    exportdata = ExportData(dir_exp, csv_sep)
+def do_main(corpus_export_name, csv_sep):
+    exportdata = ExportData(corpus_export_name, csv_sep)
     exportdata.export_data()
 
 
@@ -254,12 +264,12 @@ if __name__ == "__main__":
                         default='p',
                         metavar="",
                         help='-s p)pipe s)emi_colon t)tab  (default pipe (|))')
-    parser.add_argument('-d',
-                        dest="dir",
+    parser.add_argument('-n',
+                        dest="name",
                         required=False,
-                        default="./data_export",
+                        default="ula",
                         metavar="",
-                        help="-d <dir_export> (default ./data_export)")
+                        help="-n <corpus_name> (default ula)")
     args = parser.parse_args()
     if args.sep == 't':
         sep = '\t'
@@ -270,4 +280,4 @@ if __name__ == "__main__":
     else:
         print("options for flag -s are t/p/s")
         sys.exit()
-    do_main(args.dir, sep)
+    do_main(args.name, sep)
