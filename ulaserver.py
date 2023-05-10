@@ -1,15 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # coding: utf-8
 
 from pdb import set_trace
 # import pprint
-
 import os
 import argparse
-
 from ulalib.bottle import Bottle
 from ulalib.bottle import request, static_file
 from ulalib.save_back import save_text_data_back
+# from ulalib.w_data import *
 from ulalib.save_back import save_corpus_data_back
 from ulalib.update_data import UpdateData
 from ulalib.ula_setting import *
@@ -83,8 +82,23 @@ def server_static(filepath):
     # print("server_static")
     # print(request.url)
     # print(pars)
+    # n = os.path.basename(filepath)
+    # lst = n.split('.')
+    # ok = False
+    # e = lst[-1:][0]
+    # if len(lst) > 2:
+    #     t = lst[-2:][0]
+    #     ok = (e == 'csv' and t in ['form', 'token']) or (e == 'txt')
+    # else:
+    #     ok = (e == 'txt')
+    # if ok:
+    #     s = static_file(filepath, root="/u/ulax")
+    # else:
+    #     s = static_file(filepath, root=ROOT_PATH)
+
     s = static_file(filepath, root=ROOT_PATH)
     return s
+
 
 @app.route('/diff', method='GET')
 def diff_text_corpus():
@@ -112,12 +126,13 @@ def diff_text_corpus():
 def write(filepath=""):
     data = request_data(request)
     try:
+        # save_data(filepath,data)
         fpath = os.path.join(ROOT_PATH, filepath)
         fw = open(fpath, "wb")
         fw.write(data)
         fw.close()
         os.chmod(fpath, 0o777)
-        save_text_data_back(fpath)
+        save_text_data_back(filepath)
     except IOError as e:
         msg = f"ERRORO write()"
         raise Exception(f"{msg}\n{e}")
@@ -157,7 +172,6 @@ def update_text(filepath=""):
     return "1"
 
 
-
 @app.error(403)
 def mistake403(code):
     return f'Error 403 There is a mistake in your url! '
@@ -170,34 +184,30 @@ def error404(error):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-i',
-        dest="ip",
-        required=False,
-        metavar="",
-        default="0.0.0.0",
-        help="-i <ip> (Default 0.0.0.0")
-    parser.add_argument(
-        '-p',
-        dest="port",
-        required=False,
-        metavar="",
-        default="8080",
-        help="-p <port> (Default 80")
-    parser.add_argument(
-        '-r',
-        dest="root",
-        required=False,
-        metavar="",
-        default=".",
-        help="-r <root> (Default . ")
-    parser.add_argument(
-        '-d',
-        dest="debug",
-        required=False,
-        metavar="",
-        default="0",
-        help="-d 0/1 (Default 0 ")
+    parser.add_argument('-i',
+                        dest="ip",
+                        required=False,
+                        metavar="",
+                        default="0.0.0.0",
+                        help="-i <ip> (Default 0.0.0.0")
+    parser.add_argument('-p',
+                        dest="port",
+                        required=False,
+                        metavar="",
+                        default="8080",
+                        help="-p <port> (Default 80")
+    parser.add_argument('-r',
+                        dest="root",
+                        required=False,
+                        metavar="",
+                        default=".",
+                        help="-r <root> (Default . ")
+    parser.add_argument('-d',
+                        dest="debug",
+                        required=False,
+                        metavar="",
+                        default="0",
+                        help="-d 0/1 (Default 0 ")
     args = parser.parse_args()
     ip = args.ip
     port = int(args.port)
