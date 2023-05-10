@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from pdb import set_trace
+from ulalib.ualog import Log
 import sys
 import argparse
 import pathlib as pth
+import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
-# from openpyxl import Workbook
 
 __date__ = "02-01-2023"
 __version__ = "0.1.1"
@@ -23,16 +24,18 @@ LANG = 4
 POS = 5
 FUNCT = 6
 MSD = 7
-TOKEN_ROW_LEN = 8
 
-#token.csv
-#coment|coment
-#FORMA = 0
-#FORMAKEY = 1
+SIGLA = 8
+
 TOKEN_ROW_LEN = 2
+FORM_ROW_LEN = 2
 
-#HEAD = ["FORMA", "FORMAKEY", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD"]
-HEAD = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD"]
+HEAD_TOKEN = [
+    "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLe"
+]
+
+path_err = "log/exportdata.ERR.log"
+logerr = Log("w").open(path_err, 1).log
 
 
 class ExportData(object):
@@ -42,9 +45,31 @@ class ExportData(object):
         self.sep = csv_sep
 
     def export_corpus(self):
-        corpus_path = os.path.join(CORPUS_DIR, CORPUS_NAME)
+
+        def fill_corpus_sg(rows):
+            st = set()
+            for row in rows:
+                cols = row.strip().split('|')
+                sg = set(cols[SIGLA].split(','))
+                st.update(sg)
+            st.remove('')
+            return st
+
+        def set_row_sg(row, js, lst0):
+            lst=lst0.copy()
+            r = row.split('|')
+            rsg = r[SIGLA].split(',')
+            rsg = [x for x in rsg if x != '']
+            for s in rsg:
+                i = js[s]
+                lst[i] = s
+            r = r[:-1]
+            r.extend(lst)
+            return r
+
+        corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
         if pth.Path(corpus_path).exists() is False:
-            print(f"{corpus_path} Non  esistente")
+            logerr(f"{corpus_path} Non  esistente")
             sys.exit()
         lst = []
         try:
@@ -52,26 +77,30 @@ class ExportData(object):
                 lst = f.readlines()
         except Exception as e:
             msg = f'ERROR export_corpus \n{e}\n'
-            print(msg)
+            logerr(msg)
             raise Exception(msg)
         try:
             # head_csv = self.sep.join(HEAD)
             corpus_name = CORPUS_NAME.replace('csv', '.ula.csv')
-            exp_path = os.path.join(self.dir_exp, corpus_name)
-            print(exp_path)
+            exp_path = ptu.join(DATA_EXPORT_DIR, corpus_name)
             fw = open(exp_path, "w", encoding=ENCODING)
-            lst.sort()
+            # lst.sort() AAA
+            #set di sigle di tutto il corpus
+            corpus_sg = fill_corpus_sg(lst)
+            #dictionari delle sigle del corpus
+            sg_js = {x: i for i, x in enumerate(sorted(corpus_sg))}
+            #list di sigle vuote
+            sg_lst = ['' for i in range(len(corpus_sg))]
             for item in lst:
-                item0=[]
-                r=item.split('|')
-                for i,x in enumerate(r):
-                    if i==1:
-                        continue
-                    item0.append(x)
-                row=self.sep.join(item0)
+                item = item.strip()
+                # print(item)
+                r = set_row_sg(item, sg_js, sg_lst)
+                #elimina formakey
+                del r[1]
+                row = self.sep.join(r)
                 # row = item0.replace('|', self.sep)
                 fw.write(row)
-                # fw.write(os.linesep)
+                fw.write(os.linesep)
             fw.close()
             os.chmod(exp_path, 0o777)
         except IOError as e:
@@ -80,9 +109,11 @@ class ExportData(object):
 
     def read_form_csv(self, text_name):
         form_name = text_name.replace(".txt", f".form.csv")
-        form_path = os.path.join(DATA_DIR, form_name)
+        # AAAform_path = os.path.join(DATA_DIR, form_name)
+        form_path = ptu.join(DATA_DIR, form_name)
+
         if pth.Path(form_path).exists() is False:
-            print(f"{form_path} Non  esistente")
+            logerr(f"{form_path} Non  esistente")
             sys.exit()
         form_lst = []
         form_keys = []
@@ -94,8 +125,8 @@ class ExportData(object):
                 if row == "":
                     break
                 cols = row.split('|')
-                if len(cols) < TOKEN_ROW_LEN:
-                    self.logerr(f"text\n{i}\n{row}\n{cols}\n")
+                if len(cols) < FORM_ROW_LEN:
+                    logerr(f"text\n{i}\n{row}\n{cols}\n")
                     continue
                 form_lst.append(cols)
                 key = cols[FORMAKEY]
@@ -103,14 +134,15 @@ class ExportData(object):
             return form_lst, form_keys
         except Exception as e:
             msg = f'ERROR read_form_csv \n{e}\n'
-            self.logerr(msg)
+            logerr(msg)
             raise Exception(msg)
 
     def read_token_csv(self, text_name):
         token_name = text_name.replace(".txt", f".token.csv")
-        token_path = os.path.join(DATA_DIR, token_name)
+        # AAA token_path = os.path.join(DATA_DIR, token_name)
+        token_path = ptu.join(DATA_DIR, token_name)
         if pth.Path(token_path).exists() is False:
-            print(f"{token_path} Non  esistente")
+            logerr(f"{token_path} Non  esistente")
             sys.exit()
         token_lst = []
         try:
@@ -122,13 +154,13 @@ class ExportData(object):
                     break
                 cols = row.split('|')
                 if len(cols) < TOKEN_ROW_LEN:
-                    self.logerr(f"text\n{i}\n{row}\n{cols}\n")
+                    logerr(f"text\n{i}\n{row}\n{cols}\n")
                     continue
                 token_lst.append(cols)
             return token_lst
         except Exception as e:
             msg = f'ERROR read_token_csv \n{e}\n'
-            self.logerr(msg)
+            logerr(msg)
             raise Exception(msg)
 
     def join_token_form(self, token_lst, form_lst, form_keys):
@@ -149,12 +181,12 @@ class ExportData(object):
 
     def write_token_form_csv(self, exp_path, token_fom_lst):
         try:
-            head_csv = self.sep.join(HEAD)
+            head_csv = self.sep.join(HEAD_TOKEN)
             fw = open(exp_path, "w", encoding=ENCODING)
             fw.write(head_csv)
             fw.write(os.linesep)
             for item in token_fom_lst:
-                
+
                 item0 = []
                 for i, x in enumerate(item):
                     if i == 1:
@@ -176,14 +208,15 @@ class ExportData(object):
         form_lst, form_keys = self.read_form_csv(text_name)
         token_form_lst = self.join_token_form(token_lst, form_lst, form_keys)
         exp_name = text_name.replace(".txt", ".ula.csv")
-        exp_csv_path = os.path.join(self.dir_exp, exp_name)
+        # AAA exp_csv_path = os.path.join(self.dir_exp, exp_name)
+        exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
         print(exp_csv_path)
         self.write_token_form_csv(exp_csv_path, token_form_lst)
 
     def read_text_list(self):
         if pth.Path(TEXT_LIST_PATH).exists() is False:
             msg = "text_list.txt Not Found."
-            print(msg)
+            logerr(msg)
             sys.exit()
         try:
             with open(TEXT_LIST_PATH, 'r', encoding=ENCODING) as f:
@@ -195,16 +228,15 @@ class ExportData(object):
         return names
 
     def export_data(self):
-        path = pth.Path(self.dir_exp)
-        path.mkdir(exist_ok=True)
-        os.chmod(self.dir_exp, 0o777)
+        path = ptu.abs(DATA_EXPORT_DIR)
+        ptu.make_dir(path, 0o777)
         names = self.read_text_list()
-        for name in names:
-            if name.strip() == '':
-                continue
-            text_name = name + ".txt"
-            # print(text_name)
-            self.export_text_data(text_name)
+        # for name in names:
+        #     if name.strip() == '':
+        #         continue
+        #     text_name = name + ".txt"
+        #     # print(text_name)
+        #     self.export_text_data(text_name)
         self.export_corpus()
 
 
