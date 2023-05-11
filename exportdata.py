@@ -30,12 +30,6 @@ SIGLA = 8
 TOKEN_ROW_LEN = 2
 FORM_ROW_LEN = 2
 
-HEAD_TOKEN = [
-    "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLE"
-]
-
-HEAD_CORPUS = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD"]
-
 path_err = "log/exportdata.ERR.log"
 logerr = Log("w").open(path_err, 1).log
 
@@ -47,8 +41,13 @@ class ExportData(object):
         self.sep = csv_sep
 
     def export_corpus(self):
+        head_corpus = [
+            "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD"
+        ]
 
-        def fill_corpus_sg(rows):
+        #estrae dalla lista di tutto il corpus il
+        #set di sigle utilizzato
+        def get_corpus_sigle(rows):
             st = set()
             for row in rows:
                 cols = row.strip().split('|')
@@ -57,7 +56,8 @@ class ExportData(object):
             st.remove('')
             return st
 
-        def set_row_sg(row, js, lst0):
+        # aggiunge le sigle ordinate alla row
+        def add_row_sigle(row, js, lst0):
             lst = lst0.copy()
             r = row.split('|')
             rsg = r[SIGLA].split(',')
@@ -89,14 +89,14 @@ class ExportData(object):
             print(exp_path)
             fw = open(exp_path, "w", encoding=ENCODING)
             #set di sigle di tutto il corpus
-            corpus_sg = fill_corpus_sg(lst)
+            corpus_sg = get_corpus_sigle(lst)
             #dictionario delle sigle del corpus
             sg_js = {x: i for i, x in enumerate(sorted(corpus_sg))}
             #list di sigle vuote
             sg_lst = ['' for i in range(len(corpus_sg))]
 
             #intestazione comprensiva delle sigke
-            head = HEAD_CORPUS.copy()
+            head = head_corpus.copy()
             head.extend(corpus_sg)
             row = self.sep.join(head)
             fw.write(row)
@@ -106,7 +106,8 @@ class ExportData(object):
             for item in lst:
                 item = item.strip()
                 # print(item)
-                r = set_row_sg(item, sg_js, sg_lst)
+                #aggiunge le sigle alla row
+                r = add_row_sigle(item, sg_js, sg_lst)
                 #elimina formakey
                 del r[1]
                 row = self.sep.join(r)
@@ -118,6 +119,44 @@ class ExportData(object):
             msg = f'ERROR export_corpus: \n{e}\n'
             raise Exception(msg)
 
+    def export_ttoken_form(self, text_path):
+        text_name = os.path.basename(text_path)
+        token_lst = self.read_token_csv(text_name)
+        form_lst, form_keys = self.read_form_csv(text_name)
+        token_form_lst = self.join_token_form(token_lst, form_lst, form_keys)
+        exp_name = text_name.replace(".txt", ".ula.csv")
+        exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
+        print(exp_csv_path)
+        self.write_token_form_csv(exp_csv_path, token_form_lst)
+
+    def write_token_form_csv(self, exp_path, token_fom_lst):
+        head_token = [
+            "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLE"
+        ]
+        try:
+            head_csv = self.sep.join(head_token)
+            fw = open(exp_path, "w", encoding=ENCODING)
+            fw.write(head_csv)
+            fw.write(os.linesep)
+            for item in token_fom_lst:
+
+                item0 = []
+                for i, x in enumerate(item):
+                    if i == 1:
+                        continue
+                    item0.append(x)
+                row = self.sep.join(item0)
+
+                fw.write(row)
+                fw.write(os.linesep)
+            fw.close()
+            os.chmod(exp_path, 0o777)
+        except IOError as e:
+            msg = f'ERROR write_token_form_csv: \n{e}\n'
+            sys.exit(msg)
+
+    ########################
+    
     def read_form_csv(self, text_name):
         form_name = text_name.replace(".txt", f".form.csv")
         form_path = ptu.join(DATA_DIR, form_name)
@@ -149,7 +188,6 @@ class ExportData(object):
 
     def read_token_csv(self, text_name):
         token_name = text_name.replace(".txt", f".token.csv")
-        # AAA token_path = os.path.join(DATA_DIR, token_name)
         token_path = ptu.join(DATA_DIR, token_name)
         if pth.Path(token_path).exists() is False:
             logerr(f"{token_path} Non  esistente")
@@ -189,40 +227,8 @@ class ExportData(object):
             token_form_lst.append(form)
         return token_form_lst
 
-    def write_token_form_csv(self, exp_path, token_fom_lst):
-        try:
-            head_csv = self.sep.join(HEAD_TOKEN)
-            fw = open(exp_path, "w", encoding=ENCODING)
-            fw.write(head_csv)
-            fw.write(os.linesep)
-            for item in token_fom_lst:
-
-                item0 = []
-                for i, x in enumerate(item):
-                    if i == 1:
-                        continue
-                    item0.append(x)
-                row = self.sep.join(item0)
-
-                fw.write(row)
-                fw.write(os.linesep)
-            fw.close()
-            os.chmod(exp_path, 0o777)
-        except IOError as e:
-            msg = f'ERROR write_token_form_csv: \n{e}\n'
-            sys.exit(msg)
-
-    def export_text_data(self, text_path):
-        text_name = os.path.basename(text_path)
-        token_lst = self.read_token_csv(text_name)
-        form_lst, form_keys = self.read_form_csv(text_name)
-        token_form_lst = self.join_token_form(token_lst, form_lst, form_keys)
-        exp_name = text_name.replace(".txt", ".ula.csv")
-        # AAA exp_csv_path = os.path.join(self.dir_exp, exp_name)
-        exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
-        print(exp_csv_path)
-        self.write_token_form_csv(exp_csv_path, token_form_lst)
-
+   
+    
     def read_text_list(self):
         if pth.Path(TEXT_LIST_PATH).exists() is False:
             msg = "text_list.txt Not Found."
@@ -245,7 +251,7 @@ class ExportData(object):
             if name.strip() == '':
                 continue
             text_name = name + ".txt"
-            self.export_text_data(text_name)
+            self.export_ttoken_form(text_name)
         self.export_corpus()
 
 
