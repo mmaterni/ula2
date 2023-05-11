@@ -130,11 +130,8 @@ class ExportData(object):
         exp_name = text_name.replace(".txt", ".ula.csv")
         exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
         print(exp_csv_path)
-        self.write_token_form_csv(exp_csv_path, token_form_lst)
-
-    def write_token_form_csv(self, exp_csv_path, token_fom_lst):
-        
-        
+        # self.write_token_form_csv(exp_csv_path, token_form_lst)
+        # def write_token_form_csv(self, exp_csv_path, token_form_lst):     
         head_token = [
             "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLE"
         ]
@@ -143,8 +140,7 @@ class ExportData(object):
             fw = open(exp_csv_path, "w", encoding=ENCODING)
             fw.write(head_csv)
             fw.write(os.linesep)
-            for item in token_fom_lst:
-
+            for item in token_form_lst:
                 item0 = []
                 for i, x in enumerate(item):
                     if i == 1:
