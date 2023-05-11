@@ -119,19 +119,15 @@ class ExportData(object):
             msg = f'ERROR export_corpus: \n{e}\n'
             raise Exception(msg)
 
-    def export_ttoken_form(self, text_path):
+    def export_token_form(self, text_path):
         text_name = os.path.basename(text_path)
         token_lst = self.read_token_csv(text_name)
-        form_lst, form_keys = self.read_form_csv(text_name)
-        
+        form_lst, form_keys = self.read_form_csv(text_name)      
         #aggiunge form ai token
         token_form_lst = self.join_token_form(token_lst, form_lst, form_keys)
-        
         exp_name = text_name.replace(".txt", ".ula.csv")
         exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
         print(exp_csv_path)
-        # self.write_token_form_csv(exp_csv_path, token_form_lst)
-        # def write_token_form_csv(self, exp_csv_path, token_form_lst):     
         head_token = [
             "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLE"
         ]
@@ -252,7 +248,7 @@ class ExportData(object):
             if name.strip() == '':
                 continue
             text_name = name + ".txt"
-            self.export_ttoken_form(text_name)
+            self.export_token_form(text_name)
         self.export_corpus()
 
 
