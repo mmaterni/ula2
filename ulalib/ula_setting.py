@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 
 # ULA_DATA_DIR="/u/ulax/ula_data"
 ULA_DATA_DIR="ula_data"

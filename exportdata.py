@@ -30,6 +30,8 @@ SIGLA = 8
 TOKEN_ROW_LEN = 2
 FORM_ROW_LEN = 2
 
+MSD_CSV_PATH = "static/cfg/msd.csv"
+
 path_err = "log/exportdata.ERR.log"
 logerr = Log("w").open(path_err, 1).log
 
@@ -41,6 +43,7 @@ class ExportData(object):
         self.sep = csv_sep
 
     def export_corpus(self):
+        msd_lst = self.read_msd_csv()
         head_corpus = [
             "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD"
         ]
@@ -54,7 +57,9 @@ class ExportData(object):
                 sg = set(cols[SIGLA].split(','))
                 st.update(sg)
             st.remove('')
-            return st
+            lst = list(st)
+            lst.sort()
+            return lst
 
         # aggiunge le sigle ordinate alla row
         def add_row_sigle(row, js, lst0):
@@ -88,16 +93,24 @@ class ExportData(object):
             print(os.linesep)
             print(exp_path)
             fw = open(exp_path, "w", encoding=ENCODING)
+
             #set di sigle di tutto il corpus
             corpus_sg = get_corpus_sigle(lst)
+
             #dictionario delle sigle del corpus
             sg_js = {x: i for i, x in enumerate(sorted(corpus_sg))}
+
             #list di sigle vuote
             sg_lst = ['' for i in range(len(corpus_sg))]
 
             #intestazione comprensiva delle sigke
-            head = head_corpus.copy()
-            head.extend(corpus_sg)
+            headx = head_corpus.copy()
+            # head.extend(corpus_sg)
+            # AAA
+            ls = list(corpus_sg)
+            ls.sort()
+            head = headx[0:FUNCT] + msd_lst + ls
+
             row = self.sep.join(head)
             fw.write(row)
             fw.write(os.linesep)
@@ -122,7 +135,7 @@ class ExportData(object):
     def export_token_form(self, text_path):
         text_name = os.path.basename(text_path)
         token_lst = self.read_token_csv(text_name)
-        form_lst, form_keys = self.read_form_csv(text_name)      
+        form_lst, form_keys = self.read_form_csv(text_name)
         #aggiunge form ai token
         token_form_lst = self.join_token_form(token_lst, form_lst, form_keys)
         exp_name = text_name.replace(".txt", ".ula.csv")
@@ -153,7 +166,31 @@ class ExportData(object):
             sys.exit(msg)
 
     ########################
-    
+
+    # AAA
+    def read_msd_csv(self):
+        if pth.Path(MSD_CSV_PATH).exists() is False:
+            msg = "msd.csv Found."
+            logerr(msg)
+            sys.exit()
+        try:
+            with open(MSD_CSV_PATH, 'r', encoding=ENCODING) as f:
+                lst = f.readlines()
+        except Exception as e:
+            msg = f'ERROR read_msd_ccsv \n{e}\n'
+            raise Exception(msg)
+        #id|name|attrs
+        # 1|gender|Masc,Fem,Neut
+        # 2|number|Sing,Plur
+        # 3|case|Nom,Acc
+        msd_lst = []
+        for item in lst:
+            if item[0] == '#':
+                continue
+            r = item.split('|')
+            msd_lst.append(r[1])
+        return msd_lst
+
     def read_form_csv(self, text_name):
         form_name = text_name.replace(".txt", f".form.csv")
         form_path = ptu.join(DATA_DIR, form_name)
@@ -224,8 +261,6 @@ class ExportData(object):
             token_form_lst.append(form)
         return token_form_lst
 
-   
-    
     def read_text_list(self):
         if pth.Path(TEXT_LIST_PATH).exists() is False:
             msg = "text_list.txt Not Found."
@@ -244,11 +279,11 @@ class ExportData(object):
         path = ptu.abs(DATA_EXPORT_DIR)
         ptu.make_dir(path, 0o777)
         names = self.read_text_list()
-        for name in names:
-            if name.strip() == '':
-                continue
-            text_name = name + ".txt"
-            self.export_token_form(text_name)
+        # for name in names:
+        #     if name.strip() == '':
+        #         continue
+        #     text_name = name + ".txt"
+        #     self.export_token_form(text_name)
         self.export_corpus()
 
 
