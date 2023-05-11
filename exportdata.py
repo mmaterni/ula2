@@ -130,9 +130,9 @@ class ExportData(object):
         exp_name = text_name.replace(".txt", ".ula.csv")
         exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
         print(exp_csv_path)
-    #     self.write_token_form_csv(exp_csv_path, token_form_lst)
+        self.write_token_form_csv(exp_csv_path, token_form_lst)
 
-    # def write_token_form_csv(self, exp_csv_path, token_fom_lst):
+    def write_token_form_csv(self, exp_csv_path, token_fom_lst):
         
         
         head_token = [
