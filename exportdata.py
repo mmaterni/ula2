@@ -78,10 +78,10 @@ class ExportData(object):
         if pth.Path(corpus_path).exists() is False:
             logerr(f"{corpus_path} Non  esistente")
             sys.exit()
-        lst = []
+        rows = []
         try:
             with open(corpus_path, 'r', encoding=ENCODING) as f:
-                lst = f.readlines()
+                rows = f.readlines()
         except Exception as e:
             msg = f'ERROR export_corpus \n{e}\n'
             logerr(msg)
@@ -95,7 +95,7 @@ class ExportData(object):
             fw = open(exp_path, "w", encoding=ENCODING)
 
             #set di sigle di tutto il corpus
-            corpus_sg = get_corpus_sigle(lst)
+            corpus_sg = get_corpus_sigle(rows)
 
             #dictionario delle sigle del corpus
             sg_js = {x: i for i, x in enumerate(sorted(corpus_sg))}
@@ -115,8 +115,8 @@ class ExportData(object):
             fw.write(row)
             fw.write(os.linesep)
 
-            lst.sort()
-            for item in lst:
+            rows.sort()
+            for item in rows:
                 item = item.strip()
                 # print(item)
                 #aggiunge le sigle alla row
