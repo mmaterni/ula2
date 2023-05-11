@@ -123,19 +123,24 @@ class ExportData(object):
         text_name = os.path.basename(text_path)
         token_lst = self.read_token_csv(text_name)
         form_lst, form_keys = self.read_form_csv(text_name)
+        
+        #aggiunge form ai token
         token_form_lst = self.join_token_form(token_lst, form_lst, form_keys)
+        
         exp_name = text_name.replace(".txt", ".ula.csv")
         exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
         print(exp_csv_path)
-        self.write_token_form_csv(exp_csv_path, token_form_lst)
+    #     self.write_token_form_csv(exp_csv_path, token_form_lst)
 
-    def write_token_form_csv(self, exp_path, token_fom_lst):
+    # def write_token_form_csv(self, exp_csv_path, token_fom_lst):
+        
+        
         head_token = [
             "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLE"
         ]
         try:
             head_csv = self.sep.join(head_token)
-            fw = open(exp_path, "w", encoding=ENCODING)
+            fw = open(exp_csv_path, "w", encoding=ENCODING)
             fw.write(head_csv)
             fw.write(os.linesep)
             for item in token_fom_lst:
@@ -150,7 +155,7 @@ class ExportData(object):
                 fw.write(row)
                 fw.write(os.linesep)
             fw.close()
-            os.chmod(exp_path, 0o777)
+            os.chmod(exp_csv_path, 0o777)
         except IOError as e:
             msg = f'ERROR write_token_form_csv: \n{e}\n'
             sys.exit(msg)
