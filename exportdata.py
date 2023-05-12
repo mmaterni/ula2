@@ -44,13 +44,12 @@ class ExportData(object):
         self.sep = csv_sep
 
         self.msd_attr_lst = []
-        self.msd_attr_head = []
-        self.msd_blk_lst = []
+        self.pos_attr_lst = []
+        self.msd_attr_blks = []
         self.msd_attr_idx = {}
 
-        self.sigle_head = []
-        self.sigle_js = {}
-        self.sigle_blk_lst = []
+        self.sigle_lst = []
+        self.sigle_blks = []
 
     def read_pos_msd(self):
         if pth.Path(POS_MSD_JS_PATH).exists() is False:
@@ -84,9 +83,8 @@ class ExportData(object):
         #elimina duplicati
         self.msd_attr_lst = list(msd_set)
         self.msd_attr_lst.sort()
-        self.msd_attr_head = [x.upper() for x in self.msd_attr_lst]
         #list msd vuote
-        self.msd_blk_lst = ['' for i in range(len(self.msd_attr_lst))]
+        self.msd_attr_blks = ['' for i in range(len(self.msd_attr_lst))]
 
         #dict k=pos_attr v=idx
         #idx indice di m_name in msd_head
@@ -110,47 +108,42 @@ class ExportData(object):
         sg_lst = list(st)
         sg_lst.sort()
         #lista sigle di tutto il corpus
-        self.sigle_head = sg_lst
-        #dictionario delle sigle del corpus
-        self.sigle_js = {x: i for i, x in enumerate(sg_lst)}
-        #list di sigle vuote
-        self.sigle_blk_lst = ['' for i in range(len(sg_lst))]
+        self.sigle_lst = sg_lst
+        self.sigle_blks = ['' for i in range(len(sg_lst))]
 
     def export_corpus(self):
 
         # aggiunge le sigle ordinate alla row
         def build_row(row):
-            print(row)
             r = row.split('|')
-
             #sigle della riga
-            r_sg_lst = r[SIGLA].split(',')
-            r_sg_lst = [x for x in r_sg_lst if x != '']
-            #sigle ordinate per la riga
-            row_sg_lst = self.sigle_blk_lst.copy()
-            for s in r_sg_lst:
-                i = self.sigle_js[s]
-                row_sg_lst[i] = s
-            print(row_sg_lst)
+            sgs = r[SIGLA].split(',')
+            sgs = [x for x in sgs if x != '']
+            row_sg_lst = self.sigle_blks.copy()
+            for sg in sgs:
+                i = self.sigle_lst.index(sg)
+                row_sg_lst[i] = sg
+            # print(row_sg_lst)
+
             #attrs della riga
-            r_attr_lst = r[MSD].split(',')
-            r_attr_lst = [x.lower() for x in r_attr_lst]
-            r_attr_lst = [x for x in r_attr_lst if x != '']
+            attr_lst = r[MSD].split(',')
+            attr_lst = [x.lower() for x in attr_lst]
+            attr_lst = [x for x in attr_lst if x != '']
             #sigle ordinate per la riga
-            row_attr_lst = self.msd_blk_lst.copy()
+            row_attr_lst = self.msd_attr_blks.copy()
             pos = r[POS].lower()
-            for attr in r_attr_lst:
+            for attr in attr_lst:
                 k = f'{pos}_{attr}'
                 idx = self.msd_attr_idx[k]
                 row_attr_lst[idx] = attr
-
-            rr = r[:FUNCT] + row_attr_lst
-            #elimina le sigle originarie e aggiuge la lista delle sigke
-            rr = rr[:-1]
-            rr.extend(row_sg_lst)
-            #elimina formakey
+            rr = r[:MSD] + row_attr_lst + row_sg_lst
+            # print(row)
+            # print(row_attr_lst)
+            # print(row_sg_lst)
+            # print(rr)
             del rr[1]
-            input('.')
+            # print(rr)
+            # input('?')
             return rr
 
         corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
@@ -178,16 +171,16 @@ class ExportData(object):
             #dict di pos_attr e lista msd nme  pos_msd.json
             self.read_pos_msd()
 
-            #AAA intestazione comprensiva delle sigle e msd
+            #intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
             # head = head_corpus + msd_lst + sg_lst
-            head = head_corpus + self.msd_attr_head + self.sigle_head
+            head = head_corpus + self.msd_attr_lst + self.sigle_lst
 
             row = self.sep.join(head)
             fw.write(row)
             fw.write(os.linesep)
 
-            rows.sort()
+            # AAA rows.sort()
             for item in rows:
                 item = item.strip()
                 #aggiunge set msd attr e aggiunge le sigle alla row
