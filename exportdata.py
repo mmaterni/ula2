@@ -9,6 +9,7 @@ import pathlib as pth
 import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
+import json
 
 __date__ = "10-05-2023"
 __version__ = "0.1.2"
@@ -30,7 +31,7 @@ SIGLA = 8
 TOKEN_ROW_LEN = 2
 FORM_ROW_LEN = 2
 
-MSD_CSV_PATH = "static/cfg/msd.csv"
+POS_MSD_JS_PATH = "static/cfg/pos_msd.json"
 
 path_err = "log/exportdata.ERR.log"
 logerr = Log("w").open(path_err, 1).log
@@ -42,31 +43,56 @@ class ExportData(object):
         self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
 
-    def read_msd_csv(self):
-        if pth.Path(MSD_CSV_PATH).exists() is False:
-            msg = "msd.csv Found."
+    def read_pos_msd(self):
+        if pth.Path(POS_MSD_JS_PATH).exists() is False:
+            msg = "pos_msd.jsson Not Found."
             logerr(msg)
             sys.exit()
         try:
-            with open(MSD_CSV_PATH, 'r', encoding=ENCODING) as f:
-                lst = f.readlines()
+            with open(POS_MSD_JS_PATH, 'r', encoding=ENCODING) as f:
+                s = f.read()
+                s = s.lower()
+                pos_msd_js = json.loads(s)
         except Exception as e:
-            msg = f'ERROR read_msd_ccsv \n{e}\n'
+            msg = f'ERROR read_pos_msd_js \n{e}\n'
             raise Exception(msg)
-        #id|name|attrs
-        # 1|gender|Masc,Fem,Neut
-        # 2|number|Sing,Plur
-        # 3|case|Nom,Acc
-        msd_lst = []
-        msd_attr_lst = []
-        for row in lst:
-            if row[0] == '#':
-                continue
-            r = row.lower().split('|')
-            msd_lst.append(r[1])
 
-        # AAA sort ?
-        return msd_lst
+        msd_head = set()
+        pos_attr_js = {}
+        for kv in pos_msd_js.items():
+            p_k=kv[0]
+            p_js=kv[1]
+            m_lst = p_js['msd_list']
+            for m_js in m_lst:
+                m_name = m_js['msd_name']
+                msd_head.add(m_name)
+                # p_m = [p_k, m_name]
+                # pos_msd_lst.append(p_m)
+                attrs = m_js['attrs']
+                for a in attrs:
+                    p_a_k = f'{p_k}{a}'
+                    pos_attr_js[p_a_k] = [m_name, -1]
+
+        msd_head = list(msd_head)
+        msd_head.sort()
+        msd_js = {}
+        for kv in pos_attr_js.items():
+            k = kv[0]
+            v = kv[1]
+            m_name = v[0]
+            idx = msd_head.index(m_name)
+            msd_js[k] = msd_head[idx]
+            kv[1][1] = idx
+
+        for kv in pos_attr_js.items():
+            k = kv[0]
+            v = kv[1]
+            n=v[0]
+            i=v[1]
+            h=msd_head[i]
+            if n!=h:
+                print("**",n,h)
+            print(k,n,i,h)    
 
     def get_msd_dict(self, lst):
         js = {}
@@ -132,13 +158,14 @@ class ExportData(object):
             sg_blk_lst = ['' for i in range(len(sg_lst))]
 
             #lista estratta da msd.csv
-            msd_lst = self.read_msd_csv()
-            #lista di msd vuote
-            msd_blk_lst = ['' for i in range(len(msd_lst))]
+            self.read_pos_msd()
+            # #lista di msd vuote
+            # msd_blk_lst = ['' for i in range(len(msd_lst))]
 
             #AAA intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
-            head = head_corpus + msd_lst + sg_lst
+            # head = head_corpus + msd_lst + sg_lst
+            head = head_corpus + sg_lst
 
             row = self.sep.join(head)
             fw.write(row)
