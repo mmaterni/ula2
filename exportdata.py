@@ -173,10 +173,10 @@ class ExportData(object):
             fw.write(row)
             fw.write(os.linesep)
 
-            # AAA rows.sort()
+            rows.sort()
             for item in rows:
                 item = item.strip()
-                #aggiunge set msd attr e aggiunge le sigle alla row
+                #aggiunge  msd attrs e  le sigle alla row
                 r = build_row(item)
                 row = self.sep.join(r)
                 fw.write(row)
@@ -310,11 +310,11 @@ class ExportData(object):
         path = ptu.abs(DATA_EXPORT_DIR)
         ptu.make_dir(path, 0o777)
         names = self.read_text_list()
-        # for name in names:
-        #     if name.strip() == '':
-        #         continue
-        #     text_name = name + ".txt"
-        #     self.export_token_form(text_name)
+        for name in names:
+            if name.strip() == '':
+                continue
+            text_name = name + ".txt"
+            self.export_token_form(text_name)
         self.export_corpus()
 
 
