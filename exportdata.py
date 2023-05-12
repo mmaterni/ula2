@@ -131,7 +131,7 @@ class ExportData(object):
             for s in r_sg_lst:
                 i = self.sigle_js[s]
                 row_sg_lst[i] = s
-
+            print(row_sg_lst)
             #attrs della riga
             r_attr_lst = r[MSD].split(',')
             r_attr_lst = [x.lower() for x in r_attr_lst]
@@ -144,13 +144,14 @@ class ExportData(object):
                 idx = self.msd_attr_idx[k]
                 row_attr_lst[idx] = attr
 
-            row = r[:FUNCT] + row_attr_lst
+            rr = r[:FUNCT] + row_attr_lst
             #elimina le sigle originarie e aggiuge la lista delle sigke
-            row = row[:-1]
-            row.extend(row_sg_lst)
+            rr = rr[:-1]
+            rr.extend(row_sg_lst)
             #elimina formakey
-            del row[1]
-            return row
+            del rr[1]
+            input('.')
+            return rr
 
         corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
         if pth.Path(corpus_path).exists() is False:
