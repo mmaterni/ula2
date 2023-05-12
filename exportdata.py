@@ -139,8 +139,6 @@ class ExportData(object):
             #sigle ordinate per la riga
             row_attr_lst = self.msd_blk_lst.copy()
             pos = r[POS].lower()
-            print(pos)
-            print(r_attr_lst)
             for attr in r_attr_lst:
                 k = f'{pos}_{attr}'
                 idx = self.pos_attr_idx[k]
@@ -152,7 +150,6 @@ class ExportData(object):
             row.extend(row_sg_lst)
             #elimina formakey
             del row[1]
-
             return row
 
         corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
