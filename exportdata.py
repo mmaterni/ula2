@@ -66,8 +66,6 @@ class ExportData(object):
             for m_js in m_lst:
                 m_name = m_js['msd_name']
                 msd_head.add(m_name)
-                # p_m = [p_k, m_name]
-                # pos_msd_lst.append(p_m)
                 attrs = m_js['attrs']
                 for a in attrs:
                     p_a_k = f'{p_k}{a}'
@@ -90,8 +88,6 @@ class ExportData(object):
             n=v[0]
             i=v[1]
             h=msd_head[i]
-            if n!=h:
-                print("**",n,h)
             print(k,n,i,h)    
 
     def get_msd_dict(self, lst):
