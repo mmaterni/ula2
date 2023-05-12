@@ -58,12 +58,23 @@ class ExportData(object):
         # 2|number|Sing,Plur
         # 3|case|Nom,Acc
         msd_lst = []
-        for item in lst:
-            if item[0] == '#':
+        msd_attr_lst = []
+        for row in lst:
+            if row[0] == '#':
                 continue
-            r = item.split('|')
-            msd_lst.append(r[1].upper())
+            r = row.lower().split('|')
+            msd_lst.append(r[1])
+
+        # AAA sort ?
         return msd_lst
+
+    def get_msd_dict(self, lst):
+        js = {}
+        for i, msd in enumerate(lst):
+            attrs = msd.split(',')
+            for a in attrs:
+                js[a] = i
+        return js
 
     #estrae dalla lista di tutto il corpus il
     #set di sigle utilizzato
