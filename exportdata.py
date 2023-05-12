@@ -47,7 +47,7 @@ class ExportData(object):
         self.msd_head = []
         self.msd_blk_lst = []
 
-        self.pos_attr_idx = {}
+        self.msd_attr_idx = {}
 
         self.sg_head = []
         self.corpus_sg_js = {}
@@ -97,7 +97,7 @@ class ExportData(object):
             m_name = kv[1]
             idx = self.msd_lst.index(m_name)
             pos_attr_idx_js[k] = idx
-        self.pos_attr_idx = pos_attr_idx_js
+        self.msd_attr_idx = pos_attr_idx_js
 
     #estrae dalla lista di tutto il corpus il
     #set di sigle utilizzato
@@ -141,7 +141,7 @@ class ExportData(object):
             pos = r[POS].lower()
             for attr in r_attr_lst:
                 k = f'{pos}_{attr}'
-                idx = self.pos_attr_idx[k]
+                idx = self.msd_attr_idx[k]
                 row_attr_lst[idx] = attr
 
             row = r[:FUNCT] + row_attr_lst
