@@ -42,6 +42,29 @@ class ExportData(object):
         self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
 
+    def read_msd_csv(self):
+        if pth.Path(MSD_CSV_PATH).exists() is False:
+            msg = "msd.csv Found."
+            logerr(msg)
+            sys.exit()
+        try:
+            with open(MSD_CSV_PATH, 'r', encoding=ENCODING) as f:
+                lst = f.readlines()
+        except Exception as e:
+            msg = f'ERROR read_msd_ccsv \n{e}\n'
+            raise Exception(msg)
+        #id|name|attrs
+        # 1|gender|Masc,Fem,Neut
+        # 2|number|Sing,Plur
+        # 3|case|Nom,Acc
+        msd_lst = []
+        for item in lst:
+            if item[0] == '#':
+                continue
+            r = item.split('|')
+            msd_lst.append(r[1].upper())
+        return msd_lst
+
     #estrae dalla lista di tutto il corpus il
     #set di sigle utilizzato
     def get_corpus_sigle(self, rows):
@@ -56,7 +79,6 @@ class ExportData(object):
         return lst
 
     def export_corpus(self):
-        msd_lst = self.read_msd_csv()
 
         # aggiunge le sigle ordinate alla row
         def add_row_sigle(row, js, lst0):
@@ -98,7 +120,8 @@ class ExportData(object):
             #list di sigle vuote
             sg_blk_lst = ['' for i in range(len(sg_lst))]
 
-
+            #lista estratta da msd.csv
+            msd_lst = self.read_msd_csv()
             #lista di msd vuote
             msd_blk_lst = ['' for i in range(len(msd_lst))]
 
@@ -163,30 +186,6 @@ class ExportData(object):
             sys.exit(msg)
 
     ########################
-
-    # AAA
-    def read_msd_csv(self):
-        if pth.Path(MSD_CSV_PATH).exists() is False:
-            msg = "msd.csv Found."
-            logerr(msg)
-            sys.exit()
-        try:
-            with open(MSD_CSV_PATH, 'r', encoding=ENCODING) as f:
-                lst = f.readlines()
-        except Exception as e:
-            msg = f'ERROR read_msd_ccsv \n{e}\n'
-            raise Exception(msg)
-        #id|name|attrs
-        # 1|gender|Masc,Fem,Neut
-        # 2|number|Sing,Plur
-        # 3|case|Nom,Acc
-        msd_lst = []
-        for item in lst:
-            if item[0] == '#':
-                continue
-            r = item.split('|')
-            msd_lst.append(r[1].upper())
-        return msd_lst
 
     def read_form_csv(self, text_name):
         form_name = text_name.replace(".txt", f".form.csv")
