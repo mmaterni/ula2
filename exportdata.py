@@ -112,17 +112,17 @@ class ExportData(object):
 
     def export_corpus(self):
 
-        # aggiunge le sigle ordinate alla row
+        # aggiunge le sigle ordinate alla row e inserisce attrs
         def build_row(row):
             r = row.split('|')
+
             #sigle della riga
             sgs = r[SIGLA].split(',')
             sgs = [x for x in sgs if x != '']
-            row_sg_lst = self.corpus_sg_blks.copy()
+            row_sgs = self.corpus_sg_blks.copy()
             for sg in sgs:
                 i = self.corpus_sgs.index(sg)
-                row_sg_lst[i] = sg
-            # print(row_sg_lst)
+                row_sgs[i] = sg
 
             #attrs della riga
             attrs = r[MSD].split(',')
@@ -135,7 +135,7 @@ class ExportData(object):
                 k = f'{pos}_{attr}'
                 idx = self.corpus_msd_attr_idx[k]
                 row_attrs[idx] = attr
-            rr = r[:MSD] + row_attrs + row_sg_lst          
+            rr = r[:MSD] + row_attrs + row_sgs          
             #elimina formkey
             del rr[1]
             return rr
@@ -167,9 +167,8 @@ class ExportData(object):
 
             #intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
-            # head = head_corpus + msd_lst + sg_lst
-            head = head_corpus + self.corpus_msd_attrs + self.corpus_sgs
-
+            attrs_head=[x.upper() for x in self.corpus_msd_attrs]
+            head = head_corpus + attrs_head + self.corpus_sgs
             row = self.sep.join(head)
             fw.write(row)
             fw.write(os.linesep)
