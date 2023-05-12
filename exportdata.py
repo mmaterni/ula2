@@ -43,13 +43,12 @@ class ExportData(object):
         self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
 
-        self.msd_attr_lst = []
-        self.pos_attr_lst = []
-        self.msd_attr_blks = []
-        self.msd_attr_idx = {}
+        self.corpus_msd_attrs = []
+        self.corpus_msd_attr_blks = []
+        self.corpus_msd_attr_idx = {}
 
-        self.sigle_lst = []
-        self.sigle_blks = []
+        self.corpus_sgs = []
+        self.corpus_sg_blks = []
 
     def read_pos_msd(self):
         if pth.Path(POS_MSD_JS_PATH).exists() is False:
@@ -60,7 +59,7 @@ class ExportData(object):
             with open(POS_MSD_JS_PATH, 'r', encoding=ENCODING) as f:
                 s = f.read()
                 s = s.lower()
-                pos_msd_js = json.loads(s)
+                js = json.loads(s)
         except Exception as e:
             msg = f'ERROR read_pos_msd_js \n{e}\n'
             raise Exception(msg)
@@ -69,22 +68,22 @@ class ExportData(object):
         msd_set = set()
         #dict k=pos_attr v=msd_name
         pos_attr_js = {}
-        for kv in pos_msd_js.items():
-            p_k = kv[0]
-            p_js = kv[1]
-            m_lst = p_js['msd_list']
+        for kv in js.items():
+            k = kv[0]
+            v = kv[1]
+            m_lst = v['msd_list']
             for m_js in m_lst:
                 m_name = m_js['msd_name']
                 msd_set.add(m_name)
                 attrs = m_js['attrs']
                 for a in attrs:
-                    p_a_k = f'{p_k}_{a}'
+                    p_a_k = f'{k}_{a}'
                     pos_attr_js[p_a_k] = m_name
         #elimina duplicati
-        self.msd_attr_lst = list(msd_set)
-        self.msd_attr_lst.sort()
+        self.corpus_msd_attrs = list(msd_set)
+        self.corpus_msd_attrs.sort()
         #list msd vuote
-        self.msd_attr_blks = ['' for i in range(len(self.msd_attr_lst))]
+        self.corpus_msd_attr_blks = ['' for i in range(len(self.corpus_msd_attrs))]
 
         #dict k=pos_attr v=idx
         #idx indice di m_name in msd_head
@@ -92,9 +91,9 @@ class ExportData(object):
         for kv in pos_attr_js.items():
             k = kv[0]
             m_name = kv[1]
-            idx = self.msd_attr_lst.index(m_name)
+            idx = self.corpus_msd_attrs.index(m_name)
             pos_attr_idx_js[k] = idx
-        self.msd_attr_idx = pos_attr_idx_js
+        self.corpus_msd_attr_idx = pos_attr_idx_js
 
     #estrae dalla lista di tutto il corpus il
     #set di sigle utilizzato
@@ -108,8 +107,8 @@ class ExportData(object):
         sg_lst = list(st)
         sg_lst.sort()
         #lista sigle di tutto il corpus
-        self.sigle_lst = sg_lst
-        self.sigle_blks = ['' for i in range(len(sg_lst))]
+        self.corpus_sgs = sg_lst
+        self.corpus_sg_blks = ['' for i in range(len(sg_lst))]
 
     def export_corpus(self):
 
@@ -119,9 +118,9 @@ class ExportData(object):
             #sigle della riga
             sgs = r[SIGLA].split(',')
             sgs = [x for x in sgs if x != '']
-            row_sg_lst = self.sigle_blks.copy()
+            row_sg_lst = self.corpus_sg_blks.copy()
             for sg in sgs:
-                i = self.sigle_lst.index(sg)
+                i = self.corpus_sgs.index(sg)
                 row_sg_lst[i] = sg
             # print(row_sg_lst)
 
@@ -130,20 +129,14 @@ class ExportData(object):
             attr_lst = [x.lower() for x in attr_lst]
             attr_lst = [x for x in attr_lst if x != '']
             #sigle ordinate per la riga
-            row_attr_lst = self.msd_attr_blks.copy()
+            row_attr_lst = self.corpus_msd_attr_blks.copy()
             pos = r[POS].lower()
             for attr in attr_lst:
                 k = f'{pos}_{attr}'
-                idx = self.msd_attr_idx[k]
+                idx = self.corpus_msd_attr_idx[k]
                 row_attr_lst[idx] = attr
             rr = r[:MSD] + row_attr_lst + row_sg_lst
-            # print(row)
-            # print(row_attr_lst)
-            # print(row_sg_lst)
-            # print(rr)
             del rr[1]
-            # print(rr)
-            # input('?')
             return rr
 
         corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
@@ -174,7 +167,7 @@ class ExportData(object):
             #intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
             # head = head_corpus + msd_lst + sg_lst
-            head = head_corpus + self.msd_attr_lst + self.sigle_lst
+            head = head_corpus + self.corpus_msd_attrs + self.corpus_sgs
 
             row = self.sep.join(head)
             fw.write(row)
