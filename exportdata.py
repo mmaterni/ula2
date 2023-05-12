@@ -43,15 +43,14 @@ class ExportData(object):
         self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
 
-        self.msd_lst = []
-        self.msd_head = []
+        self.msd_attr_lst = []
+        self.msd_attr_head = []
         self.msd_blk_lst = []
-
         self.msd_attr_idx = {}
 
-        self.sg_head = []
-        self.corpus_sg_js = {}
-        self.sg_blk_lst = []
+        self.sigle_head = []
+        self.sigle_js = {}
+        self.sigle_blk_lst = []
 
     def read_pos_msd(self):
         if pth.Path(POS_MSD_JS_PATH).exists() is False:
@@ -83,11 +82,11 @@ class ExportData(object):
                     p_a_k = f'{p_k}_{a}'
                     pos_attr_js[p_a_k] = m_name
         #elimina duplicati
-        self.msd_lst = list(msd_set)
-        self.msd_lst.sort()
-        self.msd_head = [x.upper() for x in self.msd_lst]
+        self.msd_attr_lst = list(msd_set)
+        self.msd_attr_lst.sort()
+        self.msd_attr_head = [x.upper() for x in self.msd_attr_lst]
         #list msd vuote
-        self.msd_blk_lst = ['' for i in range(len(self.msd_lst))]
+        self.msd_blk_lst = ['' for i in range(len(self.msd_attr_lst))]
 
         #dict k=pos_attr v=idx
         #idx indice di m_name in msd_head
@@ -95,7 +94,7 @@ class ExportData(object):
         for kv in pos_attr_js.items():
             k = kv[0]
             m_name = kv[1]
-            idx = self.msd_lst.index(m_name)
+            idx = self.msd_attr_lst.index(m_name)
             pos_attr_idx_js[k] = idx
         self.msd_attr_idx = pos_attr_idx_js
 
@@ -111,25 +110,26 @@ class ExportData(object):
         sg_lst = list(st)
         sg_lst.sort()
         #lista sigle di tutto il corpus
-        self.sg_head = sg_lst
+        self.sigle_head = sg_lst
         #dictionario delle sigle del corpus
-        self.corpus_sg_js = {x: i for i, x in enumerate(sg_lst)}
+        self.sigle_js = {x: i for i, x in enumerate(sg_lst)}
         #list di sigle vuote
-        self.sg_blk_lst = ['' for i in range(len(sg_lst))]
+        self.sigle_blk_lst = ['' for i in range(len(sg_lst))]
 
     def export_corpus(self):
 
         # aggiunge le sigle ordinate alla row
         def build_row(row):
+            print(row)
             r = row.split('|')
 
             #sigle della riga
             r_sg_lst = r[SIGLA].split(',')
             r_sg_lst = [x for x in r_sg_lst if x != '']
             #sigle ordinate per la riga
-            row_sg_lst = self.sg_blk_lst.copy()
+            row_sg_lst = self.sigle_blk_lst.copy()
             for s in r_sg_lst:
-                i = self.corpus_sg_js[s]
+                i = self.sigle_js[s]
                 row_sg_lst[i] = s
 
             #attrs della riga
@@ -180,7 +180,7 @@ class ExportData(object):
             #AAA intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
             # head = head_corpus + msd_lst + sg_lst
-            head = head_corpus + self.msd_head + self.sg_head
+            head = head_corpus + self.msd_attr_head + self.sigle_head
 
             row = self.sep.join(head)
             fw.write(row)
