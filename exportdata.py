@@ -42,24 +42,21 @@ class ExportData(object):
         self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
 
+    #estrae dalla lista di tutto il corpus il
+    #set di sigle utilizzato
+    def get_corpus_sigle(self, rows):
+        st = set()
+        for row in rows:
+            cols = row.strip().split('|')
+            sg = set(cols[SIGLA].split(','))
+            st.update(sg)
+        st.remove('')
+        lst = list(st)
+        lst.sort()
+        return lst
+
     def export_corpus(self):
         msd_lst = self.read_msd_csv()
-        head_corpus = [
-            "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD"
-        ]
-
-        #estrae dalla lista di tutto il corpus il
-        #set di sigle utilizzato
-        def get_corpus_sigle(rows):
-            st = set()
-            for row in rows:
-                cols = row.strip().split('|')
-                sg = set(cols[SIGLA].split(','))
-                st.update(sg)
-            st.remove('')
-            lst = list(st)
-            lst.sort()
-            return lst
 
         # aggiunge le sigle ordinate alla row
         def add_row_sigle(row, js, lst0):
@@ -94,22 +91,20 @@ class ExportData(object):
             print(exp_path)
             fw = open(exp_path, "w", encoding=ENCODING)
 
-            #set di sigle di tutto il corpus
-            corpus_sg = get_corpus_sigle(rows)
-
+            #lista sigle di tutto il corpus
+            sg_lst = self.get_corpus_sigle(rows)
             #dictionario delle sigle del corpus
-            sg_js = {x: i for i, x in enumerate(sorted(corpus_sg))}
-
+            sg_js = {x: i for i, x in enumerate(sorted(sg_lst))}
             #list di sigle vuote
-            sg_lst = ['' for i in range(len(corpus_sg))]
+            sg_blk_lst = ['' for i in range(len(sg_lst))]
 
-            #intestazione comprensiva delle sigke
-            headx = head_corpus.copy()
-            # head.extend(corpus_sg)
-            # AAA
-            ls = list(corpus_sg)
-            ls.sort()
-            head = headx[0:FUNCT] + msd_lst + ls
+
+            #lista di msd vuote
+            msd_blk_lst = ['' for i in range(len(msd_lst))]
+
+            #AAA intestazione comprensiva delle sigle e msd
+            head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
+            head = head_corpus + msd_lst + sg_lst
 
             row = self.sep.join(head)
             fw.write(row)
@@ -118,11 +113,13 @@ class ExportData(object):
             rows.sort()
             for item in rows:
                 item = item.strip()
-                # print(item)
+
                 #aggiunge le sigle alla row
-                r = add_row_sigle(item, sg_js, sg_lst)
+                r = add_row_sigle(item, sg_js, sg_blk_lst)
+                # AAA inserire msd
                 #elimina formakey
                 del r[1]
+
                 row = self.sep.join(r)
                 fw.write(row)
                 fw.write(os.linesep)
@@ -188,7 +185,7 @@ class ExportData(object):
             if item[0] == '#':
                 continue
             r = item.split('|')
-            msd_lst.append(r[1])
+            msd_lst.append(r[1].upper())
         return msd_lst
 
     def read_form_csv(self, text_name):
