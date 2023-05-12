@@ -44,7 +44,7 @@ class ExportData(object):
         self.sep = csv_sep
 
         self.corpus_msd_attrs = []
-        self.corpus_msd_attr_blks = []
+        self.corpus_attrs_blk = []
         self.corpus_msd_attr_idx = {}
 
         self.corpus_sgs = []
@@ -71,27 +71,27 @@ class ExportData(object):
         for kv in js.items():
             k = kv[0]
             v = kv[1]
-            m_lst = v['msd_list']
-            for m_js in m_lst:
-                m_name = m_js['msd_name']
-                msd_set.add(m_name)
+            msd_list = v['msd_list']
+            for m_js in msd_list:
+                msd_name = m_js['msd_name']
+                msd_set.add(msd_name)
                 attrs = m_js['attrs']
                 for a in attrs:
                     p_a_k = f'{k}_{a}'
-                    pos_attr_js[p_a_k] = m_name
+                    pos_attr_js[p_a_k] = msd_name
         #elimina duplicati
         self.corpus_msd_attrs = list(msd_set)
         self.corpus_msd_attrs.sort()
         #list msd vuote
-        self.corpus_msd_attr_blks = ['' for i in range(len(self.corpus_msd_attrs))]
+        self.corpus_attrs_blk = ['' for i in range(len(self.corpus_msd_attrs))]
 
         #dict k=pos_attr v=idx
         #idx indice di m_name in msd_head
         pos_attr_idx_js = {}
         for kv in pos_attr_js.items():
             k = kv[0]
-            m_name = kv[1]
-            idx = self.corpus_msd_attrs.index(m_name)
+            msd_name = kv[1]
+            idx = self.corpus_msd_attrs.index(msd_name)
             pos_attr_idx_js[k] = idx
         self.corpus_msd_attr_idx = pos_attr_idx_js
 
@@ -125,17 +125,18 @@ class ExportData(object):
             # print(row_sg_lst)
 
             #attrs della riga
-            attr_lst = r[MSD].split(',')
-            attr_lst = [x.lower() for x in attr_lst]
-            attr_lst = [x for x in attr_lst if x != '']
+            attrs = r[MSD].split(',')
+            attrs = [x.lower() for x in attrs]
+            attrs = [x for x in attrs if x != '']
             #sigle ordinate per la riga
-            row_attr_lst = self.corpus_msd_attr_blks.copy()
+            row_attrs = self.corpus_attrs_blk.copy()
             pos = r[POS].lower()
-            for attr in attr_lst:
+            for attr in attrs:
                 k = f'{pos}_{attr}'
                 idx = self.corpus_msd_attr_idx[k]
-                row_attr_lst[idx] = attr
-            rr = r[:MSD] + row_attr_lst + row_sg_lst
+                row_attrs[idx] = attr
+            rr = r[:MSD] + row_attrs + row_sg_lst          
+            #elimina formkey
             del rr[1]
             return rr
 
