@@ -43,12 +43,11 @@ class ExportData(object):
         self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
         self.pos_msd_json = {}
-        self.corpus_msd_attrs = []
-        self.corpus_attrs_blk = []
-        self.corpus_msd_attr_idx = {}
-
-        self.corpus_sgs = []
-        self.corpus_sg_blks = []
+        #lista di msd_name nel corpus
+        self.corpus_msd_lst = []
+        self.corpus_msd_blks = []
+        # lista delle sigle nel corpus
+        self.corpus_sg_lst = []
 
     def read_pos_msd(self):
         if pth.Path(POS_MSD_JS_PATH).exists() is False:
@@ -59,42 +58,24 @@ class ExportData(object):
             with open(POS_MSD_JS_PATH, 'r', encoding=ENCODING) as f:
                 s = f.read()
                 s = s.lower()
-                js = json.loads(s)
-                self.pos_msd_json = js
+                self.pos_msd_json = json.loads(s)
         except Exception as e:
             msg = f'ERROR read_pos_msd_js \n{e}\n'
             raise Exception(msg)
+        self.check_attrs()
 
         #lista msd name
         msd_set = set()
-        #dict k=pos_attr v=msd_name
-        pos_attr_js = {}
-        for kv in js.items():
-            k = kv[0]
+        for kv in self.pos_msd_json.items():
             v = kv[1]
             msd_list = v['msd_list']
-            for m_js in msd_list:
-                msd_name = m_js['msd_name']
+            for js in msd_list:
+                msd_name = js['msd_name']
                 msd_set.add(msd_name)
-                attrs = m_js['attrs']
-                for a in attrs:
-                    p_a_k = f'{k}_{a}'
-                    pos_attr_js[p_a_k] = msd_name
-        #elimina duplicati
-        self.corpus_msd_attrs = list(msd_set)
-        self.corpus_msd_attrs.sort()
+        self.corpus_msd_lst = list(msd_set)
+        self.corpus_msd_lst.sort()
         #list msd vuote
-        self.corpus_attrs_blk = ['' for i in range(len(self.corpus_msd_attrs))]
-
-        #dict k=pos_attr v=idx
-        #idx indice di m_name in msd_head
-        pos_attr_idx_js = {}
-        for kv in pos_attr_js.items():
-            k = kv[0]
-            msd_name = kv[1]
-            idx = self.corpus_msd_attrs.index(msd_name)
-            pos_attr_idx_js[k] = idx
-        self.corpus_msd_attr_idx = pos_attr_idx_js
+        self.corpus_msd_blks = ['' for i in range(len(self.corpus_msd_lst))]
 
     #estrae dalla lista di tutto il corpus il
     #set di sigle utilizzato
@@ -108,8 +89,28 @@ class ExportData(object):
         sg_lst = list(st)
         sg_lst.sort()
         #lista sigle di tutto il corpus
-        self.corpus_sgs = sg_lst
-        self.corpus_sg_blks = ['' for i in range(len(sg_lst))]
+        self.corpus_sg_lst = sg_lst
+
+    def check_attrs(self):
+        for k, v in self.pos_msd_json.items():
+            pos = k
+            msd_list = v['msd_list']
+            atrr_lst = []
+            for js in msd_list:
+                attrs = js['attrs']
+                atrr_lst.extend(attrs)
+            atrr_lst.sort()
+            attr_set = sorted(list(set(atrr_lst)))
+            x = False
+            for a in attr_set:
+                n = atrr_lst.count(a)
+                if n > 1:
+                    x = True
+                    print(n, a)
+            if x:
+                print(pos)
+                print("|".join(atrr_lst))
+                # input('')
 
     def export_corpus(self):
 
@@ -120,80 +121,40 @@ class ExportData(object):
             #sigle della riga
             sgs = r[SIGLA].split(',')
             sgs = [x for x in sgs if x != '']
-            row_sgs = self.corpus_sg_blks.copy()
-            for sg in sgs:
-                i = self.corpus_sgs.index(sg)
-                row_sgs[i] = sg
-
+            row_sgs = [x if x in sgs else '' for x in self.corpus_sg_lst]
 
             #attrs della riga
-            row_attrs = self.corpus_attrs_blk.copy()
+            row_msd_lst = self.corpus_msd_blks.copy()
+            r_attrs = r[MSD].split(',')
+            r_attrs = [x for x in r_attrs if x != '']
+            r_attrs = [x.lower() for x in r_attrs]
 
-            attrs = r[MSD].split(',')
-            attrs = [x for x in attrs if x != '']
-            attrs = [x.lower() for x in attrs]
-        
             pos = r[POS].lower()
-            if pos=='':
-                # AAA  ritornare riga vuota
-                return row.split('|')
-            
-            # AAA vechio con la costruzione indice
-            # for attr in attrs:
-            #     k = f'{pos}_{attr}'
-            #     idx = self.corpus_msd_attr_idx[k]
-            #     row_attrs[idx] = attr
+            if pos == '':
+                # return row.split('|')
+                return None
 
-            # AAA
-            # print(self.corpus_msd_attrs)
-            # print(pos)
-            # print(attrs)
-            xrow_attrs = self.corpus_attrs_blk.copy()
-            lst = self.corpus_attrs_blk.copy()
-            
             pos_js = self.pos_msd_json[pos]
-            xmsd_list = pos_js['msd_list']
-            
-            # ########################
-            # AAA check
-            l0 = []
-            for x in xmsd_list:
-                xm = x['msd_name']
-                xas = x['attrs']
-                xas = [x.lower() for x in xas]
-                for x in xas:
-                    l0.append(x)
-            s0 = list(set(l0))
-            l0.sort()
-            for x in s0:
-                n=l0.count(x)
-                if n> 1:
-                    print(pos)
-                    print(l0)
-                    print(n,x)
-                    print("----")
-            #################################
+            msd_list = pos_js['msd_list']
 
-            # AAA nuovo su json direttamente
-            for attr in attrs:
-                for x in xmsd_list:
-                    xm = x['msd_name']
-                    xas = x['attrs']
-                    xas = [x.lower() for x in xas]
-                    if attr in xas:
-                        idx = self.corpus_msd_attrs.index(xm)
-                        xrow_attrs[idx] = xm
-                        lst[idx] = attr
-                        # print(idx, xm)
+            # distrinuisce msd sulla riag in funzione di attr
+            row_msd_lst = self.corpus_msd_blks.copy()
+            for i,attr in enumerate(r_attrs):
+                for js in msd_list:
+                    msd_name = js['msd_name']
+                    attrs = js['attrs']
+                    if attr in attrs:
+                        idx = self.corpus_msd_lst.index(msd_name)
+                        row_msd_lst[idx] = msd_name
+                        # if attr=='ind':
+                        #     print(msd_name,attr,i,",".join(r_attrs))
+                        # if attr=='imp':
+                        #     print(msd_name,attr,i,",".join(r_attrs))
                         break
 
-            # print(xrow_attrs)
-            # print(lst)
-            # print(pos)
-            row_attrs = xrow_attrs
-            # print(row_attrs)
-            # input('?')
-            rr = r[:MSD] + row_attrs + row_sgs
+
+
+            rr = r[:MSD] + row_msd_lst + row_sgs
             #elimina formkey
             del rr[1]
             return rr
@@ -202,6 +163,7 @@ class ExportData(object):
         if pth.Path(corpus_path).exists() is False:
             logerr(f"{corpus_path} Non  esistente")
             sys.exit()
+        #constrollo attributi in pos_msd.json
         rows = []
         try:
             with open(corpus_path, 'r', encoding=ENCODING) as f:
@@ -211,10 +173,8 @@ class ExportData(object):
             logerr(msg)
             raise Exception(msg)
         try:
-            # head_csv = self.sep.join(HEAD)
             cexport_name = f"corpus.{self.corpus_exp_name}.csv"
             exp_path = ptu.join(DATA_EXPORT_DIR, cexport_name)
-            print(os.linesep)
             print(exp_path)
             fw = open(exp_path, "w", encoding=ENCODING)
 
@@ -225,8 +185,8 @@ class ExportData(object):
 
             #intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
-            attrs_head = [x.upper() for x in self.corpus_msd_attrs]
-            head = head_corpus + attrs_head + self.corpus_sgs
+            attrs_head = [x.upper() for x in self.corpus_msd_lst]
+            head = head_corpus + attrs_head + self.corpus_sg_lst
             row = self.sep.join(head)
             fw.write(row)
             fw.write(os.linesep)
@@ -234,10 +194,9 @@ class ExportData(object):
             rows.sort()
             for item in rows:
                 item = item.strip()
-                #aggiunge  msd attrs e  le sigle alla row
                 r = build_row(item)
-                # AAA controllare rughe vuote
-                
+                if r is None:
+                    continue
                 row = self.sep.join(r)
                 fw.write(row)
                 fw.write(os.linesep)
