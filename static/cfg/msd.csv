@@ -4,9 +4,9 @@
 3|case|Nom,Acc
 4|degree|Pos,Cmp,Sup,Abs
 5|adpType|PrepS,PrepArt
-6|verbForm|Fin,Ind
-7|mood|Inf,Part,Ger,Ind,Imp,Cnd,Sub
-8|tense|Past,Pres,Fut,Imp
+6|verbForm|Fin,  Ind
+7|mood|Inf,Part,Ger,  Ind , Imp ,Cnd,Sub
+8|tense|Past,Pres,Fut, Imp
 9|voice|Act,Pass,Rfl
 10|person|1,2,3
 11|property|Intr,Trans

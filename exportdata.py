@@ -42,7 +42,7 @@ class ExportData(object):
     def __init__(self, corpus_exp_name, csv_sep='\t'):
         self.corpus_exp_name = corpus_exp_name
         self.sep = csv_sep
-
+        self.pos_msd_json = {}
         self.corpus_msd_attrs = []
         self.corpus_attrs_blk = []
         self.corpus_msd_attr_idx = {}
@@ -60,6 +60,7 @@ class ExportData(object):
                 s = f.read()
                 s = s.lower()
                 js = json.loads(s)
+                self.pos_msd_json = js
         except Exception as e:
             msg = f'ERROR read_pos_msd_js \n{e}\n'
             raise Exception(msg)
@@ -124,18 +125,75 @@ class ExportData(object):
                 i = self.corpus_sgs.index(sg)
                 row_sgs[i] = sg
 
+
             #attrs della riga
-            attrs = r[MSD].split(',')
-            attrs = [x.lower() for x in attrs]
-            attrs = [x for x in attrs if x != '']
-            #sigle ordinate per la riga
             row_attrs = self.corpus_attrs_blk.copy()
+
+            attrs = r[MSD].split(',')
+            attrs = [x for x in attrs if x != '']
+            attrs = [x.lower() for x in attrs]
+        
             pos = r[POS].lower()
+            if pos=='':
+                # AAA  ritornare riga vuota
+                return row.split('|')
+            
+            # AAA vechio con la costruzione indice
+            # for attr in attrs:
+            #     k = f'{pos}_{attr}'
+            #     idx = self.corpus_msd_attr_idx[k]
+            #     row_attrs[idx] = attr
+
+            # AAA
+            # print(self.corpus_msd_attrs)
+            # print(pos)
+            # print(attrs)
+            xrow_attrs = self.corpus_attrs_blk.copy()
+            lst = self.corpus_attrs_blk.copy()
+            
+            pos_js = self.pos_msd_json[pos]
+            xmsd_list = pos_js['msd_list']
+            
+            # ########################
+            # AAA check
+            l0 = []
+            for x in xmsd_list:
+                xm = x['msd_name']
+                xas = x['attrs']
+                xas = [x.lower() for x in xas]
+                for x in xas:
+                    l0.append(x)
+            s0 = list(set(l0))
+            l0.sort()
+            for x in s0:
+                n=l0.count(x)
+                if n> 1:
+                    print(pos)
+                    print(l0)
+                    print(n,x)
+                    print("----")
+            #################################
+
+            # AAA nuovo su json direttamente
             for attr in attrs:
-                k = f'{pos}_{attr}'
-                idx = self.corpus_msd_attr_idx[k]
-                row_attrs[idx] = attr
-            rr = r[:MSD] + row_attrs + row_sgs          
+                for x in xmsd_list:
+                    xm = x['msd_name']
+                    xas = x['attrs']
+                    xas = [x.lower() for x in xas]
+                    if attr in xas:
+                        idx = self.corpus_msd_attrs.index(xm)
+                        xrow_attrs[idx] = xm
+                        lst[idx] = attr
+                        # print(idx, xm)
+                        break
+
+            # print(xrow_attrs)
+            # print(lst)
+            # print(pos)
+            row_attrs = xrow_attrs
+            # print(row_attrs)
+            # input('?')
+            rr = r[:MSD] + row_attrs + row_sgs
             #elimina formkey
             del rr[1]
             return rr
@@ -167,7 +225,7 @@ class ExportData(object):
 
             #intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
-            attrs_head=[x.upper() for x in self.corpus_msd_attrs]
+            attrs_head = [x.upper() for x in self.corpus_msd_attrs]
             head = head_corpus + attrs_head + self.corpus_sgs
             row = self.sep.join(head)
             fw.write(row)
@@ -178,6 +236,8 @@ class ExportData(object):
                 item = item.strip()
                 #aggiunge  msd attrs e  le sigle alla row
                 r = build_row(item)
+                # AAA controllare rughe vuote
+                
                 row = self.sep.join(r)
                 fw.write(row)
                 fw.write(os.linesep)
@@ -310,11 +370,11 @@ class ExportData(object):
         path = ptu.abs(DATA_EXPORT_DIR)
         ptu.make_dir(path, 0o777)
         names = self.read_text_list()
-        for name in names:
-            if name.strip() == '':
-                continue
-            text_name = name + ".txt"
-            self.export_token_form(text_name)
+        # for name in names:
+        #     if name.strip() == '':
+        #         continue
+        #     text_name = name + ".txt"
+        #     self.export_token_form(text_name)
         self.export_corpus()
 
 
