@@ -11,8 +11,8 @@ import os
 from ulalib.ula_setting import *
 import json
 
-__date__ = "10-05-2023"
-__version__ = "0.1.2"
+__date__ = "14-05-2023"
+__version__ = "0.1.4"
 __author__ = "Marta Materni"
 
 #form.csv
@@ -25,7 +25,6 @@ LANG = 4
 POS = 5
 FUNCT = 6
 MSD = 7
-
 SIGLA = 8
 
 TOKEN_ROW_LEN = 2
@@ -128,18 +127,15 @@ class ExportData(object):
             r_attrs = r[MSD].split(',')
             r_attrs = [x for x in r_attrs if x != '']
             r_attrs = [x.lower() for x in r_attrs]
-
             pos = r[POS].lower()
             if pos == '':
                 # return row.split('|')
                 return None
-
             pos_js = self.pos_msd_json[pos]
             msd_list = pos_js['msd_list']
-
             # distrinuisce msd sulla riag in funzione di attr
             row_msd_lst = self.corpus_msd_blks.copy()
-            for i,attr in enumerate(r_attrs):
+            for i, attr in enumerate(r_attrs):
                 for js in msd_list:
                     msd_name = js['msd_name']
                     attrs = js['attrs']
@@ -152,11 +148,8 @@ class ExportData(object):
                         #     print(msd_name,attr,i,",".join(r_attrs))
                         break
 
-
-
             rr = r[:MSD] + row_msd_lst + row_sgs
-            #elimina formkey
-            del rr[1]
+            del rr[FORMAKEY]
             return rr
 
         corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
