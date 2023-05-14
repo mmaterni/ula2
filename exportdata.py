@@ -124,9 +124,9 @@ class ExportData(object):
 
             #attrs della riga
             row_msd_lst = self.corpus_msd_blks.copy()
-            r_attrs = r[MSD].split(',')
-            r_attrs = [x for x in r_attrs if x != '']
-            r_attrs = [x.lower() for x in r_attrs]
+            row_attrs = r[MSD].split(',')
+            row_attrs = [x for x in row_attrs if x != '']
+            row_attrs = [x.lower() for x in row_attrs]
             pos = r[POS].lower()
             if pos == '':
                 # return row.split('|')
@@ -135,11 +135,11 @@ class ExportData(object):
             msd_list = pos_js['msd_list']
             # distrinuisce msd sulla riag in funzione di attr
             row_msd_lst = self.corpus_msd_blks.copy()
-            for i, attr in enumerate(r_attrs):
+            for i, attr in enumerate(row_attrs):
                 for js in msd_list:
                     msd_name = js['msd_name']
-                    attrs = js['attrs']
-                    if attr in attrs:
+                    msd_attrs = js['attrs']
+                    if attr in msd_attrs:
                         idx = self.corpus_msd_lst.index(msd_name)
                         row_msd_lst[idx] = msd_name
                         # if attr=='ind':
