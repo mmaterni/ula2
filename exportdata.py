@@ -10,6 +10,7 @@ import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
 import json
+import csv
 
 __date__ = "14-05-2023"
 __version__ = "0.1.4"
@@ -31,6 +32,7 @@ TOKEN_ROW_LEN = 2
 FORM_ROW_LEN = 2
 
 POS_MSD_JS_PATH = "static/cfg/pos_msd.json"
+POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
 
 path_err = "log/exportdata.ERR.log"
 logerr = Log("w").open(path_err, 1).log
@@ -49,18 +51,38 @@ class ExportData(object):
         self.corpus_sg_lst = []
 
     def read_pos_msd(self):
-        if pth.Path(POS_MSD_JS_PATH).exists() is False:
-            msg = "pos_msd.jsson Not Found."
-            logerr(msg)
-            sys.exit()
-        try:
-            with open(POS_MSD_JS_PATH, 'r', encoding=ENCODING) as f:
-                s = f.read()
-                s = s.lower()
-                self.pos_msd_json = json.loads(s)
-        except Exception as e:
-            msg = f'ERROR read_pos_msd_js \n{e}\n'
-            raise Exception(msg)
+        # if pth.Path(POS_MSD_JS_PATH).exists() is False:
+        #     msg = "pos_msd.jsson Not Found."
+        #     logerr(msg)
+        #     sys.exit()
+        # try:
+        #     with open(POS_MSD_JS_PATH, 'r', encoding=ENCODING) as f:
+        #         s = f.read()
+        #         s = s.lower()
+        #         self.pos_msd_json = json.loads(s)
+        # except Exception as e:
+        #     msg = f'ERROR read_pos_msd_js \n{e}\n'
+        #     raise Exception(msg)
+
+        ##########################################
+        with open(POS_MSD_CSV_PATH) as f:
+            pos_msd_rows = f.readlines()
+
+        self.pos_msd_json = {}
+        for item in pos_msd_rows[1:]:
+            item = item.strip().lower()
+            row = item.split('|')
+            pos = row[0]
+            pos_name = row[1]
+            msd_name = row[2]
+            attrs = row[3].split(",")
+            if pos not in self.pos_msd_json:
+                self.pos_msd_json[pos] = {"pos_name": pos_name, "msd_list": []}
+            self.pos_msd_json[pos]["msd_list"].append({
+                "msd_name": msd_name,
+                "attrs": attrs
+            })
+        #############################################
         self.check_attrs()
 
         #lista msd name
@@ -149,9 +171,9 @@ class ExportData(object):
                         break
 
             #assegnazione pos_name
-            pos_name=self.pos_msd_json[pos]['pos_name']
-            r[POS]=pos_name
-            
+            pos_name = self.pos_msd_json[pos]['pos_name']
+            r[POS] = pos_name
+
             rr = r[:MSD] + row_msd_lst + row_sgs
             del rr[FORMAKEY]
             return rr

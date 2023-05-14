@@ -39,3 +39,6 @@ CCONJ|coordinating conjunction|MWEs|MWEs
 SCONJ|subordinating conjunction|MWEs|MWEs
 NUM|numeral|numType|Card,Ord
 PART|particle|partType|Pos,Neg,Int,Exc,Verb
+INTJ|interjection||
+X|other||
+-|del||
