@@ -1,19 +1,54 @@
 
 var PosMsdJson = {
   pmjs: {},
-  read: async function () {
-    const url = "cfg/pos_msd.json";
+
+  read_csv:async function () {
+    let csv=null;
+    const url = "cfg/pos_msd.csv";
     const resp = await fetch(url, {
       method: 'GET',
       headers: { "Content-Type": "text/plain;charset=UTF-8" },
       cache: 'default'
     });
     if (resp.ok) {
-      this.pmjs = await resp.json();
+      csv = await resp.text();
     } else {
       alert("pos_msd.json Not Found.");
     }
+    const rows = csv.trim().split('\n');
+    // const headers = rows.shift().split('|');
+    // elimina intestazione tabella csv
+    rows.shift()
+    let json = {};
+    rows.forEach((line) => {
+      const row = line.split('|');
+      const pos = row[0];
+      if (!json[pos]) {
+        json[pos] = { pos_name: row[1], msd_list: [] };
+      }
+      json[pos].msd_list.push({
+        msd_name: row[2],
+        attrs: row[3].split(','),
+      });
+    });
+    // console.log(json);
+    this.pmjs = json;
   },
+
+  // read: async function () {
+  //   const url = "cfg/pos_msd.json";
+  //   const resp = await fetch(url, {
+  //     method: 'GET',
+  //     headers: { "Content-Type": "text/plain;charset=UTF-8" },
+  //     cache: 'default'
+  //   });
+  //   if (resp.ok) {
+  //     this.pmjs = await resp.json();
+  //   } else {
+  //     alert("pos_msd.json Not Found.");
+  //   }
+  // },
+
   pos_sign_list: function () {
     let ks = [];
     for (let k in this.pmjs) ks.push(k);
@@ -75,7 +110,8 @@ var PosMsd = {
     this.setXY();
   },
   open: async function () {
-    await PosMsdJson.read();
+    await PosMsdJson.read_csv();
+    //AAA await PosMsdJson.read();
     let pos_sign_list = PosMsdJson.pos_sign_list();
     let rs = [];
     for (let pos_sign of pos_sign_list) {
