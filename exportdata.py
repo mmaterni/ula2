@@ -148,6 +148,8 @@ class ExportData(object):
                         #     print(msd_name,attr,i,",".join(r_attrs))
                         break
 
+            pos_name=self.pos_msd_json[pos][pos_name]
+            print(pos,pos_name)
             rr = r[:MSD] + row_msd_lst + row_sgs
             del rr[FORMAKEY]
             return rr
