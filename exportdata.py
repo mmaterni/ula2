@@ -141,7 +141,7 @@ class ExportData(object):
                     msd_attrs = js['attrs']
                     if attr in msd_attrs:
                         idx = self.corpus_msd_lst.index(msd_name)
-                        row_msd_lst[idx] = msd_name
+                        row_msd_lst[idx] = attr
                         # if attr=='ind':
                         #     print(msd_name,attr,i,",".join(r_attrs))
                         # if attr=='imp':
