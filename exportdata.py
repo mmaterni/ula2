@@ -36,7 +36,6 @@ POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
 
 path_err = "log/exportdata.ERR.log"
 logerr = Log("w").open(path_err, 1).log
-
 """
 POS|pos_name|msd_name|attrs
 NOUN|noun|gender|Masc,Fem,Neut
@@ -72,6 +71,8 @@ NOUN|noun|case|Nom,Acc
     ]
   },
 """
+
+
 class ExportData(object):
 
     def __init__(self, corpus_exp_name, csv_sep='\t'):
@@ -122,8 +123,9 @@ class ExportData(object):
     def get_corpus_sigle(self, rows):
         st = set()
         for row in rows:
-            cols = row.strip().split('|')
-            sg = set(cols[SIGLA].split(','))
+            # cols = row.strip().split('|')
+            # sg = set(cols[SIGLA].split(','))
+            sg = set(row[SIGLA].split(','))
             st.update(sg)
         st.remove('')
         sg_lst = list(st)
@@ -203,18 +205,26 @@ class ExportData(object):
             sys.exit()
         #constrollo attributi in pos_msd.json
         rows = []
+        # try:
+        #     with open(corpus_path, 'r', encoding=ENCODING) as f:
+        #         rows = f.readlines()
+        # except Exception as e:
+        #     msg = f'ERROR export_corpus \n{e}\n'
+        #     exit(msg)
         try:
-            with open(corpus_path, 'r', encoding=ENCODING) as f:
-                rows = f.readlines()
+            f = open(corpus_path, 'r', encoding=ENCODING)
+            reader = csv.reader(f, delimiter='|')
+            for row in reader:
+                rows.append(row)
+            f.close()
         except Exception as e:
-            msg = f'ERROR export_corpus \n{e}\n'
-            exit(msg)
+            sys.exit(e)
         try:
             cexport_name = f"corpus.{self.corpus_exp_name}.csv"
             exp_path = ptu.join(DATA_EXPORT_DIR, cexport_name)
             print(exp_path)
-            fw = open(exp_path, "w", encoding=ENCODING)
 
+            fw = open(exp_path, "w", encoding=ENCODING)
             # #lista sigle di tutto il corpus
             self.get_corpus_sigle(rows)
             #dict di pos_attr e lista msd nme  pos_msd.json
