@@ -84,7 +84,7 @@ class ExportData(object):
         # lista delle sigle nel corpus
         self.corpus_sg_lst = []
 
-    def read_pos_msd(self):
+    def read_pos_msd_csv(self):
         try:
             f = open(POS_MSD_CSV_PATH)
         except Exception as e:
@@ -218,7 +218,7 @@ class ExportData(object):
             # #lista sigle di tutto il corpus
             self.get_corpus_sigle(rows)
             #dict di pos_attr e lista msd nme  pos_msd.json
-            self.read_pos_msd()
+            self.read_pos_msd_csv()
 
             #intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
@@ -241,7 +241,7 @@ class ExportData(object):
             os.chmod(exp_path, 0o777)
         except IOError as e:
             msg = f'ERROR export_corpus: \n{e}\n'
-            raise Exception(msg)
+            sys.exit(msg)
 
     def export_token_form(self, text_path):
         text_name = os.path.basename(text_path)
