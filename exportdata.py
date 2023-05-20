@@ -208,8 +208,7 @@ class ExportData(object):
                 rows = f.readlines()
         except Exception as e:
             msg = f'ERROR export_corpus \n{e}\n'
-            logerr(msg)
-            raise Exception(msg)
+            exit(msg)
         try:
             cexport_name = f"corpus.{self.corpus_exp_name}.csv"
             exp_path = ptu.join(DATA_EXPORT_DIR, cexport_name)
