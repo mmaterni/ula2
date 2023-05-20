@@ -150,7 +150,8 @@ class ExportData(object):
                     x = True
                     print(pos, n, a)
             if x:
-                print("|".join(atrr_lst))
+                pass
+                # print("|".join(atrr_lst))
                 # input('')
 
     def export_corpus(self):
@@ -163,8 +164,9 @@ class ExportData(object):
             #distribuisce le sigle di riga nella lista delle sigle del corpus
             row_sgs = [x if x in sgs else '' for x in self.corpus_sg_lst]
 
-            #attrs della riga
+            #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
             row_msd_lst = self.corpus_msd_blks.copy()
+            #attributi di riga escluso '' e minuscoli
             row_attrs = row[MSD].split(',')
             row_attrs = [x for x in row_attrs if x != '']
             row_attrs = [x.lower() for x in row_attrs]
@@ -176,18 +178,27 @@ class ExportData(object):
             msd_list = pos_js['msd_list']
             # distrinuisce msd sulla riag in funzione di attr
             row_msd_lst = self.corpus_msd_blks.copy()
+
+            #attributi di riga
             for i, attr in enumerate(row_attrs):
+                #lista mse del pos
                 for js in msd_list:
                     msd_name = js['msd_name']
                     msd_attrs = js['attrs']
+                    #atttributo di riga appartien agli attributi del msd corrente
                     if attr in msd_attrs:
+                        #TODO controllo attr duplicati
+                        #gestione attr duplicati in lista per pos
+                        if attr == 'ind' and i == 1:
+                            continue
+                        if attr == 'imp' and i == 2:
+                            continue
+                        #setta nella lista attrs da esportare l'attr di riga
                         idx = self.corpus_msd_lst.index(msd_name)
                         row_msd_lst[idx] = attr
-                        if attr=='ind':
-                            print(msd_name,attr,i,",".join(row_attrs))
-                        # if attr=='imp':
-                        #     print(msd_name,attr,i,",".join(r_attrs))
                         break
+                # if attr in ['imp','ind']:
+                #     print(msd_name, attr, i, ",".join(row_attrs))
             #assegnazione pos_name
             pos_name = self.pos_msd_json[pos]['pos_name']
             row[POS] = pos_name
