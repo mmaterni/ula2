@@ -350,12 +350,8 @@ class ExportData(object):
         return token_form_lst
 
     def read_text_list(self):
-        if pth.Path(TEXT_LIST_PATH).exists() is False:
-            msg = "text_list.txt Not Found."
-            logerr(msg)
-            sys.exit()
         try:
-            with open(TEXT_LIST_PATH+"x", 'r', encoding=ENCODING) as f:
+            with open(TEXT_LIST_PATH, 'r', encoding=ENCODING) as f:
                 lst = f.readlines()
         except Exception as e:
             msg = f'ERROR read_text_lst \n{e}\n'
