@@ -123,8 +123,6 @@ class ExportData(object):
     def get_corpus_sigle(self, rows):
         st = set()
         for row in rows:
-            # cols = row.strip().split('|')
-            # sg = set(cols[SIGLA].split(','))
             sg = set(row[SIGLA].split(','))
             st.update(sg)
         st.remove('')
@@ -282,14 +280,10 @@ class ExportData(object):
     def read_form_csv(self, text_name):
         form_name = text_name.replace(".txt", f".form.csv")
         form_path = ptu.join(DATA_DIR, form_name)
-        # if pth.Path(form_path).exists() is False:
-        #     logerr(f"{form_path} Non  esistente")
-        #     sys.exit()
         form_rows = []
         form_keys = []
         try:
             with open(form_path, 'r', encoding=ENCODING) as f:
-                # lst = f.readlines()
                 reader =csv.reader(f,delimiter='|')
                 for i, row in enumerate(reader):
                     if len(row) < FORM_ROW_LEN:
@@ -323,21 +317,22 @@ class ExportData(object):
             sys.exit(msg)
         return token_rows
 
-    def join_token_form(self, token_lst, form_lst, form_keys):
+    def join_token_form(self, token_rows, form_rows, form_keys):
         form_empty = ["", "", "", "", "", "", "", ""]
-        token_form_lst = []
-        for token in token_lst:
-            key = token[FORMAKEY]
+        token_form_rows = []
+        for token_row in token_rows:
+            key = token_row[FORMAKEY]
             try:
                 idx = form_keys.index(key)
             except ValueError:
-                form = form_empty
-                form[0] = token[0]
-                form[1] = token[1]
+                form_row = form_empty
+                form_row[0] = token_row[0]
+                form_row[1] = token_row[1]
+                print(token_row)
             else:
-                form = form_lst[idx]
-            token_form_lst.append(form)
-        return token_form_lst
+                form_row = form_rows[idx]
+            token_form_rows.append(form_row)
+        return token_form_rows
 
     def read_text_list(self):
         try:
