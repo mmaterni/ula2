@@ -282,36 +282,31 @@ class ExportData(object):
     def read_form_csv(self, text_name):
         form_name = text_name.replace(".txt", f".form.csv")
         form_path = ptu.join(DATA_DIR, form_name)
-
-        if pth.Path(form_path).exists() is False:
-            logerr(f"{form_path} Non  esistente")
-            sys.exit()
-        form_lst = []
+        # if pth.Path(form_path).exists() is False:
+        #     logerr(f"{form_path} Non  esistente")
+        #     sys.exit()
+        form_rows = []
         form_keys = []
         try:
             with open(form_path, 'r', encoding=ENCODING) as f:
-                lst = f.readlines()
-            for i, row in enumerate(lst):
-                row = row.strip()
-                if row == "":
-                    break
-                cols = row.split('|')
-                if len(cols) < FORM_ROW_LEN:
-                    logerr(f"text\n{i}\n{row}\n{cols}\n")
-                    continue
-                form_lst.append(cols)
-                key = cols[FORMAKEY]
-                form_keys.append(key)
-            return form_lst, form_keys
+                # lst = f.readlines()
+                reader =csv.reader(f,delimiter='|')
+                for i, row in enumerate(reader):
+                    if len(row) < FORM_ROW_LEN:
+                        logerr(f"text\n{i} {row}")
+                        continue
+                    form_rows.append(row)
+                    key = row[FORMAKEY]
+                    form_keys.append(key)
         except Exception as e:
             msg = f'ERROR read_form_csv \n{e}\n'
-            logerr(msg)
-            raise Exception(msg)
+            sys.exit(msg)
+        return form_rows, form_keys
 
     def read_token_csv(self, text_name):
         token_name = text_name.replace(".txt", f".token.csv")
         token_path = ptu.join(DATA_DIR, token_name)
-        token_lst = []
+        token_rows = []
         try:
             # with open(token_path, 'r', encoding=ENCODING) as f:
             #     lst = f.readlines()
@@ -325,20 +320,17 @@ class ExportData(object):
             #         continue
             #     token_lst.append(cols)
             # return token_lst
-
             f = open(token_path, 'r', encoding=ENCODING)
             reader = csv.reader(f, delimiter='|')
             # lst = f.readlines()
             for i, row in enumerate(reader):
-                # row = row.strip()
-                # if row == "":
-                #     break
-                # cols = row.split('|')
                 if len(row) < TOKEN_ROW_LEN:
-                    logerr(f"text\n{i}\n{row}\n")
+                    # TODO controllo righe vuote
+                    # logerr(f"{i}{row}")
                     continue
-                token_lst.append(row)
-            return token_lst
+                token_rows.append(row)
+            f.close()
+            return token_rows
 
         except Exception as e:
             msg = f'ERROR read_token_csv \n{e}\n'
