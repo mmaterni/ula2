@@ -157,22 +157,20 @@ class ExportData(object):
 
         # aggiunge le sigle ordinate alla row e inserisce attrs
         def build_row(row):
-            # r = row.split('|')
-            r = row
-
             #sigle della riga
-            sgs = r[SIGLA].split(',')
+            sgs = row[SIGLA].split(',')
             sgs = [x for x in sgs if x != '']
+            #distribuisce le sigle di riga nella lista delle sigle del corpus
             row_sgs = [x if x in sgs else '' for x in self.corpus_sg_lst]
 
             #attrs della riga
             row_msd_lst = self.corpus_msd_blks.copy()
-            row_attrs = r[MSD].split(',')
+            row_attrs = row[MSD].split(',')
             row_attrs = [x for x in row_attrs if x != '']
             row_attrs = [x.lower() for x in row_attrs]
-            pos = r[POS].lower()
+            pos = row[POS].lower()
             if pos == '':
-                # return row.split('|')
+                # print(r)
                 return None
             pos_js = self.pos_msd_json[pos]
             msd_list = pos_js['msd_list']
@@ -190,14 +188,12 @@ class ExportData(object):
                         # if attr=='imp':
                         #     print(msd_name,attr,i,",".join(r_attrs))
                         break
-
             #assegnazione pos_name
             pos_name = self.pos_msd_json[pos]['pos_name']
-            r[POS] = pos_name
-
-            rr = r[:MSD] + row_msd_lst + row_sgs
-            del rr[FORMAKEY]
-            return rr
+            row[POS] = pos_name
+            row_exp = row[:MSD] + row_msd_lst + row_sgs
+            del row_exp[FORMAKEY]
+            return row_exp
 
         corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
         rows = []
