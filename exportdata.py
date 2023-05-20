@@ -183,8 +183,8 @@ class ExportData(object):
                     if attr in msd_attrs:
                         idx = self.corpus_msd_lst.index(msd_name)
                         row_msd_lst[idx] = attr
-                        # if attr=='ind':
-                        #     print(msd_name,attr,i,",".join(r_attrs))
+                        if attr=='ind':
+                            print(msd_name,attr,i,",".join(row_attrs))
                         # if attr=='imp':
                         #     print(msd_name,attr,i,",".join(r_attrs))
                         break
