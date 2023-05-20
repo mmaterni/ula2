@@ -363,11 +363,11 @@ class ExportData(object):
         path = ptu.abs(DATA_EXPORT_DIR)
         ptu.make_dir(path, 0o777)
         names = self.read_text_list()
-        # for name in names:
-        #     if name.strip() == '':
-        #         continue
-        #     text_name = name + ".txt"
-        #     self.export_token_form(text_name)
+        for name in names:
+            if name.strip() == '':
+                continue
+            text_name = name + ".txt"
+            self.export_token_form(text_name)
         self.export_corpus()
 
 
