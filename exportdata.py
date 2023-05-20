@@ -111,8 +111,8 @@ class ExportData(object):
 
         f.close()
         #############################################
-        # AAA check attrs
-        self.check_attrs()
+        # TODO check attrs
+        # self.check_attrs()
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
         #list msd vuote
@@ -133,6 +133,7 @@ class ExportData(object):
         #lista sigle di tutto il corpus
         self.corpus_sg_lst = sg_lst
 
+    #controlla attributi dulicati per pos
     def check_attrs(self):
         for k, v in self.pos_msd_json.items():
             pos = k
@@ -172,7 +173,7 @@ class ExportData(object):
             row_attrs = [x.lower() for x in row_attrs]
             pos = row[POS].lower()
             if pos == '':
-                # print(r)
+                # print(row)
                 return None
             pos_js = self.pos_msd_json[pos]
             msd_list = pos_js['msd_list']
