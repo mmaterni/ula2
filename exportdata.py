@@ -5,12 +5,13 @@ from pdb import set_trace
 from ulalib.ualog import Log
 import sys
 import argparse
-import pathlib as pth
+# import pathlib as pth
 import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
-import json
+# import json
 import csv
+import pandas as pd
 
 __date__ = "20-05-2023"
 __version__ = "0.1.4"
@@ -28,8 +29,8 @@ FUNCT = 6
 MSD = 7
 SIGLA = 8
 
-TOKEN_ROW_LEN = 2
-FORM_ROW_LEN = 2
+# TOKEN_ROW_LEN = 2
+# FORM_ROW_LEN = 2
 
 # POS_MSD_JS_PATH = "static/cfg/pos_msd.json"
 POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
@@ -244,95 +245,30 @@ class ExportData(object):
 
     def export_token_form(self, text_path):
         text_name = os.path.basename(text_path)
-        token_lst = self.read_token_csv(text_name)
-        form_lst, form_keys = self.read_form_csv(text_name)
-        #aggiunge form ai token
-        token_form_lst = self.join_token_form(token_lst, form_lst, form_keys)
-        exp_name = text_name.replace(".txt", ".ula.csv")
-        exp_csv_path = ptu.join(DATA_EXPORT_DIR, exp_name)
-        print(exp_csv_path)
-        head_token = [
-            "FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SIGLE"
-        ]
-        try:
-            head_csv = self.sep.join(head_token)
-            fw = open(exp_csv_path, "w", encoding=ENCODING)
-            fw.write(head_csv)
-            fw.write(os.linesep)
-            for item in token_form_lst:
-                item0 = []
-                for i, x in enumerate(item):
-                    if i == 1:
-                        continue
-                    item0.append(x)
-                row = self.sep.join(item0)
-
-                fw.write(row)
-                fw.write(os.linesep)
-            fw.close()
-            os.chmod(exp_csv_path, 0o777)
-        except IOError as e:
-            msg = f'ERROR write_token_form_csv: \n{e}\n'
-            sys.exit(msg)
-
-    ########################
-
-    def read_form_csv(self, text_name):
-        form_name = text_name.replace(".txt", f".form.csv")
-        form_path = ptu.join(DATA_DIR, form_name)
-        form_rows = []
-        form_keys = []
-        try:
-            with open(form_path, 'r', encoding=ENCODING) as f:
-                reader =csv.reader(f,delimiter='|')
-                for i, row in enumerate(reader):
-                    if len(row) < FORM_ROW_LEN:
-                        logerr(f"text\n{i} {row}")
-                        continue
-                    form_rows.append(row)
-                    key = row[FORMAKEY]
-                    form_keys.append(key)
-        except Exception as e:
-            msg = f'ERROR read_form_csv \n{e}\n'
-            sys.exit(msg)
-        return form_rows, form_keys
-
-    def read_token_csv(self, text_name):
-        token_name = text_name.replace(".txt", f".token.csv")
+        token_name = text_name.replace(".txt", ".token.csv")
         token_path = ptu.join(DATA_DIR, token_name)
-        token_rows = []
-        try:
-            f = open(token_path, 'r', encoding=ENCODING)
-            reader = csv.reader(f, delimiter='|')
-            # lst = f.readlines()
-            for i, row in enumerate(reader):
-                if len(row) < TOKEN_ROW_LEN:
-                    # TODO controllo righe vuote
-                    # logerr(f"{i}{row}")
-                    continue
-                token_rows.append(row)
-            f.close()
-        except Exception as e:
-            msg = f'ERROR read_token_csv \n{e}\n'
-            sys.exit(msg)
-        return token_rows
+        form_name = text_name.replace(".txt", ".form.csv")
+        form_path = ptu.join(DATA_DIR, form_name)
+        tab12_name = text_name.replace(".txt", ".ula.csv")
+        tab12_path = ptu.join(DATA_EXPORT_DIR, tab12_name)
 
-    def join_token_form(self, token_rows, form_rows, form_keys):
-        form_empty = ["", "", "", "", "", "", "", ""]
-        token_form_rows = []
-        for token_row in token_rows:
-            key = token_row[FORMAKEY]
-            try:
-                idx = form_keys.index(key)
-            except ValueError:
-                form_row = form_empty
-                form_row[0] = token_row[0]
-                form_row[1] = token_row[1]
-                print(token_row)
-            else:
-                form_row = form_rows[idx]
-            token_form_rows.append(form_row)
-        return token_form_rows
+        tab1 = pd.read_csv(token_path, delimiter='|', header=None)
+        tab2 = pd.read_csv(form_path, delimiter='|', header=None)
+        formakey = tab2[1].duplicated().any()
+        if formakey:
+            print("La chiave formaskey non è unica.")
+        tab1 = tab1.rename(columns={1: 'col2'})
+        tab2 = tab2.rename(columns={1: 'col2'})
+        tab12 = pd.merge(tab1, tab2, on='col2', how='left')
+        tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
+        tab12['']='G'
+        tab12 = tab12.fillna('')
+        print(tab12)
+        head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
+        tab12.to_csv(tab12_path, sep='|', header=head,index=False)
+
+    def pp(self):
+        pass
 
     def read_text_list(self):
         try:
