@@ -313,18 +313,33 @@ class ExportData(object):
         token_path = ptu.join(DATA_DIR, token_name)
         token_lst = []
         try:
-            with open(token_path, 'r', encoding=ENCODING) as f:
-                lst = f.readlines()
-            for i, row in enumerate(lst):
-                row = row.strip()
-                if row == "":
-                    break
-                cols = row.split('|')
-                if len(cols) < TOKEN_ROW_LEN:
-                    logerr(f"text\n{i}\n{row}\n{cols}\n")
+            # with open(token_path, 'r', encoding=ENCODING) as f:
+            #     lst = f.readlines()
+            # for i, row in enumerate(lst):
+            #     row = row.strip()
+            #     if row == "":
+            #         break
+            #     cols = row.split('|')
+            #     if len(cols) < TOKEN_ROW_LEN:
+            #         logerr(f"text\n{i}\n{row}\n{cols}\n")
+            #         continue
+            #     token_lst.append(cols)
+            # return token_lst
+
+            f = open(token_path, 'r', encoding=ENCODING)
+            reader = csv.reader(f, delimiter='|')
+            # lst = f.readlines()
+            for i, row in enumerate(reader):
+                # row = row.strip()
+                # if row == "":
+                #     break
+                # cols = row.split('|')
+                if len(row) < TOKEN_ROW_LEN:
+                    logerr(f"text\n{i}\n{row}\n")
                     continue
-                token_lst.append(cols)
+                token_lst.append(row)
             return token_lst
+
         except Exception as e:
             msg = f'ERROR read_token_csv \n{e}\n'
             sys.exit(msg)
