@@ -12,7 +12,7 @@ from ulalib.ula_setting import *
 import json
 import csv
 
-__date__ = "14-05-2023"
+__date__ = "20-05-2023"
 __version__ = "0.1.4"
 __author__ = "Marta Materni"
 
@@ -31,13 +31,47 @@ SIGLA = 8
 TOKEN_ROW_LEN = 2
 FORM_ROW_LEN = 2
 
-POS_MSD_JS_PATH = "static/cfg/pos_msd.json"
+# POS_MSD_JS_PATH = "static/cfg/pos_msd.json"
 POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
 
 path_err = "log/exportdata.ERR.log"
 logerr = Log("w").open(path_err, 1).log
 
+"""
+POS|pos_name|msd_name|attrs
+NOUN|noun|gender|Masc,Fem,Neut
+NOUN|noun|number|Sing,Plur
+NOUN|noun|case|Nom,Acc
 
+{
+  "NOUN": {
+    "pos_name": "noun",
+    "msd_list": [
+      {
+        "msd_name": "gender",
+        "attrs": [
+          "Masc",
+          "Fem",
+          "Neut"
+        ]
+      },
+      {
+        "msd_name": "number",
+        "attrs": [
+          "Sing",
+          "Plur"
+        ]
+      },
+      {
+        "msd_name": "case",
+        "attrs": [
+          "Nom",
+          "Acc"
+        ]
+      }
+    ]
+  },
+"""
 class ExportData(object):
 
     def __init__(self, corpus_exp_name, csv_sep='\t'):
@@ -51,30 +85,21 @@ class ExportData(object):
         self.corpus_sg_lst = []
 
     def read_pos_msd(self):
-        # if pth.Path(POS_MSD_JS_PATH).exists() is False:
-        #     msg = "pos_msd.jsson Not Found."
-        #     logerr(msg)
-        #     sys.exit()
-        # try:
-        #     with open(POS_MSD_JS_PATH, 'r', encoding=ENCODING) as f:
-        #         s = f.read()
-        #         s = s.lower()
-        #         self.pos_msd_json = json.loads(s)
-        # except Exception as e:
-        #     msg = f'ERROR read_pos_msd_js \n{e}\n'
-        #     raise Exception(msg)
-
-        ##########################################
-        with open(POS_MSD_CSV_PATH) as f:
-            pos_msd_rows = f.readlines()
+        try:
+            f = open(POS_MSD_CSV_PATH)
+        except Exception as e:
+            sys.ecit(e)
+        rows = csv.reader(f, delimiter='|')
 
         self.pos_msd_json = {}
-        for item in pos_msd_rows[1:]:
-            item = item.strip().lower()
-            row = item.split('|')
+        msd_set = set()
+        next(rows)
+        for row in rows:
+            row = [x.lower() for x in row]
             pos = row[0]
             pos_name = row[1]
             msd_name = row[2]
+            msd_set.add(msd_name)
             attrs = row[3].split(",")
             if pos not in self.pos_msd_json:
                 self.pos_msd_json[pos] = {"pos_name": pos_name, "msd_list": []}
@@ -82,17 +107,11 @@ class ExportData(object):
                 "msd_name": msd_name,
                 "attrs": attrs
             })
-        #############################################
-        self.check_attrs()
 
-        #lista msd name
-        msd_set = set()
-        for kv in self.pos_msd_json.items():
-            v = kv[1]
-            msd_list = v['msd_list']
-            for js in msd_list:
-                msd_name = js['msd_name']
-                msd_set.add(msd_name)
+        f.close()
+        #############################################
+        # AAA check attrs
+        self.check_attrs()
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
         #list msd vuote
