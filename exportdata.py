@@ -355,11 +355,11 @@ class ExportData(object):
             logerr(msg)
             sys.exit()
         try:
-            with open(TEXT_LIST_PATH, 'r', encoding=ENCODING) as f:
+            with open(TEXT_LIST_PATH+"x", 'r', encoding=ENCODING) as f:
                 lst = f.readlines()
         except Exception as e:
             msg = f'ERROR read_text_lst \n{e}\n'
-            raise Exception(msg)
+            sys.exit(msg)
         names = [x.strip() for x in lst]
         return names
 
