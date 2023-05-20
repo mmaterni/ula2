@@ -210,39 +210,46 @@ class ExportData(object):
             f.close()
         except Exception as e:
             sys.exit(e)
+
+        cexport_name = f"corpus.{self.corpus_exp_name}.csv"
+        exp_path = ptu.join(DATA_EXPORT_DIR, cexport_name)
+        print(exp_path)
+        #lista sigle di tutto il corpus
+        self.get_corpus_sigle(rows)
+        #dict di pos_attr e lista msd nme  pos_msd.json
+        self.read_pos_msd_csv()
         try:
-            cexport_name = f"corpus.{self.corpus_exp_name}.csv"
-            exp_path = ptu.join(DATA_EXPORT_DIR, cexport_name)
-            print(exp_path)
-
             fw = open(exp_path, "w", encoding=ENCODING)
-            # #lista sigle di tutto il corpus
-            self.get_corpus_sigle(rows)
-            #dict di pos_attr e lista msd nme  pos_msd.json
-            self.read_pos_msd_csv()
-
+            writer = csv.writer(fv, delimiter='|')
             #intestazione comprensiva delle sigle e msd
             head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
             attrs_head = [x.upper() for x in self.corpus_msd_lst]
             head = head_corpus + attrs_head + self.corpus_sg_lst
-            row = self.sep.join(head)
-            fw.write(row)
-            fw.write(os.linesep)
+            writer.writerow(head)
+            # row = self.sep.join(head)
+            # fw.write(row)
+            # fw.write(os.linesep)
 
             rows.sort()
             for row in rows:
                 r = build_row(row)
                 if r is None:
                     continue
-                row_csv = self.sep.join(r)
-                fw.write(row_csv)
-                fw.write(os.linesep)
+                writer.writerow(r)
+                # row_csv = self.sep.join(r)
+                # fw.write(row_csv)
+                # fw.write(os.linesep)
             fw.close()
             
             os.chmod(exp_path, 0o777)
         except IOError as e:
             msg = f'ERROR export_corpus: \n{e}\n'
             sys.exit(msg)
+
+                # writer = csv.writer(file_csv, delimiter='|')
+                # writer.writerow(riga)
+
+
 
     def export_token_form(self, text_path):
         text_name = os.path.basename(text_path)
