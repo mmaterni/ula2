@@ -311,9 +311,6 @@ class ExportData(object):
     def read_token_csv(self, text_name):
         token_name = text_name.replace(".txt", f".token.csv")
         token_path = ptu.join(DATA_DIR, token_name)
-        if pth.Path(token_path).exists() is False:
-            logerr(f"{token_path} Non  esistente")
-            sys.exit()
         token_lst = []
         try:
             with open(token_path, 'r', encoding=ENCODING) as f:
@@ -330,8 +327,7 @@ class ExportData(object):
             return token_lst
         except Exception as e:
             msg = f'ERROR read_token_csv \n{e}\n'
-            logerr(msg)
-            raise Exception(msg)
+            sys.exit(msg)
 
     def join_token_form(self, token_lst, form_lst, form_keys):
         form_empty = ["", "", "", "", "", "", "", ""]
