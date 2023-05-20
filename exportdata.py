@@ -158,7 +158,8 @@ class ExportData(object):
 
         # aggiunge le sigle ordinate alla row e inserisce attrs
         def build_row(row):
-            r = row.split('|')
+            # r = row.split('|')
+            r=row
 
             #sigle della riga
             sgs = r[SIGLA].split(',')
@@ -200,17 +201,7 @@ class ExportData(object):
             return rr
 
         corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
-        if pth.Path(corpus_path).exists() is False:
-            logerr(f"{corpus_path} Non  esistente")
-            sys.exit()
-        #constrollo attributi in pos_msd.json
         rows = []
-        # try:
-        #     with open(corpus_path, 'r', encoding=ENCODING) as f:
-        #         rows = f.readlines()
-        # except Exception as e:
-        #     msg = f'ERROR export_corpus \n{e}\n'
-        #     exit(msg)
         try:
             f = open(corpus_path, 'r', encoding=ENCODING)
             reader = csv.reader(f, delimiter='|')
@@ -239,15 +230,15 @@ class ExportData(object):
             fw.write(os.linesep)
 
             rows.sort()
-            for item in rows:
-                item = item.strip()
-                r = build_row(item)
+            for row in rows:
+                r = build_row(row)
                 if r is None:
                     continue
-                row = self.sep.join(r)
-                fw.write(row)
+                row_csv = self.sep.join(r)
+                fw.write(row_csv)
                 fw.write(os.linesep)
             fw.close()
+            
             os.chmod(exp_path, 0o777)
         except IOError as e:
             msg = f'ERROR export_corpus: \n{e}\n'
