@@ -308,18 +308,6 @@ class ExportData(object):
         token_path = ptu.join(DATA_DIR, token_name)
         token_rows = []
         try:
-            # with open(token_path, 'r', encoding=ENCODING) as f:
-            #     lst = f.readlines()
-            # for i, row in enumerate(lst):
-            #     row = row.strip()
-            #     if row == "":
-            #         break
-            #     cols = row.split('|')
-            #     if len(cols) < TOKEN_ROW_LEN:
-            #         logerr(f"text\n{i}\n{row}\n{cols}\n")
-            #         continue
-            #     token_lst.append(cols)
-            # return token_lst
             f = open(token_path, 'r', encoding=ENCODING)
             reader = csv.reader(f, delimiter='|')
             # lst = f.readlines()
@@ -330,11 +318,10 @@ class ExportData(object):
                     continue
                 token_rows.append(row)
             f.close()
-            return token_rows
-
         except Exception as e:
             msg = f'ERROR read_token_csv \n{e}\n'
             sys.exit(msg)
+        return token_rows
 
     def join_token_form(self, token_lst, form_lst, form_keys):
         form_empty = ["", "", "", "", "", "", "", ""]
