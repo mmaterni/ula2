@@ -86,7 +86,6 @@ class ExportData(object):
         except Exception as e:
             sys.ecit(e)
         rows = csv.reader(f, delimiter='|')
-
         self.pos_msd_json = {}
         msd_set = set()
         next(rows)
@@ -289,7 +288,6 @@ class ExportData(object):
 def do_main(corpus_export_name):
     exportdata = ExportData(corpus_export_name)
     exportdata.export_data()
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
