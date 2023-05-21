@@ -258,6 +258,8 @@ class ExportData(object):
         tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
         tab12[''] = self.sigla
         tab12 = tab12.fillna('')
+        tab12.iloc[:, 6] = tab12.iloc[:, 6].str.lower()
+
         head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
         tab12.to_csv(tab12_path, sep='|', header=head, index=False)
 
