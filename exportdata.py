@@ -5,11 +5,9 @@ from pdb import set_trace
 from ulalib.ualog import Log
 import sys
 import argparse
-# import pathlib as pth
 import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
-# import json
 import csv
 import pandas as pd
 
@@ -76,15 +74,16 @@ NOUN|noun|case|Nom,Acc
 
 class ExportData(object):
 
-    def __init__(self, corpus_exp_name, csv_sep='\t'):
+    def __init__(self, corpus_exp_name, csv_sep='|'):
         self.corpus_exp_name = corpus_exp_name
-        self.sep = csv_sep
+        self.sep = csv_sep 
         self.pos_msd_json = {}
         #lista di msd_name nel corpus
         self.corpus_msd_lst = []
         self.corpus_msd_blks = []
         # lista delle sigle nel corpus
         self.corpus_sg_lst = []
+        self.sigla='x'
 
     def read_pos_msd_csv(self):
         try:
@@ -164,8 +163,6 @@ class ExportData(object):
             #distribuisce le sigle di riga nella lista delle sigle del corpus
             row_sgs = [x if x in sgs else '' for x in self.corpus_sg_lst]
 
-            #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
-            row_msd_lst = self.corpus_msd_blks.copy()
             #attributi di riga escluso '' e minuscoli
             row_attrs = row[MSD].split(',')
             row_attrs = [x for x in row_attrs if x != '']
@@ -176,16 +173,16 @@ class ExportData(object):
                 return None
             pos_js = self.pos_msd_json[pos]
             msd_list = pos_js['msd_list']
-            # distrinuisce msd sulla riag in funzione di attr
+            # contenitore per distribuire msd sulla riag in funzione di attr
             row_msd_lst = self.corpus_msd_blks.copy()
 
-            #attributi di riga
+            #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
             for i, attr in enumerate(row_attrs):
                 #lista mse del pos
                 for js in msd_list:
                     msd_name = js['msd_name']
                     msd_attrs = js['attrs']
-                    #atttributo di riga appartien agli attributi del msd corrente
+                    #atttributo di riga appartien agli atattrs  del msd corrente
                     if attr in msd_attrs:
                         #TODO controllo attr duplicati
                         #gestione attr duplicati in lista per pos
@@ -194,6 +191,7 @@ class ExportData(object):
                         if attr == 'imp' and i == 2:
                             continue
                         #setta nella lista attrs da esportare l'attr di riga
+                        #alla posizione del nome msd corrispondente
                         idx = self.corpus_msd_lst.index(msd_name)
                         row_msd_lst[idx] = attr
                         break
@@ -261,14 +259,11 @@ class ExportData(object):
         tab2 = tab2.rename(columns={1: 'col2'})
         tab12 = pd.merge(tab1, tab2, on='col2', how='left')
         tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
-        tab12['']='G'
+        tab12['']=self.sigla
         tab12 = tab12.fillna('')
-        print(tab12)
         head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
         tab12.to_csv(tab12_path, sep='|', header=head,index=False)
 
-    def pp(self):
-        pass
 
     def read_text_list(self):
         try:
@@ -287,6 +282,8 @@ class ExportData(object):
         for name in names:
             if name.strip() == '':
                 continue
+            print(name)
+            self.sigla=name.split('.')[-1:][0]
             text_name = name + ".txt"
             self.export_token_form(text_name)
         self.export_corpus()
