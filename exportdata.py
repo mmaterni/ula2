@@ -104,7 +104,6 @@ class ExportData(object):
             })
 
         f.close()
-        #############################################
         # TODO check attrs
         # self.check_attrs()
         self.corpus_msd_lst = list(msd_set)
@@ -246,9 +245,13 @@ class ExportData(object):
         tab12_name = text_name.replace(".txt", f".{self.exp_name}.csv")
         tab12_path = os.path.join(DATA_EXPORT_DIR, tab12_name)
         print(tab12_path)
-
         tab1 = pd.read_csv(token_path, delimiter='|', header=None)
         tab2 = pd.read_csv(form_path, delimiter='|', header=None)
+
+        # TODO trasformazione minuscolo
+        # tab1 = tab1.applymap(lambda x: x.lower() if isinstance(x, str) else x)
+        # tab2 = tab2.applymap(lambda x: x.lower() if isinstance(x, str) else x)
+
         formakey = tab2[1].duplicated().any()
         if formakey:
             print("La chiave formaskey non è unica.")
@@ -258,6 +261,7 @@ class ExportData(object):
         tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
         tab12[''] = self.sigla
         tab12 = tab12.fillna('')
+        #XXX attrs in minuscolo
         tab12.iloc[:, 6] = tab12.iloc[:, 6].str.lower()
 
         head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
