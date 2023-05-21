@@ -199,7 +199,7 @@ class ExportData(object):
             del row_exp[FORMAKEY]
             return row_exp
 
-        corpus_path = ptu.join(CORPUS_DIR, CORPUS_NAME)
+        corpus_path = os.path.join(CORPUS_DIR, CORPUS_NAME)
         rows = []
         try:
             f = open(corpus_path, 'r', encoding=ENCODING)
@@ -210,7 +210,7 @@ class ExportData(object):
         except Exception as e:
             sys.exit(e)
         exp_name = f"corpus.{self.exp_name}.csv"
-        exp_path = ptu.join(DATA_EXPORT_DIR, exp_name)
+        exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
         print(os.linesep)
         print(exp_path)
         #lista sigle di tutto il corpus
@@ -240,12 +240,12 @@ class ExportData(object):
     def export_token_form(self, text_path):
         text_name = os.path.basename(text_path)
         token_name = text_name.replace(".txt", ".token.csv")
-        token_path = ptu.join(DATA_DIR, token_name)
+        token_path = os.path.join(DATA_DIR, token_name)
         form_name = text_name.replace(".txt", ".form.csv")
-        form_path = ptu.join(DATA_DIR, form_name)
+        form_path = os.path.join(DATA_DIR, form_name)
         # tab12_name = text_name.replace(".txt", ".ula.csv")
         tab12_name = text_name.replace(".txt", f".{self.exp_name}.csv")
-        tab12_path = ptu.join(DATA_EXPORT_DIR, tab12_name)
+        tab12_path = os.path.join(DATA_EXPORT_DIR, tab12_name)
         print(tab12_path)
 
         tab1 = pd.read_csv(token_path, delimiter='|', header=None)
