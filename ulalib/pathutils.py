@@ -27,31 +27,14 @@ def abs(path_x):
 
 
 def path2str(path):
-    try:
-        if path is None:
-            raise (Exception("path2str() path is None"))
-        # TODO s = f"{path}"
-        s = path.as_posix()
-        return s.strip()
-    except Exception as e:
-        raise (Exception(f"ERROR path2str() {os.linesep}{e}"))
+    return path.as_posix().strip()
 
 
 def str2path(path_s):
-    try:
-        path_s = "" if path_s is None else path_s
-        if isinstance(path_s, str):
-            path = pth.Path(path_s)
-            return path
-        else:
-            return path_s
-    except Exception as e:
-        raise (Exception(f"ERROR str2path() {os.linesep}{e}"))
-
+   return pth.Path(path_s)
 
 def exists(path_s):
     return pth.Path(path_s).exists()
-
 
 def remove(path_s):
     if not pth.Path(path_s).exists():
@@ -175,6 +158,17 @@ def rmake_dir(path_x, mode=0o777):
     except Exception as e:
         msg = f"ERROR rmake_dir() {path_x}\n{e}"
         raise (Exception(msg))
+
+
+# def rmake_dir(path_x, mode=0o777):
+#     try:
+#         path = pth.Path(path_x) if isinstance(path_x, str) else path_x
+#         path_abs = path.absolute()
+#         for p in path_abs.parents:
+#             p.mkdir(exist_ok=True, mode=mode)
+#         path_abs.mkdir(exist_ok=True, mode=mode)
+#     except Exception as e:
+#         raise Exception(f"ERROR rmake_dir() {path_x}\n{e}")
 
 
 def make_dir_of_file(path_x, mode=0o777):
