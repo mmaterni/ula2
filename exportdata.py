@@ -27,14 +27,10 @@ FUNCT = 6
 MSD = 7
 SIGLA = 8
 
-# TOKEN_ROW_LEN = 2
-# FORM_ROW_LEN = 2
-
-# POS_MSD_JS_PATH = "static/cfg/pos_msd.json"
 POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
 
-path_err = "log/exportdata.ERR.log"
-logerr = Log("w").open(path_err, 1).log
+# path_err = "log/exportdata.ERR.log"
+# logerr = Log("w").open(path_err, 1).log
 """
 POS|pos_name|msd_name|attrs
 NOUN|noun|gender|Masc,Fem,Neut
@@ -74,16 +70,15 @@ NOUN|noun|case|Nom,Acc
 
 class ExportData(object):
 
-    def __init__(self, corpus_exp_name, csv_sep='|'):
-        self.corpus_exp_name = corpus_exp_name
-        self.sep = csv_sep 
+    def __init__(self, exp_name):
+        self.exp_name = exp_name
         self.pos_msd_json = {}
         #lista di msd_name nel corpus
         self.corpus_msd_lst = []
         self.corpus_msd_blks = []
         # lista delle sigle nel corpus
         self.corpus_sg_lst = []
-        self.sigla='x'
+        self.sigla = 'x'
 
     def read_pos_msd_csv(self):
         try:
@@ -214,8 +209,9 @@ class ExportData(object):
             f.close()
         except Exception as e:
             sys.exit(e)
-        cexport_name = f"corpus.{self.corpus_exp_name}.csv"
-        exp_path = ptu.join(DATA_EXPORT_DIR, cexport_name)
+        exp_name = f"corpus.{self.exp_name}.csv"
+        exp_path = ptu.join(DATA_EXPORT_DIR, exp_name)
+        print(os.linesep)
         print(exp_path)
         #lista sigle di tutto il corpus
         self.get_corpus_sigle(rows)
@@ -247,8 +243,10 @@ class ExportData(object):
         token_path = ptu.join(DATA_DIR, token_name)
         form_name = text_name.replace(".txt", ".form.csv")
         form_path = ptu.join(DATA_DIR, form_name)
-        tab12_name = text_name.replace(".txt", ".ula.csv")
+        # tab12_name = text_name.replace(".txt", ".ula.csv")
+        tab12_name = text_name.replace(".txt", f".{self.exp_name}.csv")
         tab12_path = ptu.join(DATA_EXPORT_DIR, tab12_name)
+        print(tab12_path)
 
         tab1 = pd.read_csv(token_path, delimiter='|', header=None)
         tab2 = pd.read_csv(form_path, delimiter='|', header=None)
@@ -259,11 +257,10 @@ class ExportData(object):
         tab2 = tab2.rename(columns={1: 'col2'})
         tab12 = pd.merge(tab1, tab2, on='col2', how='left')
         tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
-        tab12['']=self.sigla
+        tab12[''] = self.sigla
         tab12 = tab12.fillna('')
         head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
-        tab12.to_csv(tab12_path, sep='|', header=head,index=False)
-
+        tab12.to_csv(tab12_path, sep='|', header=head, index=False)
 
     def read_text_list(self):
         try:
@@ -282,15 +279,14 @@ class ExportData(object):
         for name in names:
             if name.strip() == '':
                 continue
-            print(name)
-            self.sigla=name.split('.')[-1:][0]
+            self.sigla = name.split('.')[-1:][0]
             text_name = name + ".txt"
             self.export_token_form(text_name)
         self.export_corpus()
 
 
-def do_main(corpus_export_name, csv_sep):
-    exportdata = ExportData(corpus_export_name, csv_sep)
+def do_main(corpus_export_name):
+    exportdata = ExportData(corpus_export_name)
     exportdata.export_data()
 
 
@@ -298,12 +294,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     print(f"\nauthor: {__author__}")
     print(f"release: {__version__} { __date__}\n")
-    parser.add_argument('-s',
-                        dest="sep",
-                        required=False,
-                        default='p',
-                        metavar="",
-                        help='-s p)pipe s)emi_colon t)tab  (default pipe (|))')
     parser.add_argument('-n',
                         dest="name",
                         required=False,
@@ -311,13 +301,4 @@ if __name__ == "__main__":
                         metavar="",
                         help="-n <corpus_name> (default ula)")
     args = parser.parse_args()
-    if args.sep == 't':
-        sep = '\t'
-    elif args.sep == 'p':
-        sep = '|'
-    elif args.sep == 's':
-        sep = ';'
-    else:
-        print("options for flag -s are t/p/s")
-        sys.exit()
-    do_main(args.name, sep)
+    do_main(args.name)
