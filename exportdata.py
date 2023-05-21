@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from pdb import set_trace
-from ulalib.ualog import Log
+# from pdb import set_trace
+# from ulalib.ualog import Log
 import sys
 import argparse
-import ulalib.pathutils as ptu
+# import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
 import csv
 import pandas as pd
 
-__date__ = "20-05-2023"
-__version__ = "0.1.4"
+__date__ = "21-05-2023"
+__version__ = "0.2.0"
 __author__ = "Marta Materni"
 
 #form.csv
@@ -273,8 +273,9 @@ class ExportData(object):
         return names
 
     def export_data(self):
-        path = ptu.abs(DATA_EXPORT_DIR)
-        ptu.make_dir(path, 0o777)
+        # path = ptu.abs(DATA_EXPORT_DIR)
+        # path = os.path.abspath(DATA_EXPORT_DIR)
+        # ptu.make_dir(path, 0o777)
         names = self.read_text_list()
         for name in names:
             if name.strip() == '':
