@@ -5,7 +5,6 @@
 # from ulalib.ualog import Log
 import sys
 import argparse
-# import ulalib.pathutils as ptu
 import os
 from ulalib.ula_setting import *
 import csv
