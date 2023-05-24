@@ -149,6 +149,7 @@ class ExportData(object):
 
         # aggiunge le sigle ordinate alla row e inserisce attrs
         def build_row(row):
+            
             #sigle della riga
             sgs = row[SIGLA].split(',')
             sgs = [x for x in sgs if x != '']
@@ -164,14 +165,13 @@ class ExportData(object):
                 # print(row)
                 return None
             pos_js = self.pos_msd_json[pos]
-            msd_list = pos_js['msd_list']
+            pos_msd_list = pos_js['msd_list']
             # contenitore per distribuire msd sulla riag in funzione di attr
-            row_msd_lst = self.corpus_msd_blks.copy()
-
+            row_msds = self.corpus_msd_blks.copy()
             #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
             for i, attr in enumerate(row_attrs):
                 #lista mse del pos
-                for js in msd_list:
+                for js in pos_msd_list:
                     msd_name = js['msd_name']
                     msd_attrs = js['attrs']
                     #atttributo di riga appartien agli atattrs  del msd corrente
@@ -185,17 +185,19 @@ class ExportData(object):
                         #setta nella lista attrs da esportare l'attr di riga
                         #alla posizione del nome msd corrispondente
                         idx = self.corpus_msd_lst.index(msd_name)
-                        row_msd_lst[idx] = attr
+                        row_msds[idx] = attr
                         break
                 # if attr in ['imp','ind']:
                 #     print(msd_name, attr, i, ",".join(row_attrs))
+
             #assegnazione pos_name
             pos_name = self.pos_msd_json[pos]['pos_name']
             row[POS] = pos_name
-            row_exp = row[:MSD] + row_msd_lst + row_sgs
+            row_exp = row[:MSD] + row_msds + row_sgs
             del row_exp[FORMAKEY]
             return row_exp
 
+        #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
         corpus_path = os.path.join(CORPUS_DIR, CORPUS_NAME)
         rows = []
         try:
@@ -222,6 +224,7 @@ class ExportData(object):
             attrs_head = [x.upper() for x in self.corpus_msd_lst]
             head = head_corpus + attrs_head + self.corpus_sg_lst
             writer.writerow(head)
+
             rows.sort()
             for row in rows:
                 r = build_row(row)
