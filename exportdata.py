@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# from pdb import set_trace
+from pdb import set_trace
 # from ulalib.ualog import Log
 import sys
 import argparse
@@ -143,61 +143,73 @@ class ExportData(object):
             if x:
                 pass
                 # print("|".join(atrr_lst))
+
                 # input('')
 
-    def export_corpus(self):
+    # aggiunge le sigle ordinate alla row e inserisce attrs
+    def build_row(self, r):
 
-        # aggiunge le sigle ordinate alla row e inserisce attrs
-        def build_row(row):
-            
-            #sigle della riga
-            sgs = row[SIGLA].split(',')
-            sgs = [x for x in sgs if x != '']
-            #distribuisce le sigle di riga nella lista delle sigle del corpus
-            row_sgs = [x if x in sgs else '' for x in self.corpus_sg_lst]
+        #sigle della riga
+        sgs = r[SIGLA].split(',')
+        sgs = [x for x in sgs if x != '']
+        #distribuisce le sigle di riga nella lista delle sigle del corpus
+        row_sgs = [x if x in sgs else '' for x in self.corpus_sg_lst]
 
-            #attributi di riga escluso '' e minuscoli
-            row_attrs = row[MSD].split(',')
-            row_attrs = [x for x in row_attrs if x != '']
-            row_attrs = [x.lower() for x in row_attrs]
-            pos = row[POS].lower()
-            if pos == '':
-                # print(row)
-                return None
-            pos_js = self.pos_msd_json[pos]
-            pos_msd_list = pos_js['msd_list']
-            # contenitore per distribuire msd sulla riag in funzione di attr
-            row_msds = self.corpus_msd_blks.copy()
-            #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
-            for i, attr in enumerate(row_attrs):
-                #lista mse del pos
-                for js in pos_msd_list:
-                    msd_name = js['msd_name']
-                    msd_attrs = js['attrs']
-                    #atttributo di riga appartien agli atattrs  del msd corrente
-                    if attr in msd_attrs:
-                        #TODO controllo attr duplicati
-                        #gestione attr duplicati in lista per pos
-                        if attr == 'ind' and i == 1:
-                            continue
-                        if attr == 'imp' and i == 2:
-                            continue
-                        #setta nella lista attrs da esportare l'attr di riga
-                        #alla posizione del nome msd corrispondente
-                        idx = self.corpus_msd_lst.index(msd_name)
-                        row_msds[idx] = attr
-                        break
-                # if attr in ['imp','ind']:
-                #     print(msd_name, attr, i, ",".join(row_attrs))
+        #attributi di riga escluso '' e minuscoli
+        row_attrs = r[MSD].split(',')
+        row_attrs = [x for x in row_attrs if x != '']
+        row_attrs = [x.lower() for x in row_attrs]
+        pos = r[POS].lower()
+        if pos == '':
+            # print(row)
+            return None
+        pos_js = self.pos_msd_json[pos]
+        pos_msd_list = pos_js['msd_list']
+        # contenitore per distribuire msd sulla riag in funzione di attr
+        row_msds = self.corpus_msd_blks.copy()
+        #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
+        for i, attr in enumerate(row_attrs):
+            #lista mse del pos
+            for js in pos_msd_list:
+                msd_name = js['msd_name']
+                msd_attrs = js['attrs']
+                #atttributo di riga appartien agli atattrs  del msd corrente
+                if attr in msd_attrs:
+                    #TODO controllo attr duplicati
+                    #gestione attr duplicati in lista per pos
+                    if attr == 'ind' and i == 1:
+                        continue
+                    if attr == 'imp' and i == 2:
+                        continue
+                    #setta nella lista attrs da esportare l'attr di riga
+                    #alla posizione del nome msd corrispondente
+                    idx = self.corpus_msd_lst.index(msd_name)
+                    row_msds[idx] = attr
+                    break
+            # if attr in ['imp','ind']:
+            #     print(msd_name, attr, i, ",".join(row_attrs))
 
-            #assegnazione pos_name
-            pos_name = self.pos_msd_json[pos]['pos_name']
-            row[POS] = pos_name
-            row_exp = row[:MSD] + row_msds + row_sgs
-            del row_exp[FORMAKEY]
-            return row_exp
+        # separazione loc, data in  LANG
+        l_d = r[LANG].split(',')
+        lang = ''
+        data = ''
+        if len(l_d) > 0:
+            lang = l_d[0]
+            if len(l_d) > 1:
+                data = l_d[1]
 
+        #assegnazione pos_name
+        pos_name = self.pos_msd_json[pos]['pos_name']
+        # row[POS] = pos_name
+        # row_exp = row[:MSD] + row_msds + row_sgs
+        # del row_exp[FORMAKEY]
         #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
+        row_exp = [
+            r[FORMA], r[LEMMA], r[ETIMO], lang, data, pos_name, r[FUNCT]
+        ] + row_msds + row_sgs
+        return row_exp
+
+    def export_corpus(self):
         corpus_path = os.path.join(CORPUS_DIR, CORPUS_NAME)
         rows = []
         try:
@@ -220,14 +232,15 @@ class ExportData(object):
             fw = open(exp_path, "w", encoding=ENCODING)
             writer = csv.writer(fw, delimiter='|')
             #intestazione comprensiva delle sigle e msd
-            head_corpus = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
             attrs_head = [x.upper() for x in self.corpus_msd_lst]
-            head = head_corpus + attrs_head + self.corpus_sg_lst
+            head = [
+                "FORMA", "LEMMA", "ETIMO", "LANG", "DATTE", "POS", "FUNCT"
+            ] + attrs_head + self.corpus_sg_lst
             writer.writerow(head)
-
+            #scrittura rows
             rows.sort()
             for row in rows:
-                r = build_row(row)
+                r = self.build_row(row)
                 if r is None:
                     continue
                 writer.writerow(r)
@@ -296,6 +309,7 @@ class ExportData(object):
 def do_main(corpus_export_name):
     exportdata = ExportData(corpus_export_name)
     exportdata.export_data()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
