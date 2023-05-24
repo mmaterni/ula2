@@ -26,7 +26,7 @@ FUNCT = 6
 MSD = 7
 SIGLA = 8
 
-POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
+# POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
 
 # path_err = "log/exportdata.ERR.log"
 # logerr = Log("w").open(path_err, 1).log
@@ -101,7 +101,6 @@ class ExportData(object):
                 "msd_name": msd_name,
                 "attrs": attrs
             })
-
         f.close()
         # TODO check attrs
         # self.check_attrs()
@@ -110,6 +109,19 @@ class ExportData(object):
         #list msd vuote
         self.corpus_msd_blks = ['' for i in range(len(self.corpus_msd_lst))]
 
+    #tabella decodifica sigle => località,data
+    def read_exp_loc_dat(self):
+        rows = []
+        try:
+            with open(EXP_LOC_DAT_PATH, 'r', encoding=ENCODING) as f:
+                reader = csv.reader(f, delimiter='|')
+                for row in reader:
+                    rows.append(row)
+        except Exception as e:
+            sys.exit(e)
+        print(rows)
+        return rows
+  
     #estrae dalla lista di tutto il corpus il
     #set di sigle utilizzato
     def get_corpus_sigle(self, rows):
@@ -143,9 +155,9 @@ class ExportData(object):
             if x:
                 pass
                 # print("|".join(atrr_lst))
-
                 # input('')
 
+    
     # aggiunge le sigle ordinate alla row e inserisce attrs
     def build_row(self, r):
 
@@ -203,7 +215,8 @@ class ExportData(object):
         # row[POS] = pos_name
         # row_exp = row[:MSD] + row_msds + row_sgs
         # del row_exp[FORMAKEY]
-        #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"]
+        
+        #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"],MSDS,SIGLE ..,LOC,DATE..
         row_exp = [
             r[FORMA], r[LEMMA], r[ETIMO], lang, data, pos_name, r[FUNCT]
         ] + row_msds + row_sgs
@@ -224,10 +237,15 @@ class ExportData(object):
         exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
         print(os.linesep)
         print(exp_path)
+
         #lista sigle di tutto il corpus
         self.get_corpus_sigle(rows)
+        
         #dict di pos_attr e lista msd nme  pos_msd.json
         self.read_pos_msd_csv()
+        
+        #tabella conversione sigla dta,loc
+        self.read_exp_loc_dat()
         try:
             fw = open(exp_path, "w", encoding=ENCODING)
             writer = csv.writer(fw, delimiter='|')
