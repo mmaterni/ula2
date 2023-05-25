@@ -91,8 +91,6 @@ djs={
 """
 
 
-
-
 class ExportData(object):
 
     def __init__(self, exp_name):
@@ -122,6 +120,8 @@ class ExportData(object):
         msd_set = set()
         next(rows)
         for row in rows:
+            if row[0] == '-':
+                continue
             row = [x.lower() for x in row]
             pos = row[0]
             pos_name = row[1]
@@ -139,8 +139,9 @@ class ExportData(object):
         # self.check_attrs()
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
+        print(self.corpus_msd_lst)
         #list msd vuote
-        self.corpus_msd_blks = ['' for i in range(len(self.corpus_msd_lst))]
+        self.corpus_msd_blks = [''] * len(self.corpus_msd_lst)
 
     def read_exp_csv(self):
         rows = []
@@ -211,7 +212,6 @@ class ExportData(object):
 
     # aggiunge le sigle ordinate alla row e inserisce attrs
     def build_row(self, r):
-        
         #sigle della riga
         sgs = r[SIGLA].split(',')
         sgs = [x for x in sgs if x != '']
@@ -250,8 +250,6 @@ class ExportData(object):
                     idx = self.corpus_msd_lst.index(msd_name)
                     row_msds[idx] = attr
                     break
-            # if attr in ['imp','ind']:
-            #     print(msd_name, attr, i, ",".join(row_attrs))
 
         # separazione loc, data in  LANG
         l_d = r[LANG].split(',')
@@ -267,13 +265,11 @@ class ExportData(object):
 
         #aggiunat località e date testimone
         row_loc_dat = self.build_row_loc_dat(sgs)
-        print(sgs,row_loc_dat)
-        #AAA        
 
         #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"],MSDS,SIGLE ..,LOC,DATE..
         row_exp = [
             r[FORMA], r[LEMMA], r[ETIMO], lang, data, pos_name, r[FUNCT]
-        ] + row_msds + row_sgs
+        ] + row_msds + row_sgs + row_loc_dat
         return row_exp
 
     def export_corpus(self):
@@ -302,12 +298,18 @@ class ExportData(object):
         try:
             fw = open(exp_path, "w", encoding=ENCODING)
             writer = csv.writer(fw, delimiter='|')
+
+            # head
             #intestazione comprensiva delle sigle e msd
-            attrs_head = [x.upper() for x in self.corpus_msd_lst]
+            # TODO msd maiuscole
+            # attrs_head = [x.upper() for x in self.corpus_msd_lst]
+            attrs_head=self.corpus_msd_lst
+            # FORMA,LEMMA,ETIMO,LANG,DATTE,POS,FUNCT,msda,...,loc,...,date,...
             head = [
                 "FORMA", "LEMMA", "ETIMO", "LANG", "DATTE", "POS", "FUNCT"
-            ] + attrs_head + self.corpus_sg_lst
+            ] + attrs_head + self.corpus_sg_lst + self.head_locs + self.head_dats
             writer.writerow(head)
+
             #scrittura rows
             rows.sort()
             for row in rows:
