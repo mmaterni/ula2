@@ -135,10 +135,12 @@ class ExportData(object):
         f.close()
         # TODO check attrs
         # self.check_attrs()
+
+        #elimina msd vuoto
+        msd_set.remove('')
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
-        del self.corpus_msd_lst[0]
-        #list msd vuote
+        #lista msd vuote
         self.corpus_msd_blks = [''] * len(self.corpus_msd_lst)
 
     def read_exp_csv(self):
