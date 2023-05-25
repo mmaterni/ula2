@@ -26,9 +26,9 @@ POS = 5
 FUNCT = 6
 MSD = 7
 SIGLA = 8
-
+#msd nullo da eliminare da tutte le righe
+MSD_NULL = 7
 # POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
-
 # path_err = "log/exportdata.ERR.log"
 # logerr = Log("w").open(path_err, 1).log
 """
@@ -120,8 +120,6 @@ class ExportData(object):
         msd_set = set()
         next(rows)
         for row in rows:
-            if row[0] == '-':
-                continue
             row = [x.lower() for x in row]
             pos = row[0]
             pos_name = row[1]
@@ -139,7 +137,6 @@ class ExportData(object):
         # self.check_attrs()
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
-        print(self.corpus_msd_lst)
         #list msd vuote
         self.corpus_msd_blks = [''] * len(self.corpus_msd_lst)
 
@@ -210,28 +207,8 @@ class ExportData(object):
         row = r_locs + r_dats
         return row
 
-    # aggiunge le sigle ordinate alla row e inserisce attrs
-    def build_row(self, r):
-        #sigle della riga
-        sgs = r[SIGLA].split(',')
-        sgs = [x for x in sgs if x != '']
-
-        #distribuisce le sigle di riga nella lista delle sigle del corpus
-        row_sgs = [x if x in sgs else '' for x in self.corpus_sgs]
-
-        #attributi di riga escluso '' e minuscoli
-        row_attrs = r[MSD].split(',')
-        row_attrs = [x for x in row_attrs if x != '']
-        row_attrs = [x.lower() for x in row_attrs]
-        pos = r[POS].lower()
-        if pos == '':
-            # print(row)
-            return None
-        pos_js = self.pos_msd_json[pos]
-        pos_msd_list = pos_js['msd_list']
-        # contenitore per distribuire msd sulla riag in funzione di attr
+    def build_row_msd(self, pos_msd_list, row_attrs):
         row_msds = self.corpus_msd_blks.copy()
-        #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
         for i, attr in enumerate(row_attrs):
             #lista mse del pos
             for js in pos_msd_list:
@@ -250,6 +227,51 @@ class ExportData(object):
                     idx = self.corpus_msd_lst.index(msd_name)
                     row_msds[idx] = attr
                     break
+        return row_msds
+
+    # aggiunge le sigle ordinate alla row e inserisce attrs
+    def build_row(self, r):
+
+        #sigle della riga
+        r_sgs = r[SIGLA].split(',')
+        r_sgs = [x for x in r_sgs if x != '']
+
+        #distribuisce le sigle di riga nella lista delle sigle del corpus
+        row_sgs = [x if x in r_sgs else '' for x in self.corpus_sgs]
+
+        #attributi di riga escluso '' e minuscoli
+        row_attrs = r[MSD].split(',')
+        row_attrs = [x for x in row_attrs if x != '']
+        row_attrs = [x.lower() for x in row_attrs]
+        pos = r[POS].lower()
+        if pos == '':
+            return None
+        pos_js = self.pos_msd_json[pos]
+        pos_msd_list = pos_js['msd_list']
+
+        row_msds=self.build_row_msd(pos_msd_list,row_attrs)
+
+        # # contenitore per distribuire msd sulla riag in funzione di attr
+        # row_msds = self.corpus_msd_blks.copy()
+        # #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
+        # for i, attr in enumerate(row_attrs):
+        #     #lista mse del pos
+        #     for js in pos_msd_list:
+        #         msd_name = js['msd_name']
+        #         msd_attrs = js['attrs']
+        #         #atttributo di riga appartien agli atattrs  del msd corrente
+        #         if attr in msd_attrs:
+        #             #TODO controllo attr duplicati
+        #             #gestione attr duplicati in lista per pos
+        #             if attr == 'ind' and i == 1:
+        #                 continue
+        #             if attr == 'imp' and i == 2:
+        #                 continue
+        #             #setta nella lista attrs da esportare l'attr di riga
+        #             #alla posizione del nome msd corrispondente
+        #             idx = self.corpus_msd_lst.index(msd_name)
+        #             row_msds[idx] = attr
+        #             break
 
         # separazione loc, data in  LANG
         l_d = r[LANG].split(',')
@@ -263,8 +285,8 @@ class ExportData(object):
         #assegnazione pos_name
         pos_name = self.pos_msd_json[pos]['pos_name']
 
-        #aggiunat località e date testimone
-        row_loc_dat = self.build_row_loc_dat(sgs)
+        #aggiunta località e date testimone
+        row_loc_dat = self.build_row_loc_dat(r_sgs)
 
         #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"],MSDS,SIGLE ..,LOC,DATE..
         row_exp = [
@@ -303,7 +325,7 @@ class ExportData(object):
             #intestazione comprensiva delle sigle e msd
             # TODO msd maiuscole
             # attrs_head = [x.upper() for x in self.corpus_msd_lst]
-            attrs_head=self.corpus_msd_lst
+            attrs_head = self.corpus_msd_lst
             # FORMA,LEMMA,ETIMO,LANG,DATTE,POS,FUNCT,msda,...,loc,...,date,...
             head = [
                 "FORMA", "LEMMA", "ETIMO", "LANG", "DATTE", "POS", "FUNCT"
