@@ -137,6 +137,7 @@ class ExportData(object):
         # self.check_attrs()
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
+        del self.corpus_msd_lst[0]
         #list msd vuote
         self.corpus_msd_blks = [''] * len(self.corpus_msd_lst)
 
@@ -163,17 +164,17 @@ class ExportData(object):
             self.djs[sg] = r[3]
 
     # #estrae dalla lista di tutto il corpus il
-    # #set di sigle utilizzato
+    #set di sigle utilizzato
     def get_corpus_sigle(self, rows):
         st = set()
         for row in rows:
             sg = set(row[SIGLA].split(','))
             st.update(sg)
         st.remove('')
-        sg_lst = list(st)
-        sg_lst.sort()
+        sgs = list(st)
+        sgs.sort()
         #lista sigle di tutto il corpus
-        self.corpus_sgs = sg_lst
+        self.corpus_sgs = sgs
 
     #controlla attributi dulicati per pos
     def check_attrs(self):
@@ -230,6 +231,7 @@ class ExportData(object):
         return row_msds
 
     # aggiunge le sigle ordinate alla row e inserisce attrs
+    # aggiunge località e data deelle sigle dei testimoni
     def build_row(self, r):
 
         #sigle della riga
