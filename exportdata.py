@@ -210,7 +210,9 @@ class ExportData(object):
         row = r_locs + r_dats
         return row
 
-    def build_row_msd(self, pos_msd_list, row_attrs):
+    def build_row_msd(self, pos, row_attrs):
+        pos_js = self.pos_msd_json[pos]
+        pos_msd_list = pos_js['msd_list']
         row_msds = self.corpus_msd_blks.copy()
         for i, attr in enumerate(row_attrs):
             #lista mse del pos
@@ -245,16 +247,14 @@ class ExportData(object):
 
         #attributi di riga escluso '' e minuscoli
         row_attrs = r[MSD].split(',')
-        row_attrs = [x for x in row_attrs if x != '']
-        row_attrs = [x.lower() for x in row_attrs]
+        row_attrs = [x.lower() for x in row_attrs if x != '']
         pos = r[POS].lower()
         if pos == '':
             return None
-        pos_js = self.pos_msd_json[pos]
-        pos_msd_list = pos_js['msd_list']
-
+        # pos_js = self.pos_msd_json[pos]
+        # pos_msd_list = pos_js['msd_list']
         #assenazione valori attributi alle colonne msd
-        row_msds = self.build_row_msd(pos_msd_list, row_attrs)
+        row_msds = self.build_row_msd(pos, row_attrs)
 
         # separazione loc, data in  LANG
         l_d = r[LANG].split(',')
