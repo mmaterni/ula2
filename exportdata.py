@@ -91,48 +91,6 @@ djs={
 """
 
 
-class ExpLocDat(object):
-
-    def __init__(self):
-        self.head_locs = []
-        self.val_locs = []
-        self.head_dats = []
-        #sigle pper esportazione
-        self.exp_sgs = []
-        self.ljs = {}
-        self.djs = {}
-
-    def read_exp_csv(self):
-        rows = []
-        try:
-            with open(EXP_LOC_DAT_PATH, 'r', encoding=ENCODING) as f:
-                reader = csv.reader(f, delimiter='|')
-                for r in reader:
-                    rows.append(r)
-        except Exception as e:
-            sys.exit(e)
-        #set delle date
-        ds = {r[3] for r in rows}
-        self.head_dats = [''] * len(ds)
-        for r in rows:
-            sg = r[0]
-            self.exp_sgs.append(sg)
-            self.head_locs.append(r[1])
-            self.val_locs.append(r[2])
-            i = int(r[4])
-            self.head_dats[i] = r[3]
-            self.ljs[sg] = r[2]
-            self.djs[sg] = r[3]
-
-    def build_row_loc_dat(self, r_sgs):
-        r_locs = [self.ljs[x] if x in r_sgs else '' for x in self.exp_sgs]
-        r_dats = [''] * len(self.head_dats)
-        for x in r_sgs:
-            d = self.djs[x]
-            i = self.head_dats.index(d)
-            r_dats[i] = d
-        row = r_locs + r_dats
-        return row
 
 
 class ExportData(object):
@@ -146,8 +104,13 @@ class ExportData(object):
         # lista delle sigle nel corpus
         self.corpus_sg_lst = []
         self.sigla = 'x'
-        #gestione localita e date testimoni
-        self.eld = ExpLocDat()
+        #sigle pper esportazione
+        self.head_locs = []
+        self.val_locs = []
+        self.head_dats = []
+        self.exp_sgs = []
+        self.ljs = {}
+        self.djs = {}
 
     def read_pos_msd_csv(self):
         try:
@@ -178,6 +141,28 @@ class ExportData(object):
         self.corpus_msd_lst.sort()
         #list msd vuote
         self.corpus_msd_blks = ['' for i in range(len(self.corpus_msd_lst))]
+
+    def read_exp_csv(self):
+        rows = []
+        try:
+            with open(EXP_LOC_DAT_PATH, 'r', encoding=ENCODING) as f:
+                reader = csv.reader(f, delimiter='|')
+                for r in reader:
+                    rows.append(r)
+        except Exception as e:
+            sys.exit(e)
+        #set delle date
+        ds = {r[3] for r in rows}
+        self.head_dats = [''] * len(ds)
+        for r in rows:
+            sg = r[0]
+            self.exp_sgs.append(sg)
+            self.head_locs.append(r[1])
+            self.val_locs.append(r[2])
+            i = int(r[4])
+            self.head_dats[i] = r[3]
+            self.ljs[sg] = r[2]
+            self.djs[sg] = r[3]
 
     # #estrae dalla lista di tutto il corpus il
     # #set di sigle utilizzato
@@ -213,6 +198,16 @@ class ExportData(object):
                 pass
                 # print("|".join(atrr_lst))
                 # input('')
+
+    def build_row_loc_dat(self, r_sgs):
+        r_locs = [self.ljs[x] if x in r_sgs else '' for x in self.exp_sgs]
+        r_dats = [''] * len(self.head_dats)
+        for x in r_sgs:
+            d = self.djs[x]
+            i = self.head_dats.index(d)
+            r_dats[i] = d
+        row = r_locs + r_dats
+        return row
 
     # aggiunge le sigle ordinate alla row e inserisce attrs
     def build_row(self, r):
@@ -271,9 +266,10 @@ class ExportData(object):
         pos_name = self.pos_msd_json[pos]['pos_name']
 
         #aggiunat località e date testimone
-        row_loc_dat = self.eld.build_row_loc_dat(sgs)
+        row_loc_dat = self.build_row_loc_dat(sgs)
         print(sgs,row_loc_dat)
         #AAA        
+
         #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"],MSDS,SIGLE ..,LOC,DATE..
         row_exp = [
             r[FORMA], r[LEMMA], r[ETIMO], lang, data, pos_name, r[FUNCT]
@@ -298,12 +294,11 @@ class ExportData(object):
 
         #lista sigle di tutto il corpus
         self.get_corpus_sigle(rows)
-
         #dict di pos_attr e lista msd nme  pos_msd.json
         self.read_pos_msd_csv()
-
         #tabella conversione sigla dta,loc
-        self.eld.read_exp_csv()
+        self.read_exp_csv()
+
         try:
             fw = open(exp_path, "w", encoding=ENCODING)
             writer = csv.writer(fw, delimiter='|')
