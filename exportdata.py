@@ -245,25 +245,21 @@ class ExportData(object):
         #distribuisce le sigle di riga nella lista delle sigle del corpus
         row_sgs = [x if x in r_sgs else '' for x in self.corpus_sgs]
 
-        #attributi di riga escluso '' e minuscoli
+        #attributi di riga escluso '' e resi minuscoli
         row_attrs = r[MSD].split(',')
         row_attrs = [x.lower() for x in row_attrs if x != '']
+
         pos = r[POS].lower()
         if pos == '':
             return None
-        # pos_js = self.pos_msd_json[pos]
-        # pos_msd_list = pos_js['msd_list']
+
         #assenazione valori attributi alle colonne msd
         row_msds = self.build_row_msd(pos, row_attrs)
 
         # separazione loc, data in  LANG
-        l_d = r[LANG].split(',')
-        lang = ''
-        data = ''
-        if len(l_d) > 0:
-            lang = l_d[0]
-            if len(l_d) > 1:
-                data = l_d[1]
+        l_d =f"{r[LANG]},,".split(',')
+        lang = l_d[0]
+        data = l_d[1]
 
         #assegnazione pos_name
         pos_name = self.pos_msd_json[pos]['pos_name']
@@ -333,7 +329,6 @@ class ExportData(object):
         token_path = os.path.join(DATA_DIR, token_name)
         form_name = text_name.replace(".txt", ".form.csv")
         form_path = os.path.join(DATA_DIR, form_name)
-        # tab12_name = text_name.replace(".txt", ".ula.csv")
         tab12_name = text_name.replace(".txt", f".{self.exp_name}.csv")
         tab12_path = os.path.join(DATA_EXPORT_DIR, tab12_name)
         print(tab12_path)
@@ -353,7 +348,7 @@ class ExportData(object):
         tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
         tab12[''] = self.sigla
         tab12 = tab12.fillna('')
-        #XXX attrs in minuscolo
+        #attrs in minuscolo
         tab12.iloc[:, 6] = tab12.iloc[:, 6].str.lower()
 
         head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
@@ -370,13 +365,13 @@ class ExportData(object):
         return names
 
     def export_data(self):
-        # names = self.read_text_list()
-        # for name in names:
-        #     if name.strip() == '':
-        #         continue
-        #     self.sigla = name.split('.')[-1:][0]
-        #     text_name = name + ".txt"
-        #     self.export_token_form(text_name)
+        names = self.read_text_list()
+        for name in names:
+            if name.strip() == '':
+                continue
+            self.sigla = name.split('.')[-1:][0]
+            text_name = name + ".txt"
+            self.export_token_form(text_name)
         self.export_corpus()
 
 
