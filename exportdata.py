@@ -100,7 +100,7 @@ class ExportData(object):
         self.corpus_msd_lst = []
         self.corpus_msd_blks = []
         # lista delle sigle nel corpus
-        self.corpus_sg_lst = []
+        self.corpus_sgs = []
         self.sigla = 'x'
         #sigle pper esportazione
         self.head_locs = []
@@ -176,7 +176,7 @@ class ExportData(object):
         sg_lst = list(st)
         sg_lst.sort()
         #lista sigle di tutto il corpus
-        self.corpus_sg_lst = sg_lst
+        self.corpus_sgs = sg_lst
 
     #controlla attributi dulicati per pos
     def check_attrs(self):
@@ -217,7 +217,7 @@ class ExportData(object):
         sgs = [x for x in sgs if x != '']
 
         #distribuisce le sigle di riga nella lista delle sigle del corpus
-        row_sgs = [x if x in sgs else '' for x in self.corpus_sg_lst]
+        row_sgs = [x if x in sgs else '' for x in self.corpus_sgs]
 
         #attributi di riga escluso '' e minuscoli
         row_attrs = r[MSD].split(',')
@@ -307,7 +307,7 @@ class ExportData(object):
             # FORMA,LEMMA,ETIMO,LANG,DATTE,POS,FUNCT,msda,...,loc,...,date,...
             head = [
                 "FORMA", "LEMMA", "ETIMO", "LANG", "DATTE", "POS", "FUNCT"
-            ] + attrs_head + self.corpus_sg_lst + self.head_locs + self.head_dats
+            ] + attrs_head + self.corpus_sgs + self.head_locs + self.head_dats
             writer.writerow(head)
 
             #scrittura rows
