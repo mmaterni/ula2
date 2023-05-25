@@ -249,29 +249,8 @@ class ExportData(object):
         pos_js = self.pos_msd_json[pos]
         pos_msd_list = pos_js['msd_list']
 
-        row_msds=self.build_row_msd(pos_msd_list,row_attrs)
-
-        # # contenitore per distribuire msd sulla riag in funzione di attr
-        # row_msds = self.corpus_msd_blks.copy()
-        # #attrs della riga distribuiti sulle colonne dei nomi msd del corpus
-        # for i, attr in enumerate(row_attrs):
-        #     #lista mse del pos
-        #     for js in pos_msd_list:
-        #         msd_name = js['msd_name']
-        #         msd_attrs = js['attrs']
-        #         #atttributo di riga appartien agli atattrs  del msd corrente
-        #         if attr in msd_attrs:
-        #             #TODO controllo attr duplicati
-        #             #gestione attr duplicati in lista per pos
-        #             if attr == 'ind' and i == 1:
-        #                 continue
-        #             if attr == 'imp' and i == 2:
-        #                 continue
-        #             #setta nella lista attrs da esportare l'attr di riga
-        #             #alla posizione del nome msd corrispondente
-        #             idx = self.corpus_msd_lst.index(msd_name)
-        #             row_msds[idx] = attr
-        #             break
+        #assenazione valori attributi alle colonne msd
+        row_msds = self.build_row_msd(pos_msd_list, row_attrs)
 
         # separazione loc, data in  LANG
         l_d = r[LANG].split(',')
@@ -298,11 +277,10 @@ class ExportData(object):
         corpus_path = os.path.join(CORPUS_DIR, CORPUS_NAME)
         rows = []
         try:
-            f = open(corpus_path, 'r', encoding=ENCODING)
-            reader = csv.reader(f, delimiter='|')
-            for row in reader:
-                rows.append(row)
-            f.close()
+            with open(corpus_path, 'r', encoding=ENCODING) as f:
+                reader = csv.reader(f, delimiter='|')
+                for row in reader:
+                    rows.append(row)
         except Exception as e:
             sys.exit(e)
         exp_name = f"corpus.{self.exp_name}.csv"
