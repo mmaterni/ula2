@@ -122,8 +122,6 @@ class ExportData(object):
         msd_set = set()
         next(rows)
         for row in rows:
-            #TODO controlare maiuscole-minuscole
-            # row = [x.lower() for x in row]
             pos = row[0].lower()
             pos_name = row[1]
             msd_name = row[2]
@@ -136,16 +134,15 @@ class ExportData(object):
                 "attrs": attrs
             })
         f.close()
+
         # TODO check attrs
         self.check_attrs()
-        #elimina msd vuoto
         try:
             msd_set.remove('')
         except KeyError:
             pass
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
-        #lista msd vuote
         self.corpus_msd_blks = [''] * len(self.corpus_msd_lst)
 
     def read_exp_csv(self):
@@ -176,7 +173,7 @@ class ExportData(object):
             self.locjs[sg] = r[2]
             self.datejs[sg] = r[3]
 
-    #estrae dalla lista di tutto il corpus il
+    #estrae dalla lista di tutto il corpus le sigle ordinate
     def get_corpus_sigle(self, rows):
         st = set()
         for row in rows:
@@ -195,12 +192,13 @@ class ExportData(object):
     def check_attrs(self):
         for k, v in self.pos_msd_json.items():
             pos = k
-            msd_list = v['msd_list']
+            pos_msd_list = v['msd_list']
             atrr_lst = []
-            for js in msd_list:
+            for js in pos_msd_list:
                 attrs = js['attrs']
                 atrr_lst.extend(attrs)
             atrr_lst.sort()
+            print(atrr_lst)
             attr_set = sorted(list(set(atrr_lst)))
             x = False
             for a in attr_set:
@@ -236,6 +234,7 @@ class ExportData(object):
                 #atttributo di riga appartien agli atattrs  del msd corrente
                 attr_lower = attr.lower()
                 if attr_lower in msd_attrs_lower:
+
                     #TODO controllo attr duplicati
                     #gestione attr duplicati in lista per pos
                     if attr_lower == 'ind' and i == 1:
