@@ -3,7 +3,6 @@
 
 from pdb import set_trace
 # from ulalib.ualog import Log
-import json
 import sys
 import argparse
 import os
@@ -11,8 +10,8 @@ from ulalib.ula_setting import *
 import csv
 import pandas as pd
 
-__date__ = "21-05-2023"
-__version__ = "0.2.0"
+__date__ = "27-05-2023"
+__version__ = "0.2.7"
 __author__ = "Marta Materni"
 
 #form.csv
@@ -26,8 +25,7 @@ POS = 5
 FUNCT = 6
 MSD = 7
 SIGLA = 8
-#msd nullo da eliminare da tutte le righe
-MSD_NULL = 7
+
 # POS_MSD_CSV_PATH = "static/cfg/pos_msd.csv"
 # path_err = "log/exportdata.ERR.log"
 # logerr = Log("w").open(path_err, 1).log
@@ -68,10 +66,10 @@ NOUN|noun|case|Nom,Acc
 """
 #tabella decodifica sigle => località,data
 """
-g|GRENOBLE|grenoble|XII|0
-h|TOUR|tour|XII|1
-p|PARIS|paris|XIII|2
-v|VENEZIA|venezia|XIV|3
+g|GRENOBLE|grenoble|XII
+h|TOUR|tour|XII
+p|PARIS|paris|XIII
+v|VENEZIA|venezia|XIV
 
 val_locs=['grenoble','tour','paris','venezia']
 head_dats=['XII','XII','XIV']
@@ -84,7 +82,7 @@ ljs={
 djs={
 'g':[0,'XII'],
 'h':[0,'XII'],
-'p':[1,]'XIII'],
+'p':[1,'XIII'],
 'v':[2,'XIV']
 }
 
@@ -96,19 +94,23 @@ class ExportData(object):
     def __init__(self, exp_name):
         self.exp_name = exp_name
         self.pos_msd_json = {}
+
         #lista di msd_name nel corpus
         self.corpus_msd_lst = []
         self.corpus_msd_blks = []
+
         # lista delle sigle nel corpus
         self.corpus_sgs = []
-        self.sigla = 'x'
-        #sigle pper esportazione
+        self.text_sigla = 'x'
+
+        #sigle per esportazione
         self.head_locs = []
         self.val_locs = []
-        self.head_dats = []
+        self.head_dates = []
+        self.rif_dates = []
         self.exp_sgs = []
-        self.ljs = {}
-        self.djs = {}
+        self.locjs = {}
+        self.datejs = {}
 
     def read_pos_msd_csv(self):
         try:
@@ -120,8 +122,9 @@ class ExportData(object):
         msd_set = set()
         next(rows)
         for row in rows:
-            row = [x.lower() for x in row]
-            pos = row[0]
+            #TODO controlare maiuscole-minuscole
+            # row = [x.lower() for x in row]
+            pos = row[0].lower()
             pos_name = row[1]
             msd_name = row[2]
             msd_set.add(msd_name)
@@ -135,7 +138,6 @@ class ExportData(object):
         f.close()
         # TODO check attrs
         # self.check_attrs()
-
         #elimina msd vuoto
         msd_set.remove('')
         self.corpus_msd_lst = list(msd_set)
@@ -153,29 +155,37 @@ class ExportData(object):
         except Exception as e:
             sys.exit(e)
         #set delle date
+        DATE = [
+            'IX', 'X', 'X1', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII',
+            'XVIII', 'XIX', 'XX'
+        ]
         ds = {r[3] for r in rows}
-        self.head_dats = [''] * len(ds)
+        # self.head_dats = [''] * len(ds)
+        # label head delle date
+        self.head_dates = [f'DATE.{i}' for i in range(len(ds))]
+        #date di riferimento per posizionamento date di riga
+        self.rif_dates = [x for x in DATE if x in ds]
         for r in rows:
             sg = r[0]
             self.exp_sgs.append(sg)
             self.head_locs.append(r[1])
             self.val_locs.append(r[2])
-            i = int(r[4])
-            self.head_dats[i] = r[3]
-            self.ljs[sg] = r[2]
-            self.djs[sg] = r[3]
+            self.locjs[sg] = r[2]
+            self.datejs[sg] = r[3]
 
-    # #estrae dalla lista di tutto il corpus il
-    #set di sigle utilizzato
+    #estrae dalla lista di tutto il corpus il
     def get_corpus_sigle(self, rows):
         st = set()
         for row in rows:
-            sg = set(row[SIGLA].split(','))
-            st.update(sg)
-        st.remove('')
+            sg = row[SIGLA].split(',')
+            for x in sg:
+                st.add(x)
+        try:
+            st.remove('')
+        except KeyError:
+            pass
         sgs = list(st)
         sgs.sort()
-        #lista sigle di tutto il corpus
         self.corpus_sgs = sgs
 
     #controlla attributi dulicati per pos
@@ -200,38 +210,48 @@ class ExportData(object):
                 # print("|".join(atrr_lst))
                 # input('')
 
+    #nella riga località e date derivate dalla sigla
+    # venezia, ,paris, , XI,..XIV
     def build_row_loc_dat(self, r_sgs):
-        r_locs = [self.ljs[x] if x in r_sgs else '' for x in self.exp_sgs]
-        r_dats = [''] * len(self.head_dats)
-        for x in r_sgs:
-            d = self.djs[x]
-            i = self.head_dats.index(d)
-            r_dats[i] = d
-        row = r_locs + r_dats
+        #valopri loc di riga
+        r_locs = [self.locjs[x] if x in r_sgs else '' for x in self.exp_sgs]
+        #valori data di riga
+        ds = {self.datejs[x] for x in r_sgs}
+        r_dates = [x if x in ds else '' for x in self.rif_dates]
+        row = r_locs + r_dates
         return row
 
     def build_row_msd(self, pos, row_attrs):
         pos_js = self.pos_msd_json[pos]
         pos_msd_list = pos_js['msd_list']
         row_msds = self.corpus_msd_blks.copy()
+        print(pos)
+        print(row_attrs)
+        print(pos_msd_list)
         for i, attr in enumerate(row_attrs):
+            print(i, attr)
             #lista mse del pos
             for js in pos_msd_list:
                 msd_name = js['msd_name']
                 msd_attrs = js['attrs']
+                msd_attrs_lower = [x.lower() for x in msd_attrs]
+                print("....", msd_name, msd_attrs)
                 #atttributo di riga appartien agli atattrs  del msd corrente
-                if attr in msd_attrs:
+                attr_lower = attr.lower()
+                if attr_lower in msd_attrs_lower:
                     #TODO controllo attr duplicati
                     #gestione attr duplicati in lista per pos
-                    if attr == 'ind' and i == 1:
+                    if attr_lower == 'ind' and i == 1:
                         continue
-                    if attr == 'imp' and i == 2:
+                    if attr_lower == 'imp' and i == 2:
                         continue
                     #setta nella lista attrs da esportare l'attr di riga
                     #alla posizione del nome msd corrispondente
                     idx = self.corpus_msd_lst.index(msd_name)
                     row_msds[idx] = attr
                     break
+        print(row_msds)
+        input('.')
         return row_msds
 
     # aggiunge le sigle ordinate alla row e inserisce attrs
@@ -247,7 +267,7 @@ class ExportData(object):
 
         #attributi di riga escluso '' e resi minuscoli
         row_attrs = r[MSD].split(',')
-        row_attrs = [x.lower() for x in row_attrs if x != '']
+        row_attrs = [x for x in row_attrs if x != '']
 
         pos = r[POS].lower()
         if pos == '':
@@ -257,7 +277,7 @@ class ExportData(object):
         row_msds = self.build_row_msd(pos, row_attrs)
 
         # separazione loc, data in  LANG
-        l_d =f"{r[LANG]},,".split(',')
+        l_d = f"{r[LANG]},,".split(',')
         lang = l_d[0]
         data = l_d[1]
 
@@ -306,8 +326,8 @@ class ExportData(object):
             attrs_head = self.corpus_msd_lst
             # FORMA,LEMMA,ETIMO,LANG,DATTE,POS,FUNCT,msda,...,loc,...,date,...
             head = [
-                "FORMA", "LEMMA", "ETIMO", "LANG", "DATTE", "POS", "FUNCT"
-            ] + attrs_head + self.corpus_sgs + self.head_locs + self.head_dats
+                "FORMA", "LEMMA", "ETIMO", "LANG", "DATE", "POS", "FUNCT"
+            ] + attrs_head + self.corpus_sgs + self.head_locs + self.head_dates
             writer.writerow(head)
 
             #scrittura rows
@@ -346,10 +366,13 @@ class ExportData(object):
         tab2 = tab2.rename(columns={1: 'col2'})
         tab12 = pd.merge(tab1, tab2, on='col2', how='left')
         tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
-        tab12[''] = self.sigla
+        tab12[''] = self.text_sigla
         tab12 = tab12.fillna('')
         #attrs in minuscolo
         tab12.iloc[:, 6] = tab12.iloc[:, 6].str.lower()
+
+        # tab12[[3, 4]] = tab12[3].str.split(',', expand=True)
+        # tab12 = tab12.drop(3, axis=1)
 
         head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
         tab12.to_csv(tab12_path, sep='|', header=head, index=False)
@@ -366,12 +389,12 @@ class ExportData(object):
 
     def export_data(self):
         names = self.read_text_list()
-        for name in names:
-            if name.strip() == '':
-                continue
-            self.sigla = name.split('.')[-1:][0]
-            text_name = name + ".txt"
-            self.export_token_form(text_name)
+        # for name in names:
+        #     if name.strip() == '':
+        #         continue
+        #     self.text_sigla = name.split('.')[-1:][0]
+        #     text_name = name + ".txt"
+        #     self.export_token_form(text_name)
         self.export_corpus()
 
 
