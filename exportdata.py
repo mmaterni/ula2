@@ -159,8 +159,8 @@ class ExportData(object):
             sys.exit(e)
         #set delle date
         DATE = [
-            'IX', 'X', 'X1', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII',
-            'XVIII', 'XIX', 'XX'
+            'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'X1', 'XII',
+            'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'
         ]
         ds = {r[3] for r in rows}
         # self.head_dats = [''] * len(ds)
@@ -242,6 +242,7 @@ class ExportData(object):
                         print(attr)
                         continue
                     if attr_lower == 'imp' and i == 2:
+                        print(attr)
                         continue
                     #setta nella lista attrs da esportare l'attr di riga
                     #alla posizione del nome msd corrispondente
