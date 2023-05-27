@@ -137,9 +137,12 @@ class ExportData(object):
             })
         f.close()
         # TODO check attrs
-        # self.check_attrs()
+        self.check_attrs()
         #elimina msd vuoto
-        msd_set.remove('')
+        try:
+            msd_set.remove('')
+        except KeyError:
+            pass
         self.corpus_msd_lst = list(msd_set)
         self.corpus_msd_lst.sort()
         #lista msd vuote
