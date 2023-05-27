@@ -229,7 +229,6 @@ class ExportData(object):
         pos_msd_list = pos_js['msd_list']
         row_msds = self.corpus_msd_blks.copy()
         for i, attr in enumerate(row_attrs):
-            #lista mse del pos
             for js in pos_msd_list:
                 msd_name = js['msd_name']
                 msd_attrs = js['attrs']
@@ -240,6 +239,7 @@ class ExportData(object):
                     #TODO controllo attr duplicati
                     #gestione attr duplicati in lista per pos
                     if attr_lower == 'ind' and i == 1:
+                        print(attr)
                         continue
                     if attr_lower == 'imp' and i == 2:
                         continue
