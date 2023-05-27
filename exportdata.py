@@ -228,17 +228,12 @@ class ExportData(object):
         pos_js = self.pos_msd_json[pos]
         pos_msd_list = pos_js['msd_list']
         row_msds = self.corpus_msd_blks.copy()
-        print(pos)
-        print(row_attrs)
-        print(pos_msd_list)
         for i, attr in enumerate(row_attrs):
-            print(i, attr)
             #lista mse del pos
             for js in pos_msd_list:
                 msd_name = js['msd_name']
                 msd_attrs = js['attrs']
                 msd_attrs_lower = [x.lower() for x in msd_attrs]
-                print("....", msd_name, msd_attrs)
                 #atttributo di riga appartien agli atattrs  del msd corrente
                 attr_lower = attr.lower()
                 if attr_lower in msd_attrs_lower:
@@ -253,8 +248,6 @@ class ExportData(object):
                     idx = self.corpus_msd_lst.index(msd_name)
                     row_msds[idx] = attr
                     break
-        print(row_msds)
-        input('.')
         return row_msds
 
     # aggiunge le sigle ordinate alla row e inserisce attrs
