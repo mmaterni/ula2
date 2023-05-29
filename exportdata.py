@@ -58,9 +58,10 @@ djs={
 """
 
 DATE = [
-    'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'X1', 'XII',
-    'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'
+    'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'X1', 'XII', 'XIII',
+    'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'
 ]
+
 
 class ExportData(object):
 
@@ -89,7 +90,7 @@ class ExportData(object):
         lst = []
         for i in idxs:
             r = self.pma_df.loc[i].tolist()
-            self.pos_name=r[1]
+            self.pos_name = r[1]
             lst.append(r[2])
         return lst
 
@@ -156,7 +157,7 @@ class ExportData(object):
         sgs.sort()
         self.corpus_sigls = sgs
 
-    # località e date derivate dalla sigla 
+    # località e date derivate dalla sigla
     # venezia, ,paris, , XI,..XIV
     def set_sigl_to_loc_dat(self, sigls):
         #valopri loc di riga
@@ -168,16 +169,21 @@ class ExportData(object):
         return row
 
     #distribuisce i valori di msd(li attrs)nelle colonne msd dell'esportazione
-    def set_attr_to_msd_columns(self, pos, row_attrs):
+    def set_attr_to_msd_columns(self, pos, attrs):
         columns_msd_vals = [''] * len(self.exp_msd_columns)
-        for i, attr in enumerate(row_attrs):
+        for i, attr in enumerate(attrs):
             #controllare le righe trovate
             rs = self.find_msd_name_lst(pos, attr)
-            msd_name = rs[0]
+            if len(rs) == 1:
+                n = 0
+            else:
+                n = 0
+                print(attrs)
+            msd_name = rs[n]
             idx = self.exp_msd_columns.index(msd_name)
             columns_msd_vals[idx] = attr
         # print(self.exp_msd_columns)
-        print(pos, row_attrs)
+        print(pos, attrs)
         print(columns_msd_vals, '\n')
         return columns_msd_vals
 
