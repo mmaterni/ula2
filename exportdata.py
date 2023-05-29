@@ -142,7 +142,7 @@ class ExportData(object):
 
     # località e date derivate dalla sigla
     # venezia, ,paris, , XI,..XIV
-    def set_sigl_to_loc_dat(self, sigls):
+    def sigl_to_loc_dat(self, sigls):
         #valopri loc di riga
         locs = [self.locjs[x] if x in sigls else '' for x in self.exp_sigls]
         #valori data di riga
@@ -152,7 +152,7 @@ class ExportData(object):
         return row
 
     #distribuisce i valori di msd(li attrs)nelle colonne msd dell'esportazione
-    def set_attr_to_msd_columns(self, pos, attrs):
+    def attrs_to_msd_columns(self, pos, attrs):
         columns_msd_vals = [''] * len(self.head_msds)
         for i, attr in enumerate(attrs):
             #controllare le righe trovate
@@ -186,7 +186,7 @@ class ExportData(object):
         row_attrs = [x for x in row_attrs if x != '']
 
         #assenazione valori attributi alle colonne msd
-        row_msd_vals = self.set_attr_to_msd_columns(pos, row_attrs)
+        row_msd_vals = self.attrs_to_msd_columns(pos, row_attrs)
 
         # separazione loc, data in  LANG
         l_d = f"{row[LANG]},,".split(',')
@@ -194,7 +194,7 @@ class ExportData(object):
         data = l_d[1]
 
         #aggiunta località e date testimone
-        row_loc_dat = self.set_sigl_to_loc_dat(sigls)
+        row_loc_dat = self.sigl_to_loc_dat(sigls)
 
         #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"],MSDS,SIGLE ..,LOC,DATE..
         row_exp = [
