@@ -65,6 +65,8 @@ class ExportData(object):
         self.exp_sigls = []
         self.locjs = {}
         self.datejs = {}
+        #attributi duplicati in un pos
+        self.padup = {}
 
     #ritorna le righe con pos_name,msd_name selezionate
     def find_msd_name_lst(self, pos, attr):
@@ -112,7 +114,6 @@ class ExportData(object):
             sys.exit(e)
         #set delle date
         ds = {r[3] for r in rows}
-        # self.head_dats = [''] * len(ds)
         # label head delle date
         self.head_dates = [f'DATE.{i}' for i in range(len(ds))]
         #date di riferimento per posizionamento date di riga
@@ -125,8 +126,37 @@ class ExportData(object):
             self.locjs[sg] = r[2]
             self.datejs[sg] = r[3]
 
+    #attributi duplicati in un pos
+    def pos_attrs_dupl(self, rows):
+        js = {}
+        for row in rows:
+            pos = row[POS].lower()
+            if pos not in js:
+                js[pos] = {}
+            attrs = row[MSD].split(',')
+            for i, a in enumerate(attrs):
+                if not a in js[pos]:
+                    js[pos][a] = [i, i]
+                    continue
+                mm = js[pos][a]
+                mi = min(i, mm[0])
+                mx = max(i, mm[1])
+                js[pos][a] = [mi, mx]
+        pajs = {}
+        # for p in js:
+        #     for a, mm in js[p].items():
+        #         if mm[0] != mm[1]:
+        #             if not p in pajs:
+        #                 pajs[p] = {}
+        #             pajs[p][a] = mm
+        self.padup = js
+        # for p in pajs.keys():
+        #     print('\n', p)
+        #     for a in pajs[p]:
+        #         print(a, js[p][a])
+
     #estrae dalla lista di tutto il corpus le sigle ordinate
-    def get_corpus_sigls(self, rows):
+    def set_head_sigls(self, rows):
         st = set()
         for row in rows:
             sg = row[SIGLA].split(',')
@@ -155,13 +185,13 @@ class ExportData(object):
     def attrs_to_msd_columns(self, pos, attrs):
         columns_msd_vals = [''] * len(self.head_msds)
         for i, attr in enumerate(attrs):
-            #controllare le righe trovate
+            #controllare le righe trovate se > 1 vi sono attr duplicati
             rs = self.find_msd_name_lst(pos, attr)
-            if len(rs) == 1:
-                n = 0
-            else:
-                n = 0
-                print(attr, attrs)
+            n = 0
+            #esiste  attributo duplicato per il pos
+            if len(rs) > 1:
+                mm = self.padup[pos][attr]
+                n = 1 if i > mm[0] else 0
             msd_name = rs[n]
             idx = self.head_msds.index(msd_name)
             columns_msd_vals[idx] = attr
@@ -175,6 +205,7 @@ class ExportData(object):
         pos = row[POS].lower()
         if pos == '':
             return None
+
         #sigle della riga
         sigls = row[SIGLA].split(',')
         sigls = [x for x in sigls if x != '']
@@ -196,10 +227,10 @@ class ExportData(object):
         #aggiunta località e date testimone
         row_loc_dat = self.sigl_to_loc_dat(sigls)
 
-        #["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT"],MSDS,SIGLE ..,LOC,DATE..
+        #["FORMA", "FORMAKEY,"LEMMA", "ETIMO", "LANG", "POS", "FUNCT"],MSDS,SIGLE ..,LOC,DATE..
         row_exp = [
-            row[FORMA], row[LEMMA], row[ETIMO], lang, data, self.pos_name,
-            row[FUNCT]
+            row[FORMA], row[FORMAKEY], row[LEMMA], row[ETIMO], lang, data,
+            self.pos_name, row[FUNCT]
         ] + row_msd_vals + row_sigls + row_loc_dat
         return row_exp
 
@@ -217,9 +248,10 @@ class ExportData(object):
         exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
         print(os.linesep)
         print(exp_path)
+        self.pos_attrs_dupl(rows)
 
         #lista sigle di tutto il corpus
-        self.get_corpus_sigls(rows)
+        self.set_head_sigls(rows)
         #dict di pos_attr e lista msd nme  pos_msd.json
         self.read_pos_msd_csv()
         #tabella conversione sigla dta,loc
@@ -230,9 +262,9 @@ class ExportData(object):
             writer = csv.writer(fw, delimiter='|')
 
             # HEAD
-            # FORMA,LEMMA,ETIMO,LANG,DATTE,POS,FUNCT,msda,...,loc,...,date,...
             head = [
-                "FORMA", "LEMMA", "ETIMO", "LANG", "DATE", "POS", "FUNCT"
+                "FORMA", "KEY", "LEMMA", "ETIMO", "LANG", "DATE", "POS",
+                "FUNCT"
             ] + self.head_msds + self.head_sigls + self.head_locs + self.head_dates
             writer.writerow(head)
 
