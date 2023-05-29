@@ -327,12 +327,12 @@ class ExportData(object):
 
     def export_data(self):
         names = self.read_text_list()
-        # for name in names:
-        #     if name.strip() == '':
-        #         continue
-        #     self.text_sigla = name.split('.')[-1:][0]
-        #     text_name = name + ".txt"
-        #     self.export_token_form(text_name)
+        for name in names:
+            if name.strip() == '':
+                continue
+            self.text_sigla = name.split('.')[-1:][0]
+            text_name = name + ".txt"
+            self.export_token_form(text_name)
         self.export_corpus()
 
 
