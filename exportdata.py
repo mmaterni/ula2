@@ -55,7 +55,7 @@ class ExportData(object):
         self.head_msds = []
         # lista delle sigle nel corpus
         self.head_sigls = []
-        self.text_sigl = 'x'
+        self.text_sigla = 'x'
 
         #sigle per esportazione
         self.head_locs = []
@@ -281,39 +281,59 @@ class ExportData(object):
             msg = f'ERROR export_corpus: \n{e}\n'
             sys.exit(msg)
 
-    def export_token_form(self, text_path):
+    # def export_token_form(self, text_path):
+    #     text_name = os.path.basename(text_path)
+    #     token_name = text_name.replace(".txt", ".token.csv")
+    #     token_path = os.path.join(DATA_DIR, token_name)
+    #     tab_token = pd.read_csv(token_path, delimiter='|', header=None)
+
+    #     form_name = text_name.replace(".txt", ".form.csv")
+    #     form_path = os.path.join(DATA_DIR, form_name)
+    #     tab_form = pd.read_csv(form_path, delimiter='|', header=None)
+    #     # trasformazione minuscolo
+    #     # tab1 = tab1.applymap(lambda x: x.lower() if isinstance(x, str) else x)
+    #     # tab2 = tab2.applymap(lambda x: x.lower() if isinstance(x, str) else x)
+    #     formakey = tab_form[1].duplicated().any()
+    #     if formakey:
+    #         print("La chiave formaskey non è unica.")
+    #     tab_token = tab_token.rename(columns={1: 'col2'})
+    #     tab_form = tab_form.rename(columns={1: 'col2'})
+    #     tab_exp = pd.merge(tab_token, tab_form, on='col2', how='left')
+
+    #     #elimina la colonna duplicata delle forme
+    #     # tab_exp = tab_exp.drop(tab_exp.columns[[1, 2]], axis=1)
+    #     tab_exp = tab_exp.drop(tab_exp.columns[[2]], axis=1)
+
+    #     #aggiunta della siga del testo alla fine della riga
+    #     tab_exp[''] = self.text_sigl
+    #     tab_exp = tab_exp.fillna('')
+    #     #attrs in minuscolo
+    #     tab_exp.iloc[:, 6] = tab_exp.iloc[:, 6].str.lower()
+    #     # tab12[[3, 4]] = tab12[3].str.split(',', expand=True)
+    #     # tab12 = tab12.drop(3, axis=1)
+    #     exp_name = text_name.replace(".txt", f".{self.exp_name}.csv")
+    #     exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
+    #     print(exp_path)
+    #     head = [
+    #         "FORMA", "KEY","LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD",
+    #         "SG"
+    #     ]
+    #     tab_exp.to_csv(exp_path, sep='|', header=head, index=False)
+
+    def export_token(self, text_path):
         text_name = os.path.basename(text_path)
         token_name = text_name.replace(".txt", ".token.csv")
         token_path = os.path.join(DATA_DIR, token_name)
-        form_name = text_name.replace(".txt", ".form.csv")
-        form_path = os.path.join(DATA_DIR, form_name)
-        tab12_name = text_name.replace(".txt", f".{self.exp_name}.csv")
-        tab12_path = os.path.join(DATA_EXPORT_DIR, tab12_name)
-        print(tab12_path)
-        tab1 = pd.read_csv(token_path, delimiter='|', header=None)
-        tab2 = pd.read_csv(form_path, delimiter='|', header=None)
-
-        # TODO trasformazione minuscolo
-        # tab1 = tab1.applymap(lambda x: x.lower() if isinstance(x, str) else x)
-        # tab2 = tab2.applymap(lambda x: x.lower() if isinstance(x, str) else x)
-
-        formakey = tab2[1].duplicated().any()
-        if formakey:
-            print("La chiave formaskey non è unica.")
-        tab1 = tab1.rename(columns={1: 'col2'})
-        tab2 = tab2.rename(columns={1: 'col2'})
-        tab12 = pd.merge(tab1, tab2, on='col2', how='left')
-        tab12 = tab12.drop(tab12.columns[[1, 2]], axis=1)
-        tab12[''] = self.text_sigl
-        tab12 = tab12.fillna('')
-        #attrs in minuscolo
-        tab12.iloc[:, 6] = tab12.iloc[:, 6].str.lower()
-
-        # tab12[[3, 4]] = tab12[3].str.split(',', expand=True)
-        # tab12 = tab12.drop(3, axis=1)
-
-        head = ["FORMA", "LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD", "SG"]
-        tab12.to_csv(tab12_path, sep='|', header=head, index=False)
+        exp_name = text_name.replace(".txt", f".{self.exp_name}.csv")
+        exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
+        print(exp_path)
+        df_token = pd.read_csv(token_path, delimiter='|', header=None)
+        df_token[''] = self.text_sigla
+        df_token = df_token.fillna('')
+        # minuscolo
+        # tab_token.iloc[:, 6] = tab_token.iloc[:, 6].str.lower()
+        head = ["FORMA", "KEY", "SIGL"]
+        df_token.to_csv(exp_path, sep='|', header=head, index=False)
 
     def read_text_list(self):
         try:
@@ -332,7 +352,7 @@ class ExportData(object):
                 continue
             self.text_sigla = name.split('.')[-1:][0]
             text_name = name + ".txt"
-            self.export_token_form(text_name)
+            self.export_token(text_name)
         self.export_corpus()
 
 
