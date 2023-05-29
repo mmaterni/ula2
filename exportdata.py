@@ -15,8 +15,6 @@ __date__ = "27-05-2023"
 __version__ = "0.2.7"
 __author__ = "Marta Materni"
 
-#form.csv
-# abandonés|abandonés|abandoner|*BAN||VERB|compPass|Ind,Part,Past,Sing,Masc,MWEs
 FORMA = 0
 FORMAKEY = 1
 LEMMA = 2
@@ -36,25 +34,11 @@ NOUN|noun|gender|Masc,Fem,Neut
 NOUN|noun|number|Sing,Plur
 NOUN|noun|case|Nom,Acc
 
-"""
-#tabella decodifica sigle => località,data
-"""
 g|GRENOBLE|grenoble|XII
 h|TOUR|tour|XII
 p|PARIS|paris|XIII
 v|VENEZIA|venezia|XIV
-ljs={
-'g':'grenoble',
-'h':'tour',
-'p':'paris',
-'v':'venezia'
-}
-djs={
-'g':'XII',
-'h':'XII',
-'p':'XIII',
-'v':'XIV'
-}
+
 """
 
 DATE = [
@@ -68,10 +52,9 @@ class ExportData(object):
     def __init__(self, exp_name):
         self.exp_name = exp_name
         self.pma_df = None
-        self.exp_msd_columns = []
-
+        self.head_msds = []
         # lista delle sigle nel corpus
-        self.corpus_sigls = []
+        self.head_sigls = []
         self.text_sigl = 'x'
 
         #sigle per esportazione
@@ -116,7 +99,7 @@ class ExportData(object):
         columns = ["pos", "pos_name", "msd_name", "attr"]
         self.pma_df = pd.DataFrame(pma_rows, columns=columns)
         #lista deelle colonne  msd_name
-        self.exp_msd_columns = list(OrderedDict.fromkeys(msd_lst))
+        self.head_msds = list(OrderedDict.fromkeys(msd_lst))
 
     def read_exp_csv(self):
         rows = []
@@ -143,7 +126,7 @@ class ExportData(object):
             self.datejs[sg] = r[3]
 
     #estrae dalla lista di tutto il corpus le sigle ordinate
-    def get_corpus_sigle(self, rows):
+    def get_corpus_sigls(self, rows):
         st = set()
         for row in rows:
             sg = row[SIGLA].split(',')
@@ -155,7 +138,7 @@ class ExportData(object):
             pass
         sgs = list(st)
         sgs.sort()
-        self.corpus_sigls = sgs
+        self.head_sigls = sgs
 
     # località e date derivate dalla sigla
     # venezia, ,paris, , XI,..XIV
@@ -170,7 +153,7 @@ class ExportData(object):
 
     #distribuisce i valori di msd(li attrs)nelle colonne msd dell'esportazione
     def set_attr_to_msd_columns(self, pos, attrs):
-        columns_msd_vals = [''] * len(self.exp_msd_columns)
+        columns_msd_vals = [''] * len(self.head_msds)
         for i, attr in enumerate(attrs):
             #controllare le righe trovate
             rs = self.find_msd_name_lst(pos, attr)
@@ -178,13 +161,13 @@ class ExportData(object):
                 n = 0
             else:
                 n = 0
-                print(attrs)
+                print(attr, attrs)
             msd_name = rs[n]
-            idx = self.exp_msd_columns.index(msd_name)
+            idx = self.head_msds.index(msd_name)
             columns_msd_vals[idx] = attr
         # print(self.exp_msd_columns)
-        print(pos, attrs)
-        print(columns_msd_vals, '\n')
+        # print(pos, attrs)
+        # print(columns_msd_vals, '\n')
         return columns_msd_vals
 
     # setta la riga per l'esportazione
@@ -196,7 +179,7 @@ class ExportData(object):
         sigls = row[SIGLA].split(',')
         sigls = [x for x in sigls if x != '']
         #distribuisce le sigle di riga nella lista delle sigle del corpus
-        row_sigls = [x if x in sigls else '' for x in self.corpus_sigls]
+        row_sigls = [x if x in sigls else '' for x in self.head_sigls]
 
         #attributi di riga escluso '
         row_attrs = row[MSD].split(',')
@@ -236,7 +219,7 @@ class ExportData(object):
         print(exp_path)
 
         #lista sigle di tutto il corpus
-        self.get_corpus_sigle(rows)
+        self.get_corpus_sigls(rows)
         #dict di pos_attr e lista msd nme  pos_msd.json
         self.read_pos_msd_csv()
         #tabella conversione sigla dta,loc
@@ -246,16 +229,11 @@ class ExportData(object):
             fw = open(exp_path, "w", encoding=ENCODING)
             writer = csv.writer(fw, delimiter='|')
 
-            # head
-            #intestazione comprensiva delle sigle e msd
-            # TODO msd maiuscole
-            # attrs_head = [x.upper() for x in self.corpus_msd_lst]
-            # attrs_head = self.corpus_msd_lst
-            attrs_head = self.exp_msd_columns
+            # HEAD
             # FORMA,LEMMA,ETIMO,LANG,DATTE,POS,FUNCT,msda,...,loc,...,date,...
             head = [
                 "FORMA", "LEMMA", "ETIMO", "LANG", "DATE", "POS", "FUNCT"
-            ] + attrs_head + self.corpus_sigls + self.head_locs + self.head_dates
+            ] + self.head_msds + self.head_sigls + self.head_locs + self.head_dates
             writer.writerow(head)
 
             #scrittura rows
