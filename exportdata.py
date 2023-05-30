@@ -142,7 +142,7 @@ class ExportData(object):
                 mi = min(i, mm[0])
                 mx = max(i, mm[1])
                 js[pos][a] = [mi, mx]
-        pajs = {}
+        # pajs = {}
         # for p in js:
         #     for a, mm in js[p].items():
         #         if mm[0] != mm[1]:
@@ -244,7 +244,7 @@ class ExportData(object):
                     rows.append(row)
         except Exception as e:
             sys.exit(e)
-        exp_name = f"{EXPORT_PRENAME}.{self.exp_name}.csv"
+        exp_name = f"dictionary.{self.exp_name}.csv"
         exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
         print(os.linesep)
         print(exp_path)
