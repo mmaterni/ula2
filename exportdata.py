@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pdb import set_trace
+# from pdb import set_trace
 # from ulalib.ualog import Log
 import sys
 import argparse
@@ -11,8 +11,8 @@ import csv
 import pandas as pd
 from collections import OrderedDict
 
-__date__ = "27-05-2023"
-__version__ = "0.2.7"
+__date__ = "30-05-2023"
+__version__ = "0.2.8"
 __author__ = "Marta Materni"
 
 FORMA = 0
@@ -244,7 +244,7 @@ class ExportData(object):
                     rows.append(row)
         except Exception as e:
             sys.exit(e)
-        exp_name = f"corpus.{self.exp_name}.csv"
+        exp_name = f"{EXPORT_PRENAME}.{self.exp_name}.csv"
         exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
         print(os.linesep)
         print(exp_path)

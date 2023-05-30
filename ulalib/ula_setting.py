@@ -17,7 +17,9 @@ CORPUS_DIR = f"{ULA_DATA_DIR}/data_corpus"
 CORPUS_BACK_DIR = f"{ULA_DATA_DIR}/data_corpus_back"
 
 DATA_EXPORT_DIR = f"{ULA_DATA_DIR}/data_export"
-EXP_LOC_DAT_PATH = f"{DATA_EXPORT_DIR}/exp_loc_dat.csv"
+
+EXPORT_PRENAME = f"formulario"
+EXP_LOC_DAT_PATH = f"static/cfg/exp_loc_dat.csv"
 
 TMP_DIR = f"{ULA_DATA_DIR}/tmp"
 
