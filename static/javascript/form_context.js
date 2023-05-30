@@ -100,7 +100,7 @@ var FormContext = {
     show_html: function () {
         // selezione dimensioni contesto
         const size = this.context_size;
-        //AAA aggiunto 0 per gestione versi
+        // aggiunto 0 per gestione versi
         const sizes = [3, 5, 7, 9, 0];
         const get_size_list = () => {
             let s = "<option value=''></option>";

@@ -28,7 +28,7 @@ var DbFormLpmx = {
   omogr_json: {},
   // lunghezza righe di testo e terminatore di riga
   len_row: 80,
-  row_eof: '##',
+  row_eof: "##",
   rows_js: [],
   get_text_name: function () {
     const store_text_name = localStorage.getItem(KEY_TEXT_NAME);
@@ -230,7 +230,7 @@ var DbFormLpmx = {
       const msg = `${file_name} Not Found.`;
       alert(msg);
       //riga vuota per gestione csv
-      //AAA da 7 a 8
+      // da 7 a 8
       csv_data = "|||||||";
     }
     const rows = csv_data.trim().split("\n");
@@ -303,24 +303,24 @@ var DbFormLpmx = {
       row[i].push(lft + i);
     return row;
   },
-
-  get_formakey_context: function (formakey, cnt_size) {
-    // filtra utilizzando formakey
-    let rows = [];
-    let le = this.token_lst.length;
-    if (cnt_size > 0) {
-      for (let i = 0; i < le; i++)
-        if (this.token_lst[i][1] == formakey)
-          rows.push(this.build_context(i, cnt_size));
-      return rows;
-    }
-    else {
-      for (let i = 0; i < le; i++)
-        if (this.token_lst[i][1] == formakey)
-          rows.push(this.build_context_line(i));
-      return rows;
-    }
-  },
+  // get_formakey_context: function (formakey, cnt_size) {
+  //   // filtra utilizzando formakey
+  //   alert('B');
+  //   let rows = [];
+  //   let le = this.token_lst.length;
+  //   if (cnt_size > 0) {
+  //     for (let i = 0; i < le; i++)
+  //       if (this.token_lst[i][1] == formakey)
+  //         rows.push(this.build_context(i, cnt_size));
+  //     return rows;
+  //   }
+  //   else {
+  //     for (let i = 0; i < le; i++)
+  //       if (this.token_lst[i][1] == formakey)
+  //         rows.push(this.build_context_line(i));
+  //     return rows;
+  //   }
+  // },
 
   get_context: function (fr_fk, f_idx, cnt_size) {
 
