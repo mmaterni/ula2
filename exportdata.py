@@ -92,6 +92,7 @@ class ExportData(object):
             pos = row[0].lower()
             pos_name = row[1]
             msd_name = row[2]
+            # print(msd_name, row)
             attrs = row[3].split(",")
             msd_lst.append(msd_name)
             for a in attrs:
@@ -102,6 +103,11 @@ class ExportData(object):
         self.pma_df = pd.DataFrame(pma_rows, columns=columns)
         #lista deelle colonne  msd_name
         self.head_msds = list(OrderedDict.fromkeys(msd_lst))
+        self.head_msds.remove('')
+        try:
+            self.head_msds.remove('')
+        except ValueError:
+            pass
 
     def read_exp_csv(self):
         rows = []
@@ -355,11 +361,13 @@ class ExportData(object):
             self.export_token(text_name)
         self.export_corpus()
 
+# import cProfile
 
-def do_main(corpus_export_name):
+def do_main(corpus_export_name="ula"):
     exportdata = ExportData(corpus_export_name)
     exportdata.export_data()
 
+# cProfile.run('do_main()', filename='profilo.stats')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
