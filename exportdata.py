@@ -109,6 +109,7 @@ class ExportData(object):
         except ValueError:
             pass
 
+    #file per l'sportazioe di sigle, date e località dei testimoni
     def read_exp_csv(self):
         rows = []
         try:
@@ -131,6 +132,7 @@ class ExportData(object):
             self.val_locs.append(r[2])
             self.locjs[sg] = r[2]
             self.datejs[sg] = r[3]
+        self.head_sigls=self.exp_sigls
 
     #attributi duplicati in un pos
     def pos_attrs_dupl(self, rows):
@@ -162,21 +164,24 @@ class ExportData(object):
         #         print(a, js[p][a])
 
     #estrae dalla lista di tutto il corpus le sigle ordinate
-    def set_head_sigls(self, rows):
-        st = set()
-        for row in rows:
-            sg = row[SIGLA].split(',')
-            for x in sg:
-                st.add(x)
-        try:
-            st.remove('')
-        except KeyError:
-            pass
-        sgs = list(st)
-        sgs.sort()
-        self.head_sigls = sgs
+    #XXX modifciato prendendo i dati dal file csv
+    # def set_head_sigls(self, rows):
+    #     st = set()
+    #     for row in rows:
+    #         sg = row[SIGLA].split(',')
+    #         for x in sg:
+    #             st.add(x)
+    #     try:
+    #         st.remove('')
+    #     except KeyError:
+    #         pass
+    #     sgs = list(st)
+    #     sgs.sort()
+    #     self.head_sigls = sgs
+    
+        
 
-    # località e date derivate dalla sigla
+    # località e date derivate dalla sigla itilizzando il file d copnfiurazione
     # venezia, ,paris, , XI,..XIV
     def sigl_to_loc_dat(self, sigls):
         #valopri loc di riga
@@ -241,6 +246,12 @@ class ExportData(object):
         return row_exp
 
     def export_corpus(self):
+
+        #dict di pos_attr e lista msd nme  pos_msd.json
+        self.read_pos_msd_csv()
+        #tabella conversione sigla dta,loc
+        self.read_exp_csv()
+
         corpus_path = os.path.join(CORPUS_DIR, CORPUS_NAME)
         rows = []
         try:
@@ -256,12 +267,12 @@ class ExportData(object):
         print(exp_path)
         self.pos_attrs_dupl(rows)
 
-        #lista sigle di tutto il corpus
-        self.set_head_sigls(rows)
-        #dict di pos_attr e lista msd nme  pos_msd.json
-        self.read_pos_msd_csv()
-        #tabella conversione sigla dta,loc
-        self.read_exp_csv()
+        # #lista sigle di tutto il corpus
+        # self.set_head_sigls(rows)
+        # #dict di pos_attr e lista msd nme  pos_msd.json
+        # self.read_pos_msd_csv()
+        # #tabella conversione sigla dta,loc
+        # self.read_exp_csv()
 
         try:
             fw = open(exp_path, "w", encoding=ENCODING)
@@ -286,45 +297,6 @@ class ExportData(object):
         except IOError as e:
             msg = f'ERROR export_corpus: \n{e}\n'
             sys.exit(msg)
-
-    # def export_token_form(self, text_path):
-    #     text_name = os.path.basename(text_path)
-    #     token_name = text_name.replace(".txt", ".token.csv")
-    #     token_path = os.path.join(DATA_DIR, token_name)
-    #     tab_token = pd.read_csv(token_path, delimiter='|', header=None)
-
-    #     form_name = text_name.replace(".txt", ".form.csv")
-    #     form_path = os.path.join(DATA_DIR, form_name)
-    #     tab_form = pd.read_csv(form_path, delimiter='|', header=None)
-    #     # trasformazione minuscolo
-    #     # tab1 = tab1.applymap(lambda x: x.lower() if isinstance(x, str) else x)
-    #     # tab2 = tab2.applymap(lambda x: x.lower() if isinstance(x, str) else x)
-    #     formakey = tab_form[1].duplicated().any()
-    #     if formakey:
-    #         print("La chiave formaskey non è unica.")
-    #     tab_token = tab_token.rename(columns={1: 'col2'})
-    #     tab_form = tab_form.rename(columns={1: 'col2'})
-    #     tab_exp = pd.merge(tab_token, tab_form, on='col2', how='left')
-
-    #     #elimina la colonna duplicata delle forme
-    #     # tab_exp = tab_exp.drop(tab_exp.columns[[1, 2]], axis=1)
-    #     tab_exp = tab_exp.drop(tab_exp.columns[[2]], axis=1)
-
-    #     #aggiunta della siga del testo alla fine della riga
-    #     tab_exp[''] = self.text_sigl
-    #     tab_exp = tab_exp.fillna('')
-    #     #attrs in minuscolo
-    #     tab_exp.iloc[:, 6] = tab_exp.iloc[:, 6].str.lower()
-    #     # tab12[[3, 4]] = tab12[3].str.split(',', expand=True)
-    #     # tab12 = tab12.drop(3, axis=1)
-    #     exp_name = text_name.replace(".txt", f".{self.exp_name}.csv")
-    #     exp_path = os.path.join(DATA_EXPORT_DIR, exp_name)
-    #     print(exp_path)
-    #     head = [
-    #         "FORMA", "KEY","LEMMA", "ETIMO", "LANG", "POS", "FUNCT", "MSD",
-    #         "SG"
-    #     ]
-    #     tab_exp.to_csv(exp_path, sep='|', header=head, index=False)
 
     def export_token(self, text_path):
         text_name = os.path.basename(text_path)
@@ -361,13 +333,11 @@ class ExportData(object):
             self.export_token(text_name)
         self.export_corpus()
 
-# import cProfile
 
 def do_main(corpus_export_name="ula"):
     exportdata = ExportData(corpus_export_name)
     exportdata.export_data()
 
-# cProfile.run('do_main()', filename='profilo.stats')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
