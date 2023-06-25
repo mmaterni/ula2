@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Ula Server
+Comment=Avvia Ula Server
+Exec=/u/ulax/ula2/ula2.sh
+Icon=applications-java
+Terminal=false
+Type=Application
+Categories=Utility;Application;
+Path=/u/ulax/ula2
+StartupNotify=false
