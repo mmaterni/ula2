@@ -77,27 +77,7 @@ def hello():
 def server_static(filepath):
     if 'favicon' in filepath:
         return
-    # prn_params(request)
-    # pars = request_params(request)
-    # print("server_static")
-    # print(request.url)
-    # print(pars)
-    # n = os.path.basename(filepath)
-    # lst = n.split('.')
-    # ok = False
-    # e = lst[-1:][0]
-    # if len(lst) > 2:
-    #     t = lst[-2:][0]
-    #     ok = (e == 'csv' and t in ['form', 'token']) or (e == 'txt')
-    # else:
-    #     ok = (e == 'txt')
-    # if ok:
-    #     s = static_file(filepath, root="/u/ulax")
-    # else:
-    #     s = static_file(filepath, root=ROOT_PATH)
-
-    s = static_file(filepath, root=ROOT_PATH)
-    return s
+    return static_file(filepath, root=ROOT_PATH)
 
 
 @app.route('/diff', method='GET')
@@ -207,13 +187,15 @@ if __name__ == '__main__':
                         required=False,
                         metavar="",
                         default="0",
-                        help="-d 0/1 (Default 0 ")
+                        help="-d 0/1/2 (Default 0 ")
     args = parser.parse_args()
     ip = args.ip
     port = int(args.port)
     ROOT_PATH = args.root
     print(f"{ip} {port} {ROOT_PATH}")
     if args.debug == '1':
+        app.run(host=ip, port=port, debug=False, quiet=False)
+    elif args.debug == '2':
         app.run(host=ip, port=port, debug=True, quiet=False, reload=False)
     else:
         print("Hit Ctrl-C to quit.")
