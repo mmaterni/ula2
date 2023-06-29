@@ -132,7 +132,7 @@ class ExportData(object):
             self.val_locs.append(r[2])
             self.locjs[sg] = r[2]
             self.datejs[sg] = r[3]
-        self.head_sigls=self.exp_sigls
+        self.head_sigls = self.exp_sigls
 
     #attributi duplicati in un pos
     def pos_attrs_dupl(self, rows):
@@ -178,8 +178,6 @@ class ExportData(object):
     #     sgs = list(st)
     #     sgs.sort()
     #     self.head_sigls = sgs
-    
-        
 
     # località e date derivate dalla sigla itilizzando il file d copnfiurazione
     # venezia, ,paris, , XI,..XIV
@@ -266,7 +264,6 @@ class ExportData(object):
         print(os.linesep)
         print(exp_path)
         self.pos_attrs_dupl(rows)
-
         # #lista sigle di tutto il corpus
         # self.set_head_sigls(rows)
         # #dict di pos_attr e lista msd nme  pos_msd.json
@@ -298,6 +295,19 @@ class ExportData(object):
             msg = f'ERROR export_corpus: \n{e}\n'
             sys.exit(msg)
 
+    def export_token_list(self, names):
+        token_names = [f'{x}.ula.csv' for x in names]
+        data = os.linesep.join(token_names)
+        exp_path = os.path.join(DATA_EXPORT_DIR, "token_list.txt")
+        try:
+            fw = open(exp_path, "w", encoding=ENCODING)
+            fw.write(data)
+            fw.close()
+            os.chmod(exp_path, 0o777)
+        except IOError as e:
+            msg = f'ERROR exp_token_list: \n{e}\n'
+            sys.exit(msg)
+
     def export_token(self, text_path):
         text_name = os.path.basename(text_path)
         token_name = text_name.replace(".txt", ".token.csv")
@@ -325,6 +335,7 @@ class ExportData(object):
 
     def export_data(self):
         names = self.read_text_list()
+        self.export_token_list(names)
         for name in names:
             if name.strip() == '':
                 continue
