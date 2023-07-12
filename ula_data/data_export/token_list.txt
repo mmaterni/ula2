@@ -1,0 +1,6 @@
+tr1.g.ula.csv
+tr1.p.ula.csv
+tr1.v.ula.csv
+tr5.g.ula.csv
+tr5.p.ula.csv
+tr5.v.ula.csv
