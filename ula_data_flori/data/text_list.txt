@@ -1,4 +1,0 @@
-flori.g
-flori.t
-flori.v
-florp
