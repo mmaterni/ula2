@@ -283,8 +283,23 @@ def do_main(src, trg):
 
 
 if __name__ == "__main__":
-    # es tr_1.g
-    # token_name = sys.argv[1]
-    src = "tr1.g"
-    trg = "tr1.p"
+    if len(sys.argv) < 2:
+        print("updatetoken.py <testo_src> >testo_target>")
+        es = """
+
+es.
+updatetoken.py tr1.g tr1.p
+updatetoken.py testo1.g testo4.g
+
+il primo testo è quello lavorato, il secondo
+quello nel quale aggiungere ai token le forme 
+per la disiambiguazione
+
+"""
+        print(es)
+        sys.exit(0)
+    src = sys.argv[1]
+    trg = sys.argv[2]
+    # src = "tr1.g"
+    # trg = "tr1.p"
     do_main(src, trg)
