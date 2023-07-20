@@ -27,13 +27,13 @@ PUN = "XX"
 # PTR_CHS = [r"\s*[’]\s*", r"\s*[-]\s*", r"\s*[·]\s*"]
 # CHS_LR = ['’' + BL, BL + '-', BL + '·']
 
-SIMILITARY_OK = 0.7
 SIMILITARY_MAX = 1.0
 
 
 class UpdateToken(object):
 
-    def __init__(self):
+    def __init__(self, similtary_ok="0.7"):
+        self.similtary_ok = float(similtary_ok)
         self.model = None
         self.df0 = None,
         self.df1 = None,
@@ -72,13 +72,15 @@ class UpdateToken(object):
             formakey = row[1]
             #lista delle formake per individuare  forma1,forma2,..
             self.fk_rows0.append([forma, formakey])
-
-            idx0 = max(i - self.contest_delta, 0)
-            idx1 = min(i + self.contest_delta + 1, le)
-            items = rows[idx0:idx1]
-            contest = [x[0] for x in items]
-            contest_lim = self.set_context_lim(contest, forma)
-            self.rows0.append(contest_lim)
+            if forma != formakey:
+                idx0 = max(i - self.contest_delta, 0)
+                idx1 = min(i + self.contest_delta + 1, le)
+                items = rows[idx0:idx1]
+                contest = [x[0] for x in items]
+                contest_lim = self.set_context_lim(contest, forma)
+                self.rows0.append(contest_lim)
+            else:
+                self.rows0.append([])
 
     def calc_similarity(self, row1, row2):
         try:
@@ -150,12 +152,19 @@ class UpdateToken(object):
             contest1_len = len(contest1)
             # lista indici delle righe che contenfono
             # nella stessa posizione nel contesto
+
+            # indices_found = [
+            #     n for n, row in enumerate(self.rows0)
+            #     if len(row) == contest1_len and tk1_f in row
+            #     and row.index(tk1_f) == tk1_f_pos
+            #     and self.fk_rows0[n][0] != self.fk_rows0[n][1]
+            # ]
             indices_found = [
                 n for n, row in enumerate(self.rows0)
-                if len(row) == contest1_len and tk1_f in row
-                and row.index(tk1_f) == tk1_f_pos
-                and self.fk_rows0[n][0] != self.fk_rows0[n][1]
+                if self.fk_rows0[n][0] != self.fk_rows0[n][1] and len(row) ==
+                contest1_len and tk1_f in row and row.index(tk1_f) == tk1_f_pos
             ]
+
             if len(indices_found) == 0:
                 continue
 
@@ -167,7 +176,7 @@ class UpdateToken(object):
                 # sim = self.calc_similarity(contest_forma, sentence)
                 # sim = self.calc_similarity_row(token_contest, row_txt)
                 sim = self.calc_similarity_line(contest1, row0)
-                if sim > SIMILITARY_OK:
+                if sim > self.similtary_ok:
                     indices.append([i_found, sim])
                     if sim == SIMILITARY_MAX:
                         break
@@ -233,7 +242,7 @@ class UpdateToken(object):
         os.chmod(path, 0o666)
 
     def log_udated(self, rows1):
-        path = self.path1.replace(".csv", "_upd.x.log.csv")
+        path = self.path1.replace(".csv", "_upd.x.log")
         f = open(path, "w")
         for i, x in enumerate(rows1):
             if x[0] != x[1]:
@@ -242,7 +251,7 @@ class UpdateToken(object):
         f.close()
 
     def log(self, similar_rows):
-        path = self.path1.replace(".csv", "_upd.y.log.csv")
+        path = self.path1.replace(".csv", "_upd.y.log")
         f = open(path, "w")
         for x in similar_rows:
             row1_i = x[0]
@@ -277,29 +286,31 @@ class UpdateToken(object):
         self.update_token1(upd_path)
 
 
-def do_main(src, trg):
-    rd = UpdateToken()
+def do_main(src, trg, sim):
+    rd = UpdateToken(sim)
     rd.update(src, trg)
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("updatetoken.py <testo_src> >testo_target>")
+        print("updatetoken.py <testo_src> >testo_target> [similtary]")
         es = """
 
 es.
-updatetoken.py tr1.g tr1.p
-updatetoken.py testo1.g testo4.g
+updatetoken.py tr1.g tr1.p 0.7
+updatetoken.py testo1.g testo4.g 0.6
 
 il primo testo è quello lavorato, il secondo
 quello nel quale aggiungere ai token le forme 
-per la disiambiguazione
+per la disiambiguazione.
+Il coefficienti similtary è per default = 0.7
 
 """
         print(es)
         sys.exit(0)
     src = sys.argv[1]
     trg = sys.argv[2]
-    # src = "tr1.g"
-    # trg = "tr1.p"
-    do_main(src, trg)
+    sim = 0.7
+    if len(sys.argv) > 3:
+        sim = sys.argv[3]
+    do_main(src, trg, sim)
