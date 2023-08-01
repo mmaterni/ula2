@@ -20,6 +20,62 @@ __date__ = "19-01-2023"
 __version__ = "0.2.3"
 __author__ = "Marta Materni"
 
+"""
+Gestione testo modificato
+"""
+"""
+    Prima di lanciare la procdure per le modifiche
+    
+    eseguire dal browser
+
+    1) save data
+
+    2) update corpus
+ 
+    ------------------------------------------------
+    
+    lanciare la procedura textupd.py
+    
+    1) muove
+       data/name.token.csv => tmp/name.token1.csv
+       data/name.form.csv  => tmp/name.form1.csv
+
+    2) elabora (add_text)
+       data/name.token.csv
+       data/name.form.csv
+
+    3) muove
+       data/name.token.csv => tmp/name.token2.csv
+        
+    4) elabora (set_diff)
+        tmp/name.token3.csv
+        tmp/name.form3.csv
+
+    5) muove
+       tmp/name.token3.csv => data/name.token.csv
+       tmp/name.form3.csv  => data/name.form.csv
+       stampa lista disamb.sovrascritti.
+    
+ ------------------------------------------------
+
+    Per completare 
+ 
+     eseguire daal browser
+    
+    1)load_data
+
+    2) update_text
+
+    3) sistemazione omografi disamb. sovrascritti
+    
+    4) update corpus
+
+    token1: originale
+    token2: modificato senza disambiguazione
+    token3: corretto 
+
+"""
+
 
 class TextUpd(object):
 
@@ -166,59 +222,6 @@ class TextUpd(object):
             msg = f'ERROR add_text \n{e}'
             self.logerr(msg)
             sys.exit()
-
-    """
-    Prima di lanciare la procdure per le modifiche
-    
-    eseguire dal browser
-
-    1) save data
-
-    2) update corpus
- 
-    ------------------------------------------------
-    
-    lanciare la procedura textupd.py
-    
-    1) muove
-       data/name.token.csv => tmp/name.token1.csv
-       data/name.form.csv  => tmp/name.form1.csv
-
-    2) elabora (add_text)
-       data/name.token.csv
-       data/name.form.csv
-
-    3) muove
-       data/name.token.csv => tmp/name.token2.csv
-        
-    4) elabora (set_diff)
-        tmp/name.token3.csv
-        tmp/name.form3.csv
-
-    5) muove
-       tmp/name.token3.csv => data/name.token.csv
-       tmp/name.form3.csv  => data/name.form.csv
-       stampa lista disamb.sovrascritti.
-    
- ------------------------------------------------
-
-    Per completare 
- 
-     eseguire daal browser
-    
-    1)load_data
-
-    2) update_text
-
-    3) sistemazione omografi disamb. sovrascritti
-    
-    4) update corpus
-
-    token1: originale
-    token2: modificato senza disambiguazione
-    token3: corretto 
-
-    """
 
     def add_text_upd(self, text_path, line_len=0):
         text_name = os.path.basename(text_path)

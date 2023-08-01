@@ -28,7 +28,9 @@ PUN = "XX"
 # CHS_LR = ['’' + BL, BL + '-', BL + '·']
 
 SIMILITARY_MAX = 1.0
-
+"""
+Aggiorna gli omografi di u testo simile
+"""
 
 class UpdateToken(object):
 

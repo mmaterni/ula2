@@ -30,11 +30,6 @@ ENCODING = 'utf-8'
 # CHS_LR = ['’' + BL, BL + '-', BL + '·']
 
 
-
-
-
-
-
 class RestoreData(object):
 
     def __init__(self):
