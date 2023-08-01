@@ -89,7 +89,7 @@
 522    grant          grant4         
 531    estoit         estoit1        
 549    maintes        maintes1       
-552    maintes        maintes1       
+552    maintes        maintes3       
 559    qe             qe1            
 574    maint          maint1         
 577    son            son1           
@@ -122,7 +122,6 @@
 697    se             se2            
 698    vos            vos1           
 700    ce             ce1            
-701    vos            vos1           
 711    est            est1           
 712    qe             qe3            
 717    a              a1             
@@ -320,7 +319,6 @@
 1637   mestier        mestier1       
 1644   estoit         estoit1        
 1652   qe             qe3            
-1658   de             de1            
 1660   de             de1            
 1663   chevaliers     chevaliers3    
 1667   estoient       estoient2      
@@ -584,7 +582,6 @@
 2795   il             il1            
 2802   il             il1            
 2803   furent         furent1        
-2810   le             le4            
 2812   le             le4            
 2815   grant          grant4         
 2816   mervoille      mervoille1     
@@ -641,7 +638,7 @@
 3045   il             il1            
 3048   grant          grant1         
 3049   mestier        mestier1       
-3051   grant          grant1         
+3051   grant          grant4         
 3053   avoit          avoit1         
 3054   q’             q’1            
 3055   il             il1            
@@ -716,7 +713,6 @@
 3407   qi             qi3            
 3409   estoient       estoient1      
 3412   aloient        aloient3       
-3418   li             li2            
 3420   li             li2            
 3421   en             en2            
 3427   bien           bien4          
@@ -757,7 +753,7 @@
 3563   son            son1           
 3564   grant          grant1         
 3566   ce             ce2            
-3569   ce             ce2            
+3569   ce             ce1            
 3573   bon            bon1           
 3574   chief          chief1         
 3586   qu’            qu’1           
@@ -998,7 +994,7 @@
 4641   autres         autres5        
 4642   sont           sont1          
 4648   ce             ce2            
-4650   ce             ce2            
+4650   ce             ce1            
 4658   le             le6            
 4660   di             di1            
 4668   |              nan            
@@ -1043,7 +1039,7 @@
 4880   |              nan            
 4887   sui            sui1           
 4893   vostre         vostre1        
-4896   vostre         vostre1        
+4896   vostre         vostre2        
 4899   mon            mon1           
 4907   vos            vos1           
 4923   |              nan            
@@ -1054,7 +1050,6 @@
 4951   |              nan            
 4959   en             en2            
 4960   ala            ala1           
-4961   en             en2            
 4965   alegre         alegre3        
 4970   li             li2            
 4972   qe             qe3            
@@ -1064,7 +1059,6 @@
 4978   aconplis       aconplis1      
 4982   grant          grant4         
 4987   grant          grant4         
-4991   li             li4            
 4992   cuor           cuor1          
 4993   li             li4            
 4996   son            son1           
@@ -1117,7 +1111,6 @@
 5174   il             il2            
 5175   est            est3           
 5180   ne             ne1            
-5181   ne             ne1            
 5182   s’             s’1            
 5183   en             en2            
 5188   il             il1            
@@ -1233,7 +1226,6 @@
 5699   qi             qi1            
 5700   bien           bien4          
 5703   teu            teu3           
-5705   teu            teu3           
 5715   plus           plus1          
 5719   en             en2            
 5720   ala            ala1           
@@ -1482,7 +1474,6 @@
 6853   tel            tel6           
 6856   tos            tos1           
 6857   les            les4           
-6859   les            les4           
 6864   les            les4           
 6869   qe             qe1            
 6871   bues           bues2          
@@ -1544,7 +1535,6 @@
 7145   grant          grant4         
 7149   grant          grant4         
 7152   li             li2            
-7154   li             li2            
 7159   ce             ce1            
 7160   a              a2             
 7161   entendu        entendu1       
@@ -1591,7 +1581,6 @@
 7343   oetes          oetes1         
 7350   a              a2             
 7352   bien           bien4          
-7355   li             li2            
 7358   li             li2            
 7359   a              a2             
 7360   dit            dit1           
@@ -1748,7 +1737,6 @@
 8090   ot             ot1            
 8105   ot             ot1            
 8113   tot            tot4           
-8116   les            les4           
 8117   bues           bues3          
 8119   les            les4           
 8125   il             il1            
@@ -1809,7 +1797,6 @@
 8382   qe             qe3            
 8384   l’             l’1            
 8386   en             en2            
-8395   li             li2            
 8397   li             li2            
 8410   bien           bien4          
 8411   qe             qe3            
@@ -1884,7 +1871,6 @@
 8674   il             il1            
 8675   en             en2            
 8684   qi             qi1            
-8685   li             li2            
 8688   li             li2            
 8689   fist           fist2          
 8692   tos            tos1           
@@ -1937,7 +1923,6 @@
 8893   oetes          oetes1         
 8896   en             en2            
 8897   ala            ala1           
-8898   en             en2            
 8899   son            son1           
 8902   |              nan            
 8909   vostre         vostre1        
@@ -1958,7 +1943,6 @@
 8964   furent         furent2        
 8965   les            les1           
 8971   aparoillés     aparoillés4    
-8982   le             le4            
 8984   le             le4            
 8985   fist           fist1          
 9004   lor            lor2           

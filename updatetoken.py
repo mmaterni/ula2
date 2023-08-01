@@ -32,6 +32,7 @@ SIMILITARY_MAX = 1.0
 Aggiorna gli omografi di u testo simile
 """
 
+
 class UpdateToken(object):
 
     def __init__(self, similtary_ok="0.7"):
@@ -39,7 +40,8 @@ class UpdateToken(object):
         self.model = None
         self.df0 = None,
         self.df1 = None,
-        self.path1 = None,
+        self.path_src = None,
+        self.path_trg = None,
         self.rows0 = []
         self.fk_rows0 = []
         self.contest_delta = 8
@@ -121,9 +123,12 @@ class UpdateToken(object):
             input(".Error")
         return sim_row
 
-    def update_token1(self, path):
+    def update_token1(self, token_name):
+        # AAA path = os.path.join(DATA_RESTORED_DIR, token_name)
+        # setta la dir di destinazione del files modificto e de log
+        path = os.path.join(DATA_DIR, token_name)
         print(path)
-        self.path1 = path
+        self.path_trg = path
         try:
             self.df1 = pd.read_csv(path, sep='|', header=None)
         except Exception as e:
@@ -134,7 +139,9 @@ class UpdateToken(object):
 
         similar_rows = []
         for i, row1 in enumerate(rows1):
-            # if i > 100: break
+            # AAA XXXif i > 100: break
+
+
             if i % 100 == 0:
                 print(i)
             tk1_f = row1[0]
@@ -200,15 +207,32 @@ class UpdateToken(object):
             self.df1.iat[row1_i, 1] = t_k0
 
         #scrittura file tiken
-        path = self.path1.replace(".csv", "_upd.csv")
+        """
+        read
+        ula_data/data/<src>.token.csv
+        wrute
+        ula_data/data/<trg>.token.csv
+        ula_data/data/<trg>.form.csv
+        """
+
+        print("\n")
+        print(self.path_src)
+        print("...")
+        # print(self.path_trg)
+        # AAA path = self.path_trg.replace(".csv", "_upd.csv")
+        path = self.path_trg
         print(path)
         self.df1.to_csv(path, sep="|", index=False, header=False)
         self.log_udated(rows1)
 
         #scrittura file form
-        path = path.replace(".token_upd.", ".form_upd.")
+        #AAA path = path.replace(".token_upd.", ".form_upd.")
+        path = path.replace(".token.", ".form.")
+        print(path)
         forms = self.token_list2form_list(rows1)
         self.write_list(path, forms)
+        print(self.path_word_log)
+        print(self.path_row_log)
 
     def token_list2form_list(self, rows1):
         csv = [f"{x[0]}|{x[1]}" for x in rows1]
@@ -236,7 +260,6 @@ class UpdateToken(object):
         return form_lst
 
     def write_list(self, path, rows):
-        print(path)
         with open(path, "w") as f:
             for x in rows:
                 f.write(x)
@@ -244,7 +267,9 @@ class UpdateToken(object):
         os.chmod(path, 0o666)
 
     def log_udated(self, rows1):
-        path = self.path1.replace(".csv", "_upd.x.log")
+        #AAA path = self.path_trg.replace(".csv", "_upd.x.log")
+        path = self.path_trg.replace(".csv", ".word.log")
+        self.path_word_log=path
         f = open(path, "w")
         for i, x in enumerate(rows1):
             if x[0] != x[1]:
@@ -253,7 +278,9 @@ class UpdateToken(object):
         f.close()
 
     def log(self, similar_rows):
-        path = self.path1.replace(".csv", "_upd.y.log")
+        #AAA path = self.path_trg.replace(".csv", "_upd.y.log")
+        path = self.path_trg.replace(".csv", ".row.log")
+        self.path_row_log=path
         f = open(path, "w")
         for x in similar_rows:
             row1_i = x[0]
@@ -280,12 +307,12 @@ class UpdateToken(object):
         name_src = os.path.basename(name_src)
         token_name = f"{name_src}.token.csv"
         src_path = os.path.join(DATA_DIR, token_name)
+        self.path_src = src_path
         self.fill_contest_rows(src_path)
 
         name_trg = os.path.basename(name_trg)
         token_name = f"{name_trg}.token.csv"
-        upd_path = os.path.join(DATA_RESTORED_DIR, token_name)
-        self.update_token1(upd_path)
+        self.update_token1(token_name)
 
 
 def do_main(src, trg, sim):

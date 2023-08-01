@@ -550,7 +550,7 @@ proësse|proësse
 maintes|maintes1
 reignes|reignes
 et|et
-maintes|maintes3
+maintes|maintes1
 regions|regions
 ;|;
 il|il
@@ -598,7 +598,7 @@ et|et
 li|li2
 dist|dist
 :|:
-"|"
+"|"|
 biau|biau
 nies|nies
 ,|,
@@ -699,7 +699,7 @@ se|se2
 vos|vos1
 de|de
 ce|ce1
-vos|vos
+vos|vos1
 volés|volés
 entremetre|entremetre
 .|.
@@ -849,7 +849,7 @@ qe|qe
 plaisir|plaisir
 vos|vos
 soit|soit
-"|"
+"|"|
 .|.
 coment|coment
 jason|jason
@@ -975,7 +975,7 @@ en|en
 tel|tel6
 mainiere|mainiere
 :|:
-"|"
+"|"|
 sire|sire
 ,|,
 fist|fist
@@ -1036,7 +1036,7 @@ je|je
 sor|sor
 toutes|toutes
 rienz|rienz2
-"|"
+"|"|
 .|.
 mult|mult
 estoit|estoit1
@@ -1631,7 +1631,7 @@ sojorner|sojorner
 ,|,
 de|de
 qoi|qoi
-il|il
+il|il1
 avoient|avoient
 mult|mult
 grant|grant1
@@ -1656,7 +1656,7 @@ et|et
 hercules|hercules
 ho|ho
 plus|plus
-de|de
+de|de1
 dui_cent|dui_cent
 de|de1
 plu|plu
@@ -1901,7 +1901,7 @@ en|en
 tel|tel6
 mainiere|mainiere
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -2007,7 +2007,7 @@ come|come
 ses|ses1
 mortels|mortels
 henemis|henemis
-"|"
+"|"|
 .|.
 coment|coment
 jason|jason
@@ -2066,7 +2066,7 @@ adonc|adonc
 ses|ses1
 conpaignons|conpaignons1
 :|:
-"|"
+"|"|
 seignor|seignor1
 ,|,
 fist|fist
@@ -2147,7 +2147,7 @@ il|il
 se|se
 repentira|repentira
 durement|durement
-"|"
+"|"|
 .|.
 lor|lor3
 respondi|respondi
@@ -2157,7 +2157,7 @@ mesaje|mesaje1
 et|et
 dist|dist
 :|:
-"|"
+"|"|
 vasal|vasal
 ,|,
 fist|fist
@@ -2261,7 +2261,7 @@ et|et
 biau|biau
 ne|ne
 fi|fi
-"|"
+"|"|
 .|.
 ci|ci
 dit|dit
@@ -2285,7 +2285,7 @@ puis|puis
 et|et
 dist|dist
 :|:
-"|"
+"|"|
 vasal|vasal
 ,|,
 encore|encore
@@ -2366,7 +2366,7 @@ au|au
 repentir|repentir
 sanz|sanz
 faille|faille
-"|"
+"|"|
 .|.
 li|li
 mesaje|mesaje
@@ -2384,7 +2384,7 @@ en|en
 tel|tel6
 maniere|maniere
 :|:
-"|"
+"|"|
 seignors|seignors
 gresois|gresois2
 ,|,
@@ -2455,7 +2455,7 @@ diex|diex3
 soiés|soiés
 vos|vos1
 acommandés|acommandés
-"|"
+"|"|
 .|.
 si|si
 se|se
@@ -2808,7 +2808,7 @@ la|la
 cité|cité
 ,|,
 tot|tot
-le|le
+le|le4
 pueple|pueple
 le|le4
 regardoit|regardoit
@@ -3049,7 +3049,7 @@ mult|mult
 grant|grant1
 mestier|mestier1
 car|car
-grant|grant4
+grant|grant1
 piece|piece
 avoit|avoit1
 q’|q’1
@@ -3416,7 +3416,7 @@ por|por
 cele|cele
 contree|contree
 .|.
-li|li
+li|li2
 roi|roi
 li|li2
 en|en2
@@ -3567,7 +3567,7 @@ savoir|savoir
 ce|ce2
 elle|elle
 de|de
-ce|ce1
+ce|ce2
 ne|ne
 set|set
 à|à
@@ -3766,7 +3766,7 @@ qe|qe3
 je|je
 le|le6
 vuoil|vuoil1
-"|"
+"|"|
 .|.
 quant|quant
 la|la
@@ -3858,7 +3858,7 @@ en|en
 tel|tel6
 mainiere|mainiere
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -3905,9 +3905,9 @@ devés|devés
 plus|plus
 fol|fol
 atenir|atenir
-"|"
+"|"|
 .|.
-"|"
+"|"|
 dame|dame
 ,|,
 fist|fist
@@ -3944,9 +3944,9 @@ qi|qi
 soit|soit
 en|en
 vie|vie
-"|"
+"|"|
 .|.
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -4066,7 +4066,7 @@ com|com
 je|je
 te|te
 dirai|dirai
-"|"
+"|"|
 .|.
 coment|coment
 medea|medea
@@ -4079,7 +4079,7 @@ monton|monton
 estoit|estoit2
 gardés|gardés
 .|.
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -4320,7 +4320,7 @@ i|i
 porais|porais
 mort|mort
 recevoir|recevoir
-"|"
+"|"|
 .|.
 coment|coment
 jason|jason
@@ -4351,7 +4351,7 @@ en|en
 tel|tel6
 mainiere|mainiere
 :|:
-"|"
+"|"|
 dame|dame
 ,|,
 fist|fist
@@ -4486,9 +4486,9 @@ jornés|jornés1
 et|et
 clamés|clamés
 recreant|recreant
-"|"
+"|"|
 .|.
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -4648,7 +4648,7 @@ legieres|legieres
 .|.
 ce|ce2
 tu|tu
-ce|ce1
+ce|ce2
 me|me
 vuois|vuois
 afier|afier
@@ -4666,7 +4666,7 @@ celer|celer
 de|de
 ton|ton
 coraje|coraje
-"|"
+"|"|
 .|.
 coment|coment
 jason|jason
@@ -4681,7 +4681,7 @@ en|en
 bone|bone
 foi|foi
 .|.
-"|"
+"|"|
 dame|dame
 ,|,
 fist|fist
@@ -4776,7 +4776,7 @@ damoiselles|damoiselles
 qi|qi
 i|i
 sont|sont
-"|"
+"|"|
 .|.
 adonc|adonc
 respondi|respondi
@@ -4784,7 +4784,7 @@ medea|medea
 et|et
 dist|dist
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 mult|mult
@@ -4876,9 +4876,9 @@ serpent|serpent1
 à_tot|à_tot
 vostre|vostre1
 plaisir|plaisir
-"|"
+"|"|
 .|.
-"|"
+"|"|
 dame|dame
 ,|,
 fist|fist
@@ -4894,7 +4894,7 @@ faire|faire
 vostre|vostre1
 commandament|commandament
 et|et
-vostre|vostre2
+vostre|vostre1
 volonté|volonté
 à_tot|à_tot
 mon|mon1
@@ -4921,9 +4921,9 @@ ne|ne
 savroie|savroie
 dont|dont
 aler|aler
-"|"
+"|"|
 .|.
-"|"
+"|"|
 ne|ne
 vos|vos
 chaille|chaille
@@ -4949,7 +4949,7 @@ savra|savra
 mener|mener
 et|et
 conduire|conduire
-"|"
+"|"|
 .|.
 atant|atant
 se|se
@@ -4959,7 +4959,7 @@ et|et
 s’|s’
 en|en2
 ala|ala1
-en|en
+en|en2
 sa|sa
 chanbre|chanbre
 mult|mult
@@ -4989,7 +4989,7 @@ grant|grant4
 laësse|laësse
 car|car
 tos|tos
-li|li
+li|li4
 cuor|cuor1
 li|li4
 tresaute|tresaute
@@ -5150,7 +5150,7 @@ encore|encore
 nulle|nulle
 paroulle|paroulle
 .|.
-"|"
+"|"|
 ha_las|ha_las
 ,|,
 fet|fet2
@@ -5179,7 +5179,7 @@ demie|demie
 nuit|nuit
 passee|passee
 ne|ne1
-ne|ne
+ne|ne1
 s’|s’1
 en|en2
 vont|vont
@@ -5194,7 +5194,7 @@ cuit|cuit
 jusqe|jusqe
 le|le
 jor|jor
-"|"
+"|"|
 .|.
 et|et
 qant|qant
@@ -5222,7 +5222,7 @@ en|en
 tel|tel6
 mainiere|mainiere
 :|:
-"|"
+"|"|
 las|las
 ,|,
 fet|fet2
@@ -5299,7 +5299,7 @@ je|je
 le|le4
 mandrai|mandrai
 qerre|qerre
-"|"
+"|"|
 .|.
 lor|lor3
 se|se
@@ -5521,7 +5521,7 @@ en|en
 tel|tel6
 mainere|mainere
 :|:
-"|"
+"|"|
 dame|dame
 ,|,
 je|je
@@ -5556,7 +5556,7 @@ truis|truis
 chouchee|chouchee1
 qe|qe3
 non|non
-"|"
+"|"|
 .|.
 medea|medea
 li|li4
@@ -5703,7 +5703,7 @@ convenist|convenist
 à|à
 teu|teu3
 damoiselle|damoiselle
-teu|teu
+teu|teu3
 lit|lit
 por|por
 sa|sa
@@ -5906,7 +5906,7 @@ lui|lui
 mult|mult
 vergogneuse|vergogneuse
 :|:
-"|"
+"|"|
 vasal|vasal
 ,|,
 fist|fist
@@ -5918,9 +5918,9 @@ a|a2
 isi|isi
 conduit|conduit
 ?|?
-"|"
+"|"|
 .|.
-"|"
+"|"|
 dame|dame
 ,|,
 fist|fist
@@ -5988,7 +5988,7 @@ plaisir|plaisir
 tot|tot3
 mon|mon1
 vivant|vivant1
-"|"
+"|"|
 .|.
 de|de
 se|se4
@@ -6012,7 +6012,7 @@ respondi|respondi
 et|et
 dist|dist
 :|:
-"|"
+"|"|
 biau|biau
 dous|dous1
 amis|amis
@@ -6066,9 +6066,9 @@ je|je
 ne|ne
 soie|soie1
 engignee|engignee
-"|"
+"|"|
 .|.
-"|"
+"|"|
 dame|dame
 ,|,
 fist|fist
@@ -6078,7 +6078,7 @@ jason|jason
 vostre|vostre1
 plaisir|plaisir
 soit|soit
-"|"
+"|"|
 .|.
 adonc|adonc
 se|se
@@ -6110,7 +6110,7 @@ jupiter|jupiter
 son|son1
 diex|diex3
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -6159,7 +6159,7 @@ foi|foi
 et|et
 droite|droite
 loiauté|loiauté
-"|"
+"|"|
 .|.
 jason|jason
 sans|sans
@@ -6258,7 +6258,7 @@ dist|dist
 la|la
 damoisele|damoisele
 :|:
-"|"
+"|"|
 dame|dame
 ,|,
 il|il2
@@ -6314,7 +6314,7 @@ est|est
 en|en
 vos|vos
 soulement|soulement
-"|"
+"|"|
 .|.
 coment|coment
 jason|jason
@@ -6331,7 +6331,7 @@ respondi|respondi
 et|et
 dist|dist
 :|:
-"|"
+"|"|
 biau|biau
 dous|dous1
 amis|amis
@@ -6349,7 +6349,7 @@ achever|achever
 toute|toute
 vostre|vostre2
 volonté|volonté
-"|"
+"|"|
 .|.
 adonc|adonc
 se|se1
@@ -6385,7 +6385,7 @@ dist|dist
 à|à
 jason|jason1
 :|:
-"|"
+"|"|
 ceste|ceste1
 imaje|imaje
 porterais|porterais
@@ -6410,7 +6410,7 @@ qi|qi
 en|en
 terre|terre
 soit|soit
-"|"
+"|"|
 .|.
 aprés|aprés1
 li|li2
@@ -6421,7 +6421,7 @@ et|et
 li|li2
 dist|dist
 :|:
-"|"
+"|"|
 de|de
 cestui|cestui3
 ongniment|ongniment
@@ -6452,7 +6452,7 @@ poira|poira
 damegier|damegier
 ne|ne1
 nuire|nuire
-"|"
+"|"|
 .|.
 aprés|aprés1
 li|li2
@@ -6575,7 +6575,7 @@ li|li2
 dist|dist
 ensi|ensi
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 l’|l’
@@ -6605,7 +6605,7 @@ un|un
 grant|grant1
 tresor|tresor
 achater|achater
-"|"
+"|"|
 .|.
 aprés|aprés
 l’|l’
@@ -6620,7 +6620,7 @@ et|et
 li|li2
 dist|dist
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 quant|quant
@@ -6686,7 +6686,7 @@ rienz|rienz1
 espaontés|espaontés
 ni|ni
 espardus|espardus
-"|"
+"|"|
 .|.
 aprés|aprés
 ce|ce1
@@ -6725,7 +6725,7 @@ en|en
 tel|tel6
 mainere|mainere
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -6857,7 +6857,7 @@ car|car
 tos|tos1
 les|les4
 traierais|traierais
-les|les
+les|les4
 denz|denz
 de_la|de_la
 bouche|bouche
@@ -7000,7 +7000,7 @@ nulle|nulle
 rienz|rienz1
 en|en
 obli|obli
-"|"
+"|"|
 .|.
 atant|atant
 se|se
@@ -7152,7 +7152,7 @@ doutance|doutance
 de|de
 li|li2
 .|.
-li|li
+li|li2
 roi|roi
 hoetes|hoetes
 ,|,
@@ -7175,7 +7175,7 @@ en|en
 tel|tel6
 mainiere|mainiere
 :|:
-"|"
+"|"|
 jason|jason
 ,|,
 fist|fist
@@ -7334,7 +7334,7 @@ aler|aler1
 et|et
 de_l’|de_l’
 ester|ester
-"|"
+"|"|
 .|.
 coment|coment
 jason|jason
@@ -7353,7 +7353,7 @@ mult|mult
 bien|bien4
 entenduz|entenduz
 ce_qe|ce_qe
-li|li
+li|li2
 roi|roi
 hoetes|hoetes
 li|li2
@@ -7388,7 +7388,7 @@ roi|roi1
 brief|brief
 mos|mos
 :|:
-"|"
+"|"|
 sire|sire
 ,|,
 fist|fist
@@ -7420,7 +7420,7 @@ voil|voil
 en|en
 toute|toute
 guises|guises
-"|"
+"|"|
 .|.
 adonc|adonc
 hoïsi|hoïsi
@@ -7850,7 +7850,7 @@ entre|entre
 ses|ses1
 denz|denz
 :|:
-"|"
+"|"|
 haï|haï
 jason|jason
 ,|,
@@ -7932,7 +7932,7 @@ ramoinent|ramoinent
 à|à
 sauveté|sauveté
 tostement|tostement
-"|"
+"|"|
 .|.
 coment|coment
 jason|jason
@@ -8114,7 +8114,7 @@ ala|ala
 tot|tot4
 maintenant|maintenant
 vers|vers
-les|les
+les|les4
 bues|bues3
 et|et
 les|les4
@@ -8393,7 +8393,7 @@ esforsa|esforsa
 et|et
 esvertua|esvertua
 tant_qe|tant_qe
-li|li
+li|li2
 sanc|sanc
 li|li2
 sailloit|sailloit
@@ -8683,7 +8683,7 @@ vos|vos
 di|di
 veraiement|veraiement
 qi|qi1
-li|li
+li|li2
 roi|roi
 hoetes|hoetes
 li|li2
@@ -8706,7 +8706,7 @@ conjoïs|conjoïs
 et|et
 receüs|receüs
 ,|,
-hercules|hercules
+hercules|hercules1
 et|et
 de|de
 tos|tos1
@@ -8896,11 +8896,11 @@ et|et
 s’|s’
 en|en2
 ala|ala1
-en|en
+en|en2
 son|son1
 païs|païs
 .|.
-"|"
+"|"|
 dame|dame
 ,|,
 fist|fist
@@ -8916,7 +8916,7 @@ le|le4
 desir|desir
 et|et
 vuoil|vuoil1
-"|"
+"|"|
 .|.
 lor|lor3
 fu|fu1
@@ -8980,7 +8980,7 @@ asés|asés
 horent|horent
 de_quoi|de_quoi
 .|.
-le|le
+le|le4
 roi|roi
 le|le4
 fist|fist1
