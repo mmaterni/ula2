@@ -22,6 +22,12 @@
 -  eseguire il comando
   textadd.py 
 
+- dopo la lavorazione di un testo prima di iniziare un nuovo testp 
+  eseguire
+  updatetoken.py testo nuopvo_testo 0.7
+  serve addd aggiungere le forme omografe dove possibile 
+  utilizzando la similitudine ra le righe
+
 Lancio del Server
 =============================
 
