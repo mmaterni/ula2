@@ -6,7 +6,7 @@ import sys
 from ulalib.ualog import Log
 import ulalib.pathutils as ptu
 import pathlib as pth
-from ulalib.save_back import save_text_data_back
+# from ulalib.save_back import save_text_data_back
 import shutil
 import os
 import re
@@ -14,7 +14,7 @@ from difflib import *
 from ulalib.ula_setting import *
 from texttodata import Text2Data
 from textcleaner import TextCleaner
-from ulalib.update_data import UpdateData
+# from ulalib.update_data import UpdateData
 
 __date__ = "19-01-2023"
 __version__ = "0.2.3"

@@ -102,6 +102,17 @@ ATTENZIONE !!
   PRECEDENTE
   dello stesso testo.
 
+********************************
+ATTENZIONE !!
+updatetoken.py tr1.g tr1.p 0.7
+updatetoken.py testo1.g testo4.g 0.6
+
+il primo testo è quello lavorato, il secondo
+quello nel quale aggiungere ai token le forme 
+per la disiambiguazione.
+Il coefficienti similtary è per default = 0.7
+
+**********************************
 ==============================
 Lancio del Server
 =============================

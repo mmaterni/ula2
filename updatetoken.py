@@ -86,31 +86,31 @@ class UpdateToken(object):
             else:
                 self.rows0.append([])
 
-    def calc_similarity(self, row1, row2):
-        try:
-            rs = []
-            for i, w1 in enumerate(row1):
-                w2 = row2[i]
-                matcher = SequenceMatcher(None, w1, w2)
-                sim = matcher.ratio()
-                rs.append(sim)
-                # if sim != 1:
-                #     print("{:<10} {:<10}  {}".format(w1, w2, sim))
-            total = sum(rs)
-            sim_row = total / len(rs)
-        except Exception as e:
-            print(e)
-            input(".Error")
-        return sim_row
+    # def calc_similarity(self, row1, row2):
+    #     try:
+    #         rs = []
+    #         for i, w1 in enumerate(row1):
+    #             w2 = row2[i]
+    #             matcher = SequenceMatcher(None, w1, w2)
+    #             sim = matcher.ratio()
+    #             rs.append(sim)
+    #             # if sim != 1:
+    #             #     print("{:<10} {:<10}  {}".format(w1, w2, sim))
+    #         total = sum(rs)
+    #         sim_row = total / len(rs)
+    #     except Exception as e:
+    #         print(e)
+    #         input(".Error")
+    #     return sim_row
 
-    def calc_similarity_row(self, row1, row2):
-        try:
-            matcher = SequenceMatcher(None, row1, row2)
-            sim_row = matcher.ratio()
-        except Exception as e:
-            print(e)
-            input(".Error")
-        return sim_row
+    # def calc_similarity_row(self, row1, row2):
+    #     try:
+    #         matcher = SequenceMatcher(None, row1, row2)
+    #         sim_row = matcher.ratio()
+    #     except Exception as e:
+    #         print(e)
+    #         input(".Error")
+    #     return sim_row
 
     def calc_similarity_line(self, row1, row2):
         try:
@@ -124,7 +124,6 @@ class UpdateToken(object):
         return sim_row
 
     def update_token1(self, token_name):
-        # AAA path = os.path.join(DATA_RESTORED_DIR, token_name)
         # setta la dir di destinazione del files modificto e de log
         path = os.path.join(DATA_DIR, token_name)
         print(path)
@@ -136,12 +135,9 @@ class UpdateToken(object):
         rows1 = self.df1.values
         le = len(rows1)
         print("text:", le)
-
         similar_rows = []
         for i, row1 in enumerate(rows1):
             # AAA XXXif i > 100: break
-
-
             if i % 100 == 0:
                 print(i)
             tk1_f = row1[0]
@@ -161,7 +157,6 @@ class UpdateToken(object):
             contest1_len = len(contest1)
             # lista indici delle righe che contenfono
             # nella stessa posizione nel contesto
-
             # indices_found = [
             #     n for n, row in enumerate(self.rows0)
             #     if len(row) == contest1_len and tk1_f in row
@@ -181,7 +176,6 @@ class UpdateToken(object):
             indices = []
             for i_found in indices_found:
                 row0 = self.rows0[i_found]
-                #  AAA
                 # sim = self.calc_similarity(contest_forma, sentence)
                 # sim = self.calc_similarity_row(token_contest, row_txt)
                 sim = self.calc_similarity_line(contest1, row0)
@@ -219,14 +213,12 @@ class UpdateToken(object):
         print(self.path_src)
         print("...")
         # print(self.path_trg)
-        # AAA path = self.path_trg.replace(".csv", "_upd.csv")
         path = self.path_trg
         print(path)
         self.df1.to_csv(path, sep="|", index=False, header=False)
         self.log_udated(rows1)
 
         #scrittura file form
-        #AAA path = path.replace(".token_upd.", ".form_upd.")
         path = path.replace(".token.", ".form.")
         print(path)
         forms = self.token_list2form_list(rows1)
@@ -267,7 +259,6 @@ class UpdateToken(object):
         os.chmod(path, 0o666)
 
     def log_udated(self, rows1):
-        #AAA path = self.path_trg.replace(".csv", "_upd.x.log")
         path = self.path_trg.replace(".csv", ".word.log")
         self.path_word_log=path
         f = open(path, "w")
@@ -278,7 +269,6 @@ class UpdateToken(object):
         f.close()
 
     def log(self, similar_rows):
-        #AAA path = self.path_trg.replace(".csv", "_upd.y.log")
         path = self.path_trg.replace(".csv", ".row.log")
         self.path_row_log=path
         f = open(path, "w")
