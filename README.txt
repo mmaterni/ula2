@@ -112,6 +112,31 @@ quello nel quale aggiungere ai token le forme
 per la disiambiguazione.
 Il coefficienti similtary è per default = 0.7
 
+in ula_data/dat
+son scritti i log
+
+testo.g.token.word.log
+------------
+9      son            son1           
+11     jason          jason1         
+29     daire          daire1         
+30     le             le6            
+
+-------------------
+testo.g.token.row.log
+
+son             son1            1.0
+9     prist haine et fellonie contre son nevo jason et coment il
+9     prist haine et fellonie contre son nevo jason et coment il
+
+jason           jason1          1.0
+11    et fellonie contre son nevo jason et coment il pensa de
+11    et fellonie contre son nevo jason et coment il pensa de
+
+daire           daire1          1.0
+29    et la veraie estoire de daire le nos tesmoigne qe pelleus
+29    et la veraie estoire de daire le nos tesmoigne qe pelleus
+
 **********************************
 ==============================
 Lancio del Server
