@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from pdb import set_trace
-import sys
-import os
-import ulalib.pathutils as ptu
-from ulalib.ula_setting import *
-from texttodata import Text2Data
-from textcleaner import TextCleaner
-import shutil
 import argparse
+import os
+import shutil
+import sys
+from pdb import set_trace
 
-__date__ = "18-04-2023"
-__version__ = "0.2.5"
+import ulalib.pathutils as ptu
+from textcleaner import TextCleaner
+from texttodata import Text2Data
+from ulalib.ula_setting import *
+
+__date__ = "24-10-2024"
+__version__ = "0.2.6"
 __author__ = "Marta Materni"
 
 class TextAdd(object):
@@ -73,7 +74,7 @@ class TextAdd(object):
             sys.exit(msg)
 
 
-    def write_text_list(self,):
+    def write_text_list(self):
         try:
             path_names=ptu.list_path(TEXT_BACK_DIR,"*.txt")
             text_names=[x.name for x in path_names]

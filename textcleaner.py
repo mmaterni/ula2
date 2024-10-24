@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import argparse
-import sys
+import os
 import re
+import sys
+
+import ulalib.pathutils as ptu
 from ulalib.ualog import Log
 from ulalib.ula_setting import *
-import ulalib.pathutils as ptu
 
-__date__ = "17-04-2023"
-__version__ = "0.1.5"
+__date__ = "24-10-2024"
+__version__ = "0.1.6"
 __author__ = "Marta Materni"
 
 
@@ -144,7 +145,7 @@ class TextCleaner(object):
             text = fr.read()
             fr.close()
         except Exception as e:
-            msg = f'ERROR 1 textcleaner.py \{e}'
+            msg = f'ERROR 1 textcleaner.py \n {e}'
             self.logerr(msg)
             sys.exit(e)
         try:
@@ -156,7 +157,7 @@ class TextCleaner(object):
             else:
                 text_src = text_clean
         except Exception as e:
-            msg = f'ERROR 2 textcleaner.py \{e}'
+            msg = f'ERROR 2 textcleaner.py \n {e}'
             self.logerr(msg)
             sys.exit(e)
         try:
@@ -166,7 +167,7 @@ class TextCleaner(object):
             fw.close()
             ptu.chmod(out_path, 0o777)
         except Exception as e:
-            msg = f'ERROR 3textcleaner.py \{e}'
+            msg = f'ERROR 3textcleaner.py \n {e}'
             self.logerr(msg)
             sys.exit(e)
         print(f"{in_path} =>\n{out_path}")
