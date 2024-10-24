@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import argparse
-import sys
+import os
 import re
+import sys
+
+import ulalib.pathutils as ptu
 from ulalib.ualog import Log
 from ulalib.ula_setting import *
-import ulalib.pathutils as ptu
 
 __date__ = "17-04-2023"
 __version__ = "0.1.5"
@@ -141,7 +142,7 @@ class TextAdjust(object):
             text = fr.read()
             fr.close()
         except Exception as e:
-            msg = f'ERROR 11 textadjust.py \{e}'
+            msg = f'ERROR 11 textadjust.py \n {e}'
             self.logerr(msg)
             sys.exit(e)
         try:
@@ -153,7 +154,7 @@ class TextAdjust(object):
             else:
                 text_src = text_clean
         except Exception as e:
-            msg = f'ERROR 22 textcleaner.py \{e}'
+            msg = f'ERROR 22 textcleaner.py \n {e}'
             self.logerr(msg)
             sys.exit(e)
         try:
@@ -162,7 +163,7 @@ class TextAdjust(object):
             fw.close()
             ptu.chmod(out_path, 0o777)
         except Exception as e:
-            msg = f'ERROR 33 textadjust.py \{e}'
+            msg = f'ERROR 33 textadjust.py \n {e}'
             self.logerr(msg)
             sys.exit(e)
         print(f"{in_path} => {out_path}")
